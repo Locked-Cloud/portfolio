@@ -7,7 +7,8 @@ export interface Project {
   description: string;
   tech: string[];
   link?: string;
-  status?: "live" | "in-progress" | "private";
+  status?: "LIVE" | "WIP" | "PRIV";
+  year?: string;
   metrics?: { label: string; value: string }[];
 }
 
@@ -15,98 +16,108 @@ export const featuredProjects: Project[] = [
   {
     id: "pulpoVr",
     index: "01",
-    title: "PULPOVR — Live Endodontic Guidance",
-    arabic: "تدريب أسنان لحظي",
-    tagline: "Real-time dental digital twin",
+    title: "PULPOVR",
+    arabic: "توأم رقمي لحظي",
+    tagline: "Live endodontic guidance — real-time dental digital twin",
     description:
-      "A 6-DOF IMU mounted on a dental handpiece streams telemetry at 40 Hz over WebSocket into an interactive Three.js molar — apex-locator safety HUD, trajectory panels, and student analytics. Built end to end: React 18 + TypeScript frontend, Express + WebSocket backend, ESP32 firmware in C++.",
+      "A 6-DOF IMU mounted on a dental handpiece streams telemetry at 40 Hz over WebSocket into an interactive Three.js molar — apex-locator safety HUD, trajectory panels, student analytics. Built end to end: React 18 + TypeScript frontend, Express + WebSocket backend, ESP32 firmware in C++.",
     tech: ["React 18", "TypeScript", "Three.js / R3F", "WebSocket", "Express", "ESP32 / C++"],
     link: "https://github.com/Locked-Cloud/dental-project",
-    status: "live",
+    status: "LIVE",
+    year: "2026",
     metrics: [
-      { label: "Telemetry", value: "40 Hz" },
-      { label: "Layers", value: "Firmware → 3D UI" },
-      { label: "License", value: "MIT" },
+      { label: "telemetry", value: "40 Hz" },
+      { label: "layers", value: "firmware → 3D" },
+      { label: "license", value: "MIT" },
     ],
   },
   {
     id: "smart-parking",
     index: "02",
-    title: "Smart Parking Detection",
+    title: "SMART-PARKING",
     arabic: "رؤية على الحافة",
-    tagline: "Edge ML, the whole lifecycle",
+    tagline: "Edge ML — the whole lifecycle on a Raspberry Pi 4",
     description:
-      "An 8-step pipeline — capture, auto-label with a pretrained model, two-stage YOLO fine-tuning, NCNN export — deployed to a Raspberry Pi 4 running real-time occupancy detection at 12–20 FPS with temporal smoothing. Ships with a plug-and-play baseline model and a full deployment guide.",
-    tech: ["Python", "YOLOv8", "NCNN", "OpenCV", "Raspberry Pi 4", "Multithreading"],
+      "An 8-step pipeline — capture, auto-label, two-stage YOLO fine-tuning, NCNN export — deployed to a Raspberry Pi 4 running real-time occupancy detection at 12–20 FPS with temporal smoothing. Ships with a plug-and-play baseline model and a full deployment guide.",
+    tech: ["Python", "YOLOv8", "NCNN", "OpenCV", "RPi 4", "Multithreading"],
     link: "https://github.com/Locked-Cloud/Smart-Parking-System",
-    status: "live",
+    status: "LIVE",
+    year: "2026",
     metrics: [
-      { label: "Inference", value: "12–20 FPS" },
-      { label: "Hardware", value: "RPi4 · 2 GB" },
-      { label: "Pipeline", value: "8 steps" },
+      { label: "inference", value: "12–20 FPS" },
+      { label: "hardware", value: "RPi4 · 2 GB" },
+      { label: "pipeline", value: "8 steps" },
     ],
   },
   {
     id: "bazarna",
     index: "03",
-    title: "Bazarna — بازارنا",
-    arabic: "السوق المصري، مكشّر",
-    tagline: "Egypt-first SaaS ecommerce",
+    title: "BAZARNA — بازارنا",
+    tagline: "Egypt-first multi-tenant SaaS ecommerce",
     description:
-      "Multi-tenant storefronts with the payments Egyptians actually use — COD, InstaPay, Fawry, smart wallets — Arabic-first RTL, a visual page builder, a haggling engine «فاوضني», and an AI merchant twin. React + Supabase (RLS, Edge Functions, pg_cron) on Cloudflare Pages, engineered for a $0 stack.",
-    tech: ["React 18", "Tailwind v4", "Supabase", "RLS", "Cloudflare Pages", "RTL / i18n"],
-    status: "in-progress",
+      "Storefronts with the payments Egyptians actually use — COD, InstaPay, Fawry, smart wallets — Arabic-first RTL, a visual page builder, a haggling engine «فاوضني», and an AI merchant twin. React + Supabase (RLS, Edge Functions, pg_cron) on Cloudflare Pages, engineered for a $0 stack.",
+    tech: ["React 18", "Tailwind v4", "Supabase", "RLS", "Cloudflare", "RTL / i18n"],
+    status: "WIP",
+    year: "2026",
     metrics: [
-      { label: "Infra cost", value: "$0" },
-      { label: "Tenancy", value: "Multi-tenant" },
-      { label: "Languages", value: "AR-first, EN" },
+      { label: "infra", value: "$0" },
+      { label: "tenancy", value: "multi" },
+      { label: "langs", value: "AR-first" },
     ],
+  },
+  {
+    id: "lms",
+    index: "04",
+    title: "LMS-PLATFORM",
+    tagline: "9 months · 668 commits · one product",
+    description:
+      "A course platform in production shape: React 19 + MUI 7 + Firebase, Express 5 backend. Measured performance work (bundle 1488→1425 kB, CSS 91→29 kB), per-tenant SEO with JSON-LD, and a security scan-diff tool with a 23-test suite.",
+    tech: ["React 19", "Express 5", "Firebase", "SEO", "Security tooling"],
+    status: "PRIV",
+    year: "2025–26",
   },
 ];
 
 export const moreProjects: Project[] = [
   {
-    id: "lms",
-    index: "04",
-    title: "LMS SaaS Platform",
-    tagline: "9 months, 668 commits",
-    description:
-      "A course platform in production shape: React 19 + MUI 7 + Firebase, Express 5 backend. Measured performance work (bundle 1488→1425 kB, CSS 91→29 kB), per-tenant SEO with JSON-LD, and a security scan-diff tool with a 23-test suite.",
-    tech: ["React 19", "Express 5", "Firebase", "SEO", "Security tooling"],
-    status: "private",
-  },
-  {
     id: "free-state",
     index: "05",
-    title: "Free State",
-    tagline: "Production PWA",
-    description:
-      "A real-estate platform ~1,000 files strong: installable PWA with offline pages, service-worker caching, network-status UX, auth with OTP flows, and protected routes. Shipped on Netlify + Cloudflare Pages.",
-    tech: ["React", "TypeScript", "PWA", "Service Worker", "Auth"],
+    title: "free-state",
+    tagline: "production PWA",
+    description: "Installable PWA: offline pages, service-worker caching, OTP auth, ~1,000 files.",
+    tech: ["React", "TS", "PWA"],
     link: "https://github.com/Locked-Cloud/free-state",
-    status: "live",
+    status: "LIVE",
   },
   {
     id: "raiv",
     index: "06",
     title: "RAIV-GPGPU",
     tagline: "GPU fetch-stage simulator",
-    description:
-      "A C simulation of a GPGPU instruction-fetch stage — cache, scheduler, decoder, RAM models with logged cycle traces. Systems programming that keeps my feet on the ground while my head is in the browser.",
-    tech: ["C", "Computer architecture", "Simulation"],
+    description: "C simulation of a GPGPU instruction-fetch stage — cache, scheduler, decoder, RAM traces.",
+    tech: ["C", "Architecture"],
     link: "https://github.com/Locked-Cloud/RAIV-GPGPU",
-    status: "live",
+    status: "LIVE",
   },
   {
     id: "webscraper",
     index: "07",
-    title: "Playwright Scrapers",
-    tagline: "Data pipelines at scale",
-    description:
-      "Production-grade scraping: adaptive batching, retry with backoff, checkpointing across runs, proxy validation, and a GUI — built for e-commerce catalogs of thousands of products.",
-    tech: ["Python", "Playwright", "Selenium", "Async IO"],
+    title: "WebScraper_PlayWright",
+    tagline: "data pipelines at scale",
+    description: "Adaptive batching, retry backoff, checkpointing, proxy validation, GUI.",
+    tech: ["Python", "Playwright"],
     link: "https://github.com/Locked-Cloud/WebScraper_PlayWright",
-    status: "live",
+    status: "LIVE",
+  },
+  {
+    id: "canny",
+    index: "08",
+    title: "Canny-Edge-Live",
+    tagline: "real-time computer vision",
+    description: "Live-camera edge detection with OpenCV — where the CV journey started.",
+    tech: ["Python", "OpenCV"],
+    link: "https://github.com/Locked-Cloud/Canny-Edge-Detection---Live-Camera-Application",
+    status: "LIVE",
   },
 ];
 
@@ -118,28 +129,29 @@ export interface SkillGroup {
 
 export const skillGroups: SkillGroup[] = [
   {
-    title: "Front-end",
+    title: "FRONTEND",
     arabic: "الواجهات",
     skills: ["React 18 / 19", "TypeScript", "Vite", "Tailwind CSS v4", "Three.js / R3F", "MUI 7", "TanStack Query", "Zustand", "RTL & i18n"],
   },
   {
-    title: "Back-end",
+    title: "BACKEND",
     arabic: "الخدمات",
-    skills: ["Node.js / Express 5", "Supabase — Postgres · RLS · Edge Functions", "Firebase", "REST APIs", "JWT & OTP flows", "pg_cron jobs"],
+    skills: ["Node.js / Express 5", "Supabase · Postgres · RLS", "Edge Functions", "Firebase", "JWT & OTP flows", "pg_cron jobs"],
   },
   {
-    title: "Systems & Data",
+    title: "SYSTEMS",
     arabic: "الأنظمة",
     skills: ["C / C++ — ESP32 firmware", "GPGPU simulation", "Python — YOLO · NCNN · OpenCV", "Playwright pipelines", "MATLAB", "Assembly"],
   },
   {
-    title: "Practices",
+    title: "PRACTICES",
     arabic: "الأساليب",
     skills: ["Row-Level Security models", "Performance budgets — measured", "Conventional commits", "AI-assisted dev pipelines", "$0 / free-tier architecture"],
   },
 ];
 
 export interface JourneyStop {
+  hash: string;
   year: string;
   title: string;
   note: string;
@@ -147,37 +159,94 @@ export interface JourneyStop {
 
 export const journey: JourneyStop[] = [
   {
+    hash: "a1f03c2",
     year: "2023",
     title: "Foundations",
-    note: "C++, Java, data structures — the GitHub account opens with maze solvers and calculators.",
+    note: "C++, Java, data structures — the account opens with maze solvers and calculators.",
   },
   {
+    hash: "b7e91d4",
     year: "2024",
     title: "Python & vision",
     note: "Computer vision, Flutter, scrapers, and a first full-stack attendance system (Node + EJS).",
   },
   {
+    hash: "c3a55e8",
     year: "2025",
     title: "Shipping real apps",
     note: "A production PWA for real estate, security-hardened Express APIs, scrapers that survive long runs.",
   },
   {
+    hash: "d9b12f7",
     year: "2025–26",
     title: "The LMS years",
     note: "668 commits on one product: React 19, measured perf work, per-tenant SEO, security tooling with tests.",
   },
   {
+    hash: "e5c88a3",
     year: "2026",
     title: "Real-time & Cairo-flavored SaaS",
     note: "PULPOVR streams sensor data into 3D. Bazarna productizes the Egyptian souq. This portfolio ships.",
   },
 ];
 
-export const heroStats: { value: string; label: string }[] = [
-  { value: "29", label: "public repos" },
-  { value: "700+", label: "commits on one product" },
-  { value: "40 Hz", label: "live 3D telemetry" },
-  { value: "$0", label: "infrastructure bill" },
+export const heroStats: { value: string; label: string; sub: string }[] = [
+  { value: "29", label: "PUBLIC REPOS", sub: "public surface" },
+  { value: "700+", label: "COMMITS / PRODUCT", sub: "one codebase, 9 months" },
+  { value: "40 Hz", label: "LIVE TELEMETRY", sub: "sensor → 3D scene" },
+  { value: "$0", label: "INFRA BILL", sub: "by design" },
 ];
 
+/* ─── Terminal-era content ─────────────────────────────────────────────── */
+
+export const bootLines: { text: string; tone?: "ok" | "warn" | "dim" }[] = [
+  { text: "CAIRO.SYS BIOS v2.6 — © 2026 Ibrahim Ahmed", tone: "dim" },
+  { text: "CPU ......... curiosity @ 4.2 GHz .............. OK", tone: "ok" },
+  { text: "MEM ......... 700+ commits mapped .............. OK", tone: "ok" },
+  { text: "GPU ......... Three.js rasterizer .............. OK", tone: "ok" },
+  { text: "RTL ......... Arabic / English dual-script .... OK", tone: "ok" },
+  { text: "NET ......... github.com/Locked-Cloud ....... LINKED", tone: "ok" },
+  { text: "WARN ........ neon levels set to 0 — professional mode", tone: "warn" },
+  { text: "Mounting /portfolio .......................... DONE", tone: "ok" },
+];
+
+export const typedRoles: string[] = [
+  "react + typescript interfaces",
+  "real-time 3D — three.js / R3F",
+  "SaaS on a $0 stack",
+  "edge ML on a raspberry pi",
+  "arabic-first product design",
+];
+
+export interface Social {
+  name: string;
+  handle: string;
+  url: string;
+  live: boolean;
+}
+
+export const socials: Social[] = [
+  { name: "GitHub", handle: "@Locked-Cloud", url: "https://github.com/Locked-Cloud", live: true },
+  { name: "LinkedIn", handle: "/in/ibrahim-ahmed", url: "#", live: false }, // TODO: real URL
+  { name: "Email", handle: "ibrahim@—", url: "mailto:you@example.com", live: true }, // TODO: real address
+];
+
+/** Snapshot fallback if the GitHub API is rate-limited — data from the 2026-09 study. */
+export const ghFallback = {
+  name: "Ibrahim Ahmed",
+  bio: "Don't let other people write your script.",
+  avatar_url: "https://avatars.githubusercontent.com/u/142117977?v=4",
+  public_repos: 29,
+  followers: null as number | null,
+  repos: [
+    { name: "dental-project", description: "PULPOVR: real-time dental digital twin, 6-DOF IMU telemetry", stargazers_count: 1, language: "TypeScript", html_url: "https://github.com/Locked-Cloud/dental-project", fork: false },
+    { name: "Smart-Parking-System", description: "YOLO → NCNN edge ML on Raspberry Pi 4", stargazers_count: 2, language: "Python", html_url: "https://github.com/Locked-Cloud/Smart-Parking-System", fork: false },
+    { name: "free-state", description: "Real-estate PWA with offline support", stargazers_count: 1, language: "TypeScript", html_url: "https://github.com/Locked-Cloud/free-state", fork: false },
+    { name: "WebScraper_PlayWright", description: "Adaptive e-commerce scraping pipelines", stargazers_count: 3, language: "Python", html_url: "https://github.com/Locked-Cloud/WebScraper_PlayWright", fork: false },
+    { name: "flutter-plant-diseases", description: "Plant-disease classification app", stargazers_count: 4, language: "Dart", html_url: "https://github.com/Locked-Cloud/flutter-plant-diseases", fork: false },
+    { name: "MatLab-Code", description: "Communications: AM/FM/PM modulation scripts", stargazers_count: 4, language: "MATLAB", html_url: "https://github.com/Locked-Cloud/MatLab-Code", fork: false },
+  ],
+};
+
 export const GITHUB_URL = "https://github.com/Locked-Cloud";
+export const EMAIL_TODO = "you@example.com"; // TODO: replace with real address

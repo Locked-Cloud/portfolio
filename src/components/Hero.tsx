@@ -1,127 +1,123 @@
-import { GITHUB_URL } from "../data/content";
+import { useEffect, useRef, useState } from "react";
+import Terminal from "./Terminal";
+import { typedRoles, GITHUB_URL } from "../data/content";
 
-const focusAreas = ["Real-time 3D", "SaaS products", "Edge ML", "Arabic-first UX"];
+function useTypedRole(): string {
+  const [text, setText] = useState("");
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setText(typedRoles[0]);
+      return;
+    }
+    let role = 0;
+    let char = 0;
+    let deleting = false;
+    let timer = 0;
+
+    const tick = () => {
+      const current = typedRoles[role];
+      char += deleting ? -1 : 1;
+      setText(current.slice(0, char));
+      let delay = deleting ? 32 : 62;
+      if (!deleting && char === current.length) {
+        deleting = true;
+        delay = 1900;
+      } else if (deleting && char === 0) {
+        deleting = false;
+        role = (role + 1) % typedRoles.length;
+        delay = 420;
+      }
+      timer = window.setTimeout(tick, delay);
+    };
+    timer = window.setTimeout(tick, 700);
+    return () => window.clearTimeout(timer);
+  }, []);
+  return text;
+}
 
 export default function Hero() {
+  const typed = useTypedRole();
+  const termInput = useRef<HTMLInputElement>(null);
+
   return (
-    <section
-      id="top"
-      className="lattice relative flex min-h-[94vh] items-center overflow-hidden pt-24"
-    >
-      {/* warm glows */}
-      <div
-        aria-hidden
-        className="glow absolute -top-32 right-[8%] h-96 w-96 rounded-full bg-gold/25 blur-3xl"
-      />
-      <div
-        aria-hidden
-        className="glow absolute bottom-0 left-[4%] h-80 w-80 rounded-full bg-teal/20 blur-3xl"
-      />
-      {/* arabic backdrop accent */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute right-6 top-28 select-none font-arabic text-[16vw] leading-none text-terracotta/10 md:top-24 md:text-[9rem]"
-      >
-        من القاهرة
-      </span>
+    <section id="top" className="relative z-10 mx-auto mt-14 max-w-6xl scroll-mt-24 px-4">
+      <div className="grid items-stretch gap-6 lg:grid-cols-2">
+        {/* ── operator file ── */}
+        <div className="panel flex flex-col p-7 sm:p-9" data-reveal>
+          <pre aria-hidden className="mb-6 text-[11.5px] leading-relaxed text-fog/80">
+{`const self = {
+  compile: "nightly",
+  latency: "low",
+  trust: "zero-assume"
+};`}
+          </pre>
 
-      <div className="relative mx-auto w-full max-w-6xl px-5">
-        <p
-          data-reveal
-          className="mb-5 font-display text-sm font-medium uppercase tracking-[0.25em] text-teal"
-        >
-          Front-end engineer · Cairo, Egypt 🇪🇬
-        </p>
-
-        <h1
-          data-reveal
-          style={{ transitionDelay: "80ms" }}
-          className="max-w-4xl font-display text-4xl font-bold leading-[1.08] tracking-tight sm:text-6xl lg:text-7xl"
-        >
-          I build interfaces that feel like{" "}
-          <span className="relative whitespace-nowrap text-terracotta">
-            Cairo
-            <svg
-              aria-hidden
-              viewBox="0 0 120 12"
-              preserveAspectRatio="none"
-              className="absolute -bottom-2 left-0 h-3 w-full text-gold"
-            >
-              <path
-                d="M2 8 Q 30 2 60 7 T 118 5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="3.5"
-                strokeLinecap="round"
-              />
-            </svg>
-          </span>
-          , not California.
-        </h1>
-
-        <p
-          data-reveal
-          style={{ transitionDelay: "160ms" }}
-          className="mt-7 max-w-2xl text-lg leading-relaxed text-ink/70"
-        >
-          Real-time 3D web, SaaS products, and machine learning that runs on
-          $45 hardware — from sensor firmware to the last pixel.{" "}
-          <span className="font-arabic text-base text-teal">
-            نفس الروح، شكل جديد.
-          </span>
-        </p>
-
-        <div
-          data-reveal
-          style={{ transitionDelay: "240ms" }}
-          className="mt-9 flex flex-wrap items-center gap-4"
-        >
-          <a
-            href="#work"
-            className="rounded-full bg-terracotta px-7 py-3 font-display font-semibold text-sand shadow-lg shadow-terracotta/25 transition-all hover:-translate-y-0.5 hover:bg-terracotta-deep"
+          <p className="mb-3 text-[11px] tracking-[0.3em] text-fog">
+            DEVELOPER FILE <span className="text-gold">//</span> 2026
+          </p>
+          <h1
+            className="glitch font-display text-4xl font-bold tracking-tight text-mint sm:text-6xl"
+            data-text="IBRAHIM AHMED"
           >
-            See the work
-          </a>
-          <a
-            href={GITHUB_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="rounded-full border-2 border-ink/15 px-7 py-2.5 font-display font-semibold transition-colors hover:border-ink hover:text-terracotta"
-          >
-            GitHub ↗
-          </a>
+            IBRAHIM AHMED
+          </h1>
+
+          <p className="mt-4 min-h-[1.6em] text-[15px] text-phos">
+            <span aria-live="polite">{typed}</span>
+            <span className="cursor-blink" aria-hidden />
+          </p>
+
+          <p className="mt-4 max-w-md text-sm leading-relaxed text-mint/70">
+            I build interfaces that feel like <span className="text-terra">Cairo</span>, not
+            California — real-time 3D web, SaaS products, and ML that runs on $45
+            hardware.{" "}
+            <span className="font-arabic text-phos/80">نفس الروح، شكل جديد.</span>
+          </p>
+
+          <div className="mt-7 flex flex-wrap gap-3">
+            <a href="#work" className="btn solid">view work</a>
+            <a href="#contact" className="btn">init contact</a>
+            <button type="button" className="btn gold" onClick={() => termInput.current?.focus()}>
+              open shell
+            </button>
+          </div>
+
+          <dl className="mt-auto grid grid-cols-3 gap-4 border-t border-phos/15 pt-5 text-[11px] tracking-widest text-fog">
+            <div>
+              <dt>LOC</dt>
+              <dd className="mt-1 text-[13px] text-mint">Cairo, EG</dd>
+            </div>
+            <div>
+              <dt>FOCUS</dt>
+              <dd className="mt-1 text-[13px] text-mint">3D · SaaS · ML</dd>
+            </div>
+            <div>
+              <dt>UPTIME</dt>
+              <dd className="mt-1 text-[13px] text-mint">3+ yrs</dd>
+            </div>
+          </dl>
         </div>
 
-        <ul
-          data-reveal
-          style={{ transitionDelay: "320ms" }}
-          className="mt-10 flex flex-wrap gap-2.5"
-        >
-          {focusAreas.map((f) => (
-            <li
-              key={f}
-              className="rounded-full border border-ink/15 bg-card/70 px-4 py-1.5 text-sm font-medium text-ink/75"
-            >
-              {f}
-            </li>
-          ))}
-        </ul>
+        {/* ── the shell ── */}
+        <div data-reveal style={{ transitionDelay: "120ms" }} className="min-h-[420px]">
+          <Terminal inputRef={termInput} />
+        </div>
       </div>
 
-      <div
-        aria-hidden
-        className="scroll-cue absolute bottom-6 left-1/2 -translate-x-1/2 text-ink/40"
+      <p className="mt-6 text-center text-[11px] tracking-[0.2em] text-fog/60">
+        THE SHELL IS REAL — TRY <span className="text-phos">help</span> ·{" "}
+        <span className="text-phos">projects</span> ·{" "}
+        <span className="text-phos">sudo make me a job</span>
+      </p>
+
+      <a
+        href={GITHUB_URL}
+        target="_blank"
+        rel="noreferrer"
+        className="sr-only"
       >
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-          <path
-            d="M6 9l6 6 6-6"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </div>
+        GitHub profile
+      </a>
     </section>
   );
 }

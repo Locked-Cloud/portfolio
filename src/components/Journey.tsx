@@ -3,29 +3,38 @@ import { SectionHead } from "./SectionHead";
 
 export default function Journey() {
   return (
-    <section id="journey" className="mx-auto max-w-6xl scroll-mt-20 px-5 py-24">
-      <SectionHead arabic="الرحلة" kicker="The road so far" title="From calculators to real-time 3D" />
+    <section id="log" className="mx-auto mt-28 max-w-6xl scroll-mt-24 px-4">
+      <SectionHead index="03 — LOG" title="GIT LOG — JOURNEY" note="press j to scroll, like a pro" arabic="الرحلة" />
 
-      <ol className="relative ml-3 border-l-2 border-ink/15">
-        {journey.map((stop, i) => (
-          <li
-            key={stop.year}
-            data-reveal
-            style={{ transitionDelay: `${i * 90}ms` }}
-            className="relative pb-10 pl-8 last:pb-0"
-          >
-            <span
-              aria-hidden
-              className="absolute -left-[9px] top-1.5 block h-4 w-4 rounded-full border-2 border-sand bg-terracotta"
-            />
-            <p className="font-display text-sm font-bold uppercase tracking-widest text-gold">
-              {stop.year}
-            </p>
-            <h3 className="mt-1 font-display text-xl font-bold">{stop.title}</h3>
-            <p className="mt-1.5 max-w-2xl leading-relaxed text-ink/65">{stop.note}</p>
-          </li>
-        ))}
-      </ol>
+      <div className="panel p-6 sm:p-8" data-reveal>
+        <p className="text-[11px] tracking-[0.2em] text-fog">
+          ibrahim@cairo:~$ <span className="text-phos">git log --oneline --reverse</span>
+        </p>
+        <ol className="mt-5 space-y-0">
+          {journey.map((j, i) => (
+            <li key={j.hash} className="relative flex gap-4 pb-7 pl-1 last:pb-0">
+              {/* graph rail */}
+              <div aria-hidden className="flex flex-col items-center">
+                <span className={`mt-1 block h-2.5 w-2.5 rotate-45 border ${i === journey.length - 1 ? "border-gold bg-gold" : "border-phos bg-bg"}`} />
+                {i < journey.length - 1 && <span className="w-px grow bg-phos/20" />}
+              </div>
+              <div className="pb-1">
+                <p className="text-[13px] leading-snug">
+                  <span className="text-gold">{j.hash}</span>{" "}
+                  <span className="text-fog">{j.year}</span>{" "}
+                  <span className="font-semibold text-mint">{j.title}</span>
+                </p>
+                <p className="mt-1 max-w-2xl text-[12.5px] leading-relaxed text-mint/60">
+                  {j.note}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <p className="mt-2 text-[11px] text-fog/60">
+          <span className="text-gold">(HEAD → main)</span> still committing
+        </p>
+      </div>
     </section>
   );
 }

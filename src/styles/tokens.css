@@ -1,23 +1,26 @@
 @import "tailwindcss";
 
-/* ─── Neo-Bazaar design tokens ───────────────────────────────────────────
-   Same identity as Bazarna (DESIGN.md): warm sand, ink, terracotta,
-   nile-teal, gold. Dual-script: Latin display + Arabic accents. */
+/* ─── CAIRO.SYS — terminal × Neo-Bazaar ──────────────────────────────────
+   The RADE.SYS hacker-terminal concept, professionalized and fused with
+   the Bazarna identity: warm-dark ink, phosphor nile-teal (not neon
+   green), gold as the alert accent, Arabic glyphs in the rain. */
 
 @theme {
-  --color-sand: #f5ede0;
-  --color-sand-deep: #ece0cc;
-  --color-card: #fbf6ec;
-  --color-ink: #1a1512;
-  --color-ink-soft: #2a2320;
-  --color-terracotta: #c4552d;
-  --color-terracotta-deep: #a34524;
-  --color-teal: #1f7a70;
+  --color-bg: #070c0a;
+  --color-bg2: #0b1310;
+  --color-panel: #0d1714;
+  --color-phos: #2dd4a7;
+  --color-phos-bright: #7ef0cd;
+  --color-mint: #d6efe4;
+  --color-fog: #7ca394;
   --color-gold: #d9a441;
+  --color-terra: #e0713f;
+  --color-danger: #ff6b5a;
+  --color-cyan: #4dffe7;
 
   --font-display: "Space Grotesk", "IBM Plex Sans Arabic", system-ui, sans-serif;
-  --font-body: "Inter", "IBM Plex Sans Arabic", system-ui, sans-serif;
-  --font-arabic: "Aref Ruqaa", "IBM Plex Sans Arabic", serif;
+  --font-body: "IBM Plex Mono", "IBM Plex Sans Arabic", ui-monospace, monospace;
+  --font-arabic: "IBM Plex Sans Arabic", sans-serif;
 }
 
 html {
@@ -25,72 +28,170 @@ html {
 }
 
 body {
-  background-color: var(--color-sand);
-  color: var(--color-ink);
+  background-color: var(--color-bg);
+  color: var(--color-mint);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
   background: var(--color-gold);
-  color: var(--color-ink);
+  color: var(--color-bg);
+}
+
+/* ─── Shared surfaces ──────────────────────────────────────────────────── */
+.panel {
+  border: 1px solid rgba(45, 212, 167, 0.18);
+  background: rgba(13, 23, 20, 0.82);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 40px rgba(45, 212, 167, 0.05);
+}
+
+.btn {
+  display: inline-block;
+  border: 1px solid rgba(45, 212, 167, 0.5);
+  color: var(--color-phos);
+  padding: 0.65rem 1.4rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+.btn:hover {
+  background: rgba(45, 212, 167, 0.1);
+  border-color: var(--color-phos);
+  box-shadow: 0 0 18px rgba(45, 212, 167, 0.18);
+}
+.btn.solid {
+  background: var(--color-phos);
+  color: var(--color-bg);
+  font-weight: 600;
+}
+.btn.solid:hover {
+  background: var(--color-phos-bright);
+}
+.btn.gold {
+  border-color: rgba(217, 164, 65, 0.55);
+  color: var(--color-gold);
+}
+.btn.gold:hover {
+  background: rgba(217, 164, 65, 0.1);
+  border-color: var(--color-gold);
+}
+
+.tag {
+  display: inline-block;
+  border: 1px solid;
+  padding: 0.1rem 0.55rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ─── CRT scanlines + vignette ─────────────────────────────────────────── */
+.scanlines {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.16) 3px
+  );
+  opacity: 0.3;
+}
+.vignette {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse at center, transparent 42%, rgba(0, 0, 0, 0.6) 100%),
+    linear-gradient(180deg, rgba(0, 12, 8, 0.4), transparent 16%, transparent 84%, rgba(0, 0, 0, 0.5));
+}
+
+/* ─── Glitch name ──────────────────────────────────────────────────────── */
+.glitch {
+  position: relative;
+  display: inline-block;
+}
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0;
+}
+.glitch::before {
+  color: var(--color-cyan);
+  animation: glitch-a 4.2s infinite steps(1);
+}
+.glitch::after {
+  color: var(--color-terra);
+  animation: glitch-b 4.2s infinite steps(1);
+}
+@keyframes glitch-a {
+  0%, 92%, 100% { opacity: 0; transform: none; clip-path: inset(0 0 0 0); }
+  93% { opacity: 0.8; transform: translate(-3px, 2px); clip-path: inset(12% 0 58% 0); }
+  95% { opacity: 0.8; transform: translate(3px, -1px); clip-path: inset(62% 0 8% 0); }
+  97% { opacity: 0; }
+}
+@keyframes glitch-b {
+  0%, 91%, 100% { opacity: 0; transform: none; clip-path: inset(0 0 0 0); }
+  94% { opacity: 0.75; transform: translate(3px, -2px); clip-path: inset(38% 0 34% 0); }
+  96% { opacity: 0.75; transform: translate(-2px, 1px); clip-path: inset(78% 0 4% 0); }
+  98% { opacity: 0; }
+}
+
+/* ─── Typing cursor ────────────────────────────────────────────────────── */
+.cursor-blink {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: var(--color-phos);
+  animation: blink 1.05s steps(1) infinite;
+}
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* ─── Boot sequence ────────────────────────────────────────────────────── */
+.boot-line {
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+.boot-line.show {
+  opacity: 1;
+}
+
+/* ─── Status dot ───────────────────────────────────────────────────────── */
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(45, 212, 167, 0.5); }
+  50% { box-shadow: 0 0 0 6px rgba(45, 212, 167, 0); }
+}
+.pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
 }
 
 /* ─── Scroll reveal ────────────────────────────────────────────────────── */
 [data-reveal] {
   opacity: 0;
-  transform: translateY(26px);
+  transform: translateY(22px);
   transition:
-    opacity 0.7s ease,
-    transform 0.7s ease;
+    opacity 0.65s ease,
+    transform 0.65s ease;
 }
 [data-reveal].is-visible {
   opacity: 1;
   transform: none;
 }
 
-/* ─── Mashrabiya lattice (hero backdrop, CSS-only) ─────────────────────── */
-.lattice {
-  background-image:
-    repeating-linear-gradient(
-      45deg,
-      transparent 0 22px,
-      rgba(26, 21, 18, 0.045) 22px 24px
-    ),
-    repeating-linear-gradient(
-      -45deg,
-      transparent 0 22px,
-      rgba(26, 21, 18, 0.045) 22px 24px
-    );
-}
-
-/* ─── Motion ───────────────────────────────────────────────────────────── */
-@keyframes glow-drift {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(3%, -4%) scale(1.06);
-  }
-}
-.glow {
-  animation: glow-drift 14s ease-in-out infinite;
-}
-
-@keyframes cue-bob {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(7px);
-  }
-}
-.scroll-cue {
-  animation: cue-bob 2.2s ease-in-out infinite;
-}
-
+/* ─── Accessibility ────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -100,8 +201,14 @@ body {
     opacity: 1;
     transform: none;
   }
-  .glow,
-  .scroll-cue {
+  .glitch::before,
+  .glitch::after,
+  .cursor-blink,
+  .pulse-dot,
+  .scanlines {
     animation: none;
+  }
+  .scanlines {
+    display: none;
   }
 }

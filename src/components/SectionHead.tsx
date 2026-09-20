@@ -1,43 +1,37 @@
 interface SectionHeadProps {
-  arabic: string;
-  kicker: string;
+  index: string;
   title: string;
-  inverted?: boolean;
+  note?: string;
+  arabic?: string;
 }
 
-export function SectionHead({ arabic, kicker, title, inverted }: SectionHeadProps) {
+export function SectionHead({ index, title, note, arabic }: SectionHeadProps) {
   return (
-    <div data-reveal className="mb-14">
-      <div className="flex items-baseline gap-4">
-        <span className="font-arabic text-2xl text-gold">{arabic}</span>
-        <span
-          className={`font-display text-xs font-semibold uppercase tracking-[0.3em] ${
-            inverted ? "text-teal" : "text-teal"
-          }`}
-        >
-          {kicker}
-        </span>
+    <div data-reveal className="mb-10">
+      <p className="text-[11px] tracking-[0.3em] text-fog">
+        <span className="text-gold">//</span> {index}
+        {note ? <span className="ml-3 text-fog/60">{note}</span> : null}
+      </p>
+      <div className="mt-2 flex flex-wrap items-baseline justify-between gap-3">
+        <h2 className="font-display text-3xl font-bold tracking-tight text-mint sm:text-4xl">
+          {title}
+        </h2>
+        {arabic && <span className="font-arabic text-xl text-gold/90">{arabic}</span>}
       </div>
-      <h2
-        className={`mt-3 font-display text-3xl font-bold tracking-tight sm:text-5xl ${
-          inverted ? "text-sand" : "text-ink"
-        }`}
-      >
-        {title}
-      </h2>
+      <div className="mt-5 h-px w-full bg-gradient-to-r from-phos/40 via-phos/10 to-transparent" />
     </div>
   );
 }
 
-/** Khayamiya triangle divider — tentmaker appliqué pattern as a section seam. */
-export function Khayamiya({ className = "" }: { className?: string }) {
+/** Khayamiya seam — gold triangles, kept from the Neo-Bazaar identity. */
+export function Khayamiya() {
   const triangles = Array.from({ length: 60 }, (_, i) => i);
   return (
     <svg
       aria-hidden
       viewBox="0 0 1440 16"
       preserveAspectRatio="none"
-      className={`block h-4 w-full ${className}`}
+      className="block h-3 w-full text-gold/25"
     >
       {triangles.map((i) => (
         <polygon

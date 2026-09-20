@@ -1,13 +1,14 @@
 export default function Footer() {
   return (
-    <footer className="border-t border-sand/10 bg-ink py-8 text-sand/50">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-5 text-sm sm:flex-row">
+    <footer className="mx-auto mt-24 max-w-6xl px-4 pb-10">
+      <div className="border-t border-phos/12 pt-6" />
+      <div className="flex flex-col items-center justify-between gap-3 text-[11px] tracking-[0.18em] text-fog/70 sm:flex-row">
         <p>
-          © {new Date().getFullYear()} Ibrahim Ahmed · Cairo, Egypt
+          COMPILED IN CAIRO <span className="text-gold">·</span> NO TRACKERS{" "}
+          <span className="text-gold">·</span> © {new Date().getFullYear()} IBRAHIM AHMED
         </p>
-        <p className="flex items-center gap-2">
-          <span className="font-arabic text-gold">البازار الجديد</span>
-          Neo-Bazaar theme · designed &amp; built from scratch
+        <p className="font-arabic text-[13px] tracking-normal text-gold/70">
+          نفس الروح، شكل جديد
         </p>
       </div>
     </footer>
