@@ -41,12 +41,26 @@ const HELP: string[] = [
   "  scorecard   — merit vs. stars",
   "  coverage    — what this page can't show",
   "  neofetch    — system card",
+  "  goto <x>    — scroll to: proof · work · skills · log · github · blog · contact",
+  "  theme       — toggle matrix rain & scanlines",
   "  github      — open github profile",
   "  social      — direct channels",
   "  contact     — how to reach me",
   "  uptime      — years at the keyboard",
   "  clear       — wipe the screen",
 ];
+
+const GOTO_TARGETS: Record<string, string> = {
+  top: "top",
+  proof: "proof",
+  work: "work",
+  skills: "skills",
+  log: "log",
+  github: "github",
+  blog: "blog",
+  contact: "contact",
+  "3d": "proof",
+};
 
 function commands(): Record<string, Line[]> {
   return {
@@ -194,6 +208,37 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
       return;
     }
     const key = cmd.split(/\s+/)[0].toLowerCase();
+    const arg = cmd.split(/\s+/).slice(1).join(" ").toLowerCase();
+
+    if (key === "goto") {
+      const id = GOTO_TARGETS[arg];
+      if (id) {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+        setLines((l) => [...l, prompt, { kind: "out", text: `→ /#${id}` }]);
+      } else {
+        setLines((l) => [
+          ...l,
+          prompt,
+          { kind: "err", text: `goto: unknown target '${arg}' — try proof · work · skills · log · github · blog · contact` },
+        ]);
+      }
+      return;
+    }
+    if (key === "theme") {
+      const quiet = document.body.classList.toggle("quiet");
+      setLines((l) => [
+        ...l,
+        prompt,
+        {
+          kind: "out",
+          text: quiet
+            ? "quiet mode — matrix rain & scanlines off. run `theme` to bring the weather back."
+            : "full weather restored.",
+        },
+      ]);
+      return;
+    }
+
     const out = commands()[key];
     if (out) {
       setLines((l) => [...l, prompt, ...out]);
@@ -286,7 +331,7 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={onKeyDown}
-          className="w-full bg-transparent text-[13px] text-mint outline-none placeholder:text-fog/50"
+          className="w-full bg-transparent text-[13px] text-mint outline-none placeholder:text-fog"
           placeholder="type help"
           autoComplete="off"
           spellCheck={false}
@@ -295,7 +340,7 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
       </div>
 
       {/* footer hints */}
-      <div className="flex items-center justify-between border-t border-phos/15 bg-white/5 px-5 py-2.5 text-[10px] tracking-widest text-fog/50 sm:px-6">
+      <div className="flex items-center justify-between border-t border-phos/15 bg-white/5 px-5 py-2.5 text-[10px] tracking-widest text-fog sm:px-6">
         <p>TIPS: TYPE &lsquo;VERIFY&rsquo;, &lsquo;SCORECARD&rsquo;, OR &lsquo;CLEAR&rsquo;</p>
         <p className="hidden sm:block">LOC: {COORDINATES}</p>
       </div>

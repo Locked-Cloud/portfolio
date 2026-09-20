@@ -1,4 +1,6 @@
 @import "tailwindcss";
+/* NOTE: the /cv entry's tree isn't reached by Tailwind's auto source scan —
+   its page uses the plain-CSS .cv-* classes below, deliberately. */
 
 /* ─── CAIRO.SYS — terminal × Neo-Bazaar ──────────────────────────────────
    The RADE.SYS hacker-terminal concept, professionalized and fused with
@@ -190,6 +192,77 @@ body {
 [data-reveal].is-visible {
   opacity: 1;
   transform: none;
+}
+
+/* ─── `theme` quiet mode — matrix rain & scanlines off ─────────────────── */
+body.quiet .scanlines,
+body.quiet .vignette {
+  display: none;
+}
+body.quiet canvas.fixed {
+  opacity: 0 !important;
+}
+
+/* ─── CV paper theme — plain CSS (deterministic; immune to utility scan) ── */
+.cv-page {
+  color: #1a1512;
+}
+.cv-page .cv-muted {
+  color: #5a6b62;
+}
+.cv-page .cv-h2 {
+  color: #a34524;
+}
+.cv-page .cv-body {
+  color: #3a4a42;
+}
+.cv-page .cv-teal {
+  color: #1f7a70;
+}
+.cv-page .cv-profile {
+  max-width: 70ch;
+}
+.cv-page .cv-border2 {
+  border-bottom: 2px solid #1a1512;
+}
+.cv-page .cv-rule {
+  border-top: 1px solid #c9c2b4;
+}
+.cv-page .cv-btn {
+  display: inline-block;
+  border: 1px solid rgba(31, 122, 112, 0.5);
+  color: #1f7a70;
+  padding: 0.35rem 1rem;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+  transition: background 0.15s ease;
+  cursor: pointer;
+}
+.cv-page .cv-btn:hover {
+  background: rgba(31, 122, 112, 0.1);
+}
+.cv-page .cv-btn.warn {
+  border-color: rgba(163, 69, 36, 0.6);
+  color: #a34524;
+}
+.cv-page .cv-btn.warn:hover {
+  background: rgba(163, 69, 36, 0.1);
+}
+.cv-page .cv-btn.solid {
+  background: #1f7a70;
+  border-color: #1f7a70;
+  color: #ffffff;
+  font-weight: 600;
+}
+.cv-page .cv-btn.solid:hover {
+  background: #155a52;
+}
+.cv-page .cv-row {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  column-gap: 0.9rem;
 }
 
 /* ─── CV page print rules ──────────────────────────────────────────────── */

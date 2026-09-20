@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { featuredProjects, moreProjects, type Project } from "../data/content";
 import { SectionHead } from "./SectionHead";
 
@@ -7,19 +8,99 @@ const statusStyles: Record<NonNullable<Project["status"]>, string> = {
   PRIV: "border-fog/40 text-fog",
 };
 
-function ProjectCard({ p }: { p: Project }) {
+function GalleryModal({
+  gallery,
+  index,
+  onIndex,
+  onClose,
+}: {
+  gallery: Gallery;
+  index: number;
+  onIndex: (i: number) => void;
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowRight") onIndex((index + 1) % gallery.length);
+      if (e.key === "ArrowLeft") onIndex((index - 1 + gallery.length) % gallery.length);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [index, gallery.length, onClose, onIndex]);
+
+  const item = gallery[index];
+  return (
+    <div
+      className="fixed inset-0 z-[70] flex flex-col items-center justify-center bg-black/85 p-6"
+      role="dialog"
+      aria-modal="true"
+      aria-label="project image gallery"
+      onClick={onClose}
+    >
+      <img
+        src={item.src}
+        alt={item.alt}
+        className="max-h-[72vh] max-w-full border border-phos/30 object-contain"
+        onClick={(e) => e.stopPropagation()}
+      />
+      <p className="mt-4 text-[12px] text-fog" onClick={(e) => e.stopPropagation()}>
+        {item.alt} — {index + 1}/{gallery.length}
+      </p>
+      <div className="mt-4 flex gap-3" onClick={(e) => e.stopPropagation()}>
+        <button
+          type="button"
+          className="btn"
+          onClick={() => onIndex((index - 1 + gallery.length) % gallery.length)}
+        >
+          ← prev
+        </button>
+        <button type="button" className="btn gold" onClick={onClose}>
+          close (esc)
+        </button>
+        <button
+          type="button"
+          className="btn"
+          onClick={() => onIndex((index + 1) % gallery.length)}
+        >
+          next →
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function ProjectCard({
+  p,
+  onGallery,
+}: {
+  p: Project;
+  onGallery: (p: Project) => void;
+}) {
   return (
     <article
       data-reveal
       className="panel group flex flex-col p-6 transition-colors duration-300 hover:border-phos/45"
     >
       {p.image && (
-        <img
-          src={p.image}
-          alt={p.imageAlt ?? ""}
-          loading="lazy"
-          className="mb-5 aspect-[16/9] w-full border border-phos/15 object-cover"
-        />
+        <button
+          type="button"
+          onClick={() => p.gallery && onGallery(p)}
+          className={`mb-5 block ${p.gallery ? "cursor-zoom-in" : "cursor-default"}`}
+          aria-label={p.gallery ? `open ${p.title} image gallery` : undefined}
+        >
+          <img
+            src={p.image}
+            alt={p.imageAlt ?? ""}
+            loading="lazy"
+            className="aspect-[16/9] w-full border border-phos/15 object-cover"
+          />
+          {p.gallery && (
+            <span className="tag absolute mt-2 ml-2 border-phos/40 bg-bg/80 text-phos">
+              {p.gallery.length} images
+            </span>
+          )}
+        </button>
       )}
 
       <div className="flex items-center justify-between gap-3">
@@ -65,16 +146,32 @@ function ProjectCard({ p }: { p: Project }) {
   );
 }
 
+type Gallery = NonNullable<Project["gallery"]>;
+
 export default function Projects() {
+  const [gallery, setGallery] = useState<Gallery | null>(null);
+  const [gIdx, setGIdx] = useState(0);
+
   return (
     <section id="work" className="mx-auto mt-28 max-w-6xl scroll-mt-24 px-4">
       <SectionHead index="01 — WORK" title="SHIPPED SYSTEMS" note="selected" arabic="الأعمال" />
 
       <div className="grid gap-5 md:grid-cols-2">
         {featuredProjects.map((p) => (
-          <ProjectCard key={p.id} p={p} />
+          <ProjectCard
+            key={p.id}
+            p={p}
+            onGallery={(proj: Project) => {
+              setGallery(proj.gallery ?? null);
+              setGIdx(0);
+            }}
+          />
         ))}
       </div>
+
+      {gallery && (
+        <GalleryModal gallery={gallery} index={gIdx} onIndex={setGIdx} onClose={() => setGallery(null)} />
+      )}
 
       <div className="panel mt-6 p-6" data-reveal>
         <p className="text-[11px] tracking-[0.2em] text-fog">

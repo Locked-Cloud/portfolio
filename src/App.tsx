@@ -3,10 +3,12 @@ import Nav from "./components/Nav";
 import Hero from "./components/Hero";
 import MatrixRain from "./components/MatrixRain";
 import Stats from "./components/Stats";
+import Proof from "./components/Proof";
 import Projects from "./components/Projects";
 import Skills from "./components/Skills";
 import Journey from "./components/Journey";
 import GitHubLive from "./components/GitHubLive";
+import Blog from "./components/Blog";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import { observeReveals } from "./lib/reveal";
@@ -61,10 +63,12 @@ export default function App() {
         <main>
           <Hero />
           <Stats repos={user.public_repos} />
+          <Proof />
           <Projects />
           <Skills />
           <Journey />
           <GitHubLive user={user} />
+          <Blog />
           <Contact />
         </main>
         <Footer />

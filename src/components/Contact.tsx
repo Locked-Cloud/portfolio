@@ -27,7 +27,7 @@ export default function Contact() {
         <Khayamiya />
       </div>
       <div className="mx-auto mt-14 max-w-6xl scroll-mt-24 px-4" id="contact-anchor">
-        <SectionHead index="05 — CONTACT" title="SECURE CHANNEL" note="open channel, actually" arabic="نتكلّم؟" />
+        <SectionHead index="06 — CONTACT" title="SECURE CHANNEL" note="open channel, actually" arabic="نتكلّم؟" />
 
         <div className="grid gap-5 lg:grid-cols-2">
           <div className="panel p-6 sm:p-8" data-reveal>
@@ -39,7 +39,7 @@ export default function Contact() {
               value={alias}
               onChange={(e) => setAlias(e.target.value)}
               placeholder="your name"
-              className="mt-1.5 mb-5 w-full border border-phos/20 bg-transparent px-3.5 py-2.5 text-[13px] text-mint outline-none transition-colors placeholder:text-fog/50 focus:border-phos/60"
+              className="mt-1.5 mb-5 w-full border border-phos/20 bg-transparent px-3.5 py-2.5 text-[13px] text-mint outline-none transition-colors placeholder:text-fog focus:border-phos/60"
             />
             <label className="text-[10px] tracking-[0.22em] text-fog" htmlFor="payload">
               PAYLOAD
@@ -50,7 +50,7 @@ export default function Contact() {
               onChange={(e) => setMessage(e.target.value)}
               placeholder="what should we build?"
               rows={5}
-              className="mt-1.5 mb-5 w-full resize-none border border-phos/20 bg-transparent px-3.5 py-2.5 text-[13px] text-mint outline-none transition-colors placeholder:text-fog/50 focus:border-phos/60"
+              className="mt-1.5 mb-5 w-full resize-none border border-phos/20 bg-transparent px-3.5 py-2.5 text-[13px] text-mint outline-none transition-colors placeholder:text-fog focus:border-phos/60"
             />
             <p className="text-[11px] leading-relaxed text-fog/70">
               transmit opens your mail client with the payload pre-filled — no

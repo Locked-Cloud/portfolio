@@ -11,16 +11,24 @@ export interface Project {
   year?: string;
   image?: string;
   imageAlt?: string;
+  gallery?: { src: string; alt: string }[];
   metrics?: { label: string; value: string }[];
 }
+
+const PULPOVR_ASSETS = "https://raw.githubusercontent.com/Locked-Cloud/dental-project/HEAD/docs/assets";
 
 export const featuredProjects: Project[] = [
   {
     id: "pulpoVr",
     index: "01",
     title: "PULPOVR",
-    image: "https://raw.githubusercontent.com/Locked-Cloud/dental-project/HEAD/docs/assets/hero_banner.jpg",
+    image: `${PULPOVR_ASSETS}/hero_banner.jpg`,
     imageAlt: "PULPOVR cockpit — 3D tooth digital twin with telemetry gauges",
+    gallery: [
+      { src: `${PULPOVR_ASSETS}/hero_banner.jpg`, alt: "PULPOVR cockpit — full interface" },
+      { src: `${PULPOVR_ASSETS}/digital_twin_3d.jpg`, alt: "Digital twin — 3D tooth with canal path" },
+      { src: `${PULPOVR_ASSETS}/analytics_dashboard.jpg`, alt: "Student analytics dashboard" },
+    ],
     arabic: "توأم رقمي لحظي",
     tagline: "Live endodontic guidance — real-time dental digital twin",
     description:
@@ -326,3 +334,60 @@ export const ghFallback = {
 
 export const GITHUB_URL = "https://github.com/Locked-Cloud";
 export const EMAIL_TODO = "you@example.com"; // TODO: replace with real address
+
+/* ─── Blog / devlog ────────────────────────────────────────────────────── */
+
+export interface Post {
+  slug: string;
+  title: string;
+  date: string;
+  minutes: number;
+  excerpt: string;
+  body: string[];
+}
+
+export const posts: Post[] = [
+  {
+    slug: "terminal-portfolio",
+    title: "Why my portfolio is a terminal",
+    date: "2026-09-21",
+    minutes: 3,
+    excerpt:
+      "A shell that answers, stats with provenance chips, and Arabic in the matrix rain — the design decisions behind CAIRO.SYS.",
+    body: [
+      "Most portfolios are a grid of cards. Mine boots a kernel log, tells you who I am as command output, and hands you the prompt. That choice came from a collision: a hacker-terminal reference (matrix rain, scanlines, a shell you can type into) met my own design language — the warm, Arabic-first identity I built for Bazarna, an Egypt-first SaaS.",
+      "Neon green on black is a costume. I swapped it for phosphor nile-teal on warm-dark ink, used gold exactly once (the availability chip), and let Arabic glyphs fall through the matrix rain next to the latin ones. The terminal says Cairo, not Hollywood.",
+      "The part I care most about is invisible until you type `verify`: every number on the page carries its source — [record], [measured], [by-design]. 29 repos is a public record. 40 Hz telemetry is a measurement from PULPOVR, my dental digital-twin project. $0 infra is an architecture decision, and I can show you the plan. `scorecard` prints the selection method: my two best projects have 1 and 2 stars; the 4-star repos are course scripts. Merit, not stars.",
+      "A portfolio is a claim. This one tries to make its claims executable.",
+    ],
+  },
+  {
+    slug: "dental-twin-hardware",
+    title: "A dental digital twin on ~$30 of hardware",
+    date: "2026-09-14",
+    minutes: 4,
+    excerpt:
+      "PULPOVR: an ESP32 and a 6-DOF IMU taped to a dental handpiece, streaming at 40 Hz into a Three.js molar. What I learned building end to end.",
+    body: [
+      "Root canals are done blind. The dentist feels for the canal apex through the instrument — skill built on thousands of procedures. PULPOVR asks: what if a student could see it instead?",
+      "The hardware is deliberately cheap: an ESP32 and an MPU-6050 six-degree-of-freedom IMU mounted on a contra-angle handpiece — about thirty dollars. The ESP32 reads the sensor and streams telemetry over WebSocket at 40 Hz. A Node/Express relay keeps the sessions, and the browser end is React 18 with Three.js / React-Three-Fiber rendering an interactive molar: canal paths, an apex-locator safety HUD, trajectory panels, and session analytics for instructors.",
+      "Writing it end to end taught me where the real problems live. Forty Hz sounds trivial until you own the whole pipe: firmware timing, WebSocket backpressure, and a 3D scene that must not stutter while it ingests. The virtual-device simulator I built alongside the firmware — so I could develop the frontend without a handpiece on my desk — ended up being the feature that made the demo possible anywhere.",
+      "It's MIT-licensed and documented, wiring diagrams included. The clinical claims belong to dentists; the engineering is mine and it's on GitHub.",
+    ],
+  },
+  {
+    slug: "zero-dollar-shipping",
+    title: "Shipping products on a $0 bill",
+    date: "2026-09-07",
+    minutes: 4,
+    excerpt:
+      "Cloudflare Pages, Supabase free tier, pg_cron keep-alives, and manual-first Egyptian payments — how the $0 architecture actually holds.",
+    body: [
+      "Every platform I've shipped — a real-estate PWA, an LMS, and Bazarna, an Egypt-first ecommerce SaaS — runs on infrastructure that costs nothing. That's not a hobby constraint; it's an architecture discipline that forces honest decisions.",
+      "The stack: Cloudflare Pages for hosting (unlimited bandwidth on the free tier, commercial use allowed), Supabase for Postgres with Row-Level Security doing authorization — no API server for CRUD — Edge Functions only where secrets live, and pg_cron for scheduled jobs. The traps are known: Supabase pauses projects after seven idle days, so a keep-alive ping runs on a schedule; auth emails are rate-limited, so transactional email goes through a free SMTP relay; and a weekly encrypted pg_dump lands in a private repo as disaster insurance.",
+      "The Egyptian twist is payments. Cash on delivery, InstaPay transfers, and smart-wallet transfers need no gateway at all — just a verification queue in the merchant console. A real gateway (Paymob) enters per-store with their own credentials when a store is ready, one iframe and one HMAC-verified webhook.",
+      "$0 doesn't mean toy. It means every component must justify itself before it costs money. When one of these products outgrows the free tier, I'll know exactly which line item earned it.",
+    ],
+  },
+];
+

@@ -1,8 +1,10 @@
 # Portfolio — Ibrahim Ahmed · CAIRO.SYS
 
-**Live:** https://locked-cloud.github.io/portfolio/ · CV: [/cv.html](https://locked-cloud.github.io/portfolio/cv.html)
+**Live:** https://locked-cloud.github.io/portfolio/ · CV: [/cv.html](https://locked-cloud.github.io/portfolio/cv.html) (EN/عربي, print-ready)
 
-Terminal × Cairo identity: the hero **is** an interactive shell (type `help`, `verify`, `scorecard`, `neofetch`, `coverage`), every stat carries a provenance chip, and GitHub data loads live with a bundled fallback. Arabic glyphs fall in the matrix rain.
+Terminal × Cairo identity. The hero **is** an interactive shell — `help`, `verify`, `scorecard`, `neofetch`, `coverage`, `goto work`, `theme` — every stat carries a provenance chip, a real-time **three.js tooth** loads on scroll (`#proof`), the devlog holds three written posts, and PULPOVR's gallery opens from its card. Arabic glyphs fall in the matrix rain.
+
+**Demo video:** [`docs/demo.webm`](docs/demo.webm) — a 35-second guided terminal session (recorded by the Playwright suite itself).
 
 Direction chosen from a 4-variant superdesign exploration (V2 — "the shell is the hero").
 
