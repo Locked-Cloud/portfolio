@@ -65,7 +65,6 @@ export default function App() {
     <div className="relative min-h-screen bg-bg font-body text-mint">
       <MatrixRain />
       <div className="vignette" aria-hidden />
-      <div className="scanlines" aria-hidden />
       <div className="relative z-10">
         <Nav />
         <main>

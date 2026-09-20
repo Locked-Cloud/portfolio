@@ -11,6 +11,8 @@ export interface Project {
   year?: string;
   image?: string;
   imageAlt?: string;
+  /** thumbnails that read near-black at card size get a brightness lift */
+  lift?: boolean;
   gallery?: { src: string; alt: string }[];
   metrics?: { label: string; value: string }[];
 }
@@ -49,6 +51,7 @@ export const featuredProjects: Project[] = [
     title: "SMART-PARKING",
     image: "./projects/smart-parking.jpg",
     imageAlt: "Miniature parking lot with teal detection boxes — generated in-style visual",
+    lift: true,
     arabic: "رؤية على الحافة",
     tagline: "Edge ML — the whole lifecycle on a Raspberry Pi 4",
     description:
@@ -87,12 +90,18 @@ export const featuredProjects: Project[] = [
     title: "LMS-PLATFORM",
     image: "./projects/lms.jpg",
     imageAlt: "Dark terminal dashboard with progress bars and certificate seal — generated visual (code is private)",
+    lift: true,
     tagline: "9 months · 668 commits · one product",
     description:
       "A course platform in production shape: React 19 + MUI 7 + Firebase, Express 5 backend. Measured performance work (bundle 1488→1425 kB, CSS 91→29 kB), per-tenant SEO with JSON-LD, and a security scan-diff tool with a 23-test suite.",
     tech: ["React 19", "Express 5", "Firebase", "SEO", "Security tooling"],
     status: "PRIV",
     year: "2025–26",
+    metrics: [
+      { label: "commits", value: "668" },
+      { label: "e2e tests", value: "23" },
+      { label: "span", value: "9 mo" },
+    ],
   },
 ];
 
@@ -207,6 +216,56 @@ export const journey: JourneyStop[] = [
     note: "PULPOVR streams sensor data into 3D. Bazarna productizes the Egyptian souq. This portfolio ships.",
   },
 ];
+
+/* ─── ~/graveyard — decisions with a kill date (idea-generation discipline) ── */
+
+export interface GraveItem {
+  name: string;
+  killed: string;
+  reason: string;
+}
+
+export const graveyard: GraveItem[] = [
+  {
+    name: "neon-green CRT skin",
+    killed: "2026-09",
+    reason: "borrowed aesthetic — kept the shell, swapped the costume for phosphor teal",
+  },
+  {
+    name: "per-section staggered reveals",
+    killed: "2026-09",
+    reason: "scattered motion — the boot sequence is the only show now",
+  },
+  {
+    name: "scanlines overlay",
+    killed: "2026-09",
+    reason: "one accessory too many — the Arabic rain stays, the CRT film goes",
+  },
+  {
+    name: "github-readme-stats cards",
+    killed: "2026-09",
+    reason: "third-party 503s on a good day — first-party charts only",
+  },
+  {
+    name: "cloudflare-pages deploy",
+    killed: "2026-09",
+    reason: "GitHub Pages won at $0 — one command swaps it back",
+  },
+];
+
+/* ─── PULPOVR effort allocation — counted, not estimated ────────────────────
+   Source: wc -l over the repo clone at HEAD, 2026-09-21.
+   TS/TSX 6,419 · JS/config 886 · firmware (.ino 447 + config.h 48) 495 → ~7.8K */
+
+export const pulpoLoc = {
+  total: "~7.8K",
+  source: "counted from HEAD, 2026-09",
+  split: [
+    { lang: "TypeScript / TSX", loc: "6.4K", pct: 82 },
+    { lang: "JS / config", loc: "0.9K", pct: 11 },
+    { lang: "C++ firmware", loc: "0.5K", pct: 7 },
+  ],
+};
 
 /* ─── V2 hero: stats carry their provenance (idea-generation discipline) ── */
 
@@ -347,6 +406,20 @@ export interface Post {
 }
 
 export const posts: Post[] = [
+  {
+    slug: "how-this-homepage-was-chosen",
+    title: "Four heroes, one verdict",
+    date: "2026-09-21",
+    minutes: 3,
+    excerpt:
+      "The homepage you're on wasn't the first idea — it was the survivor of a written brief, four generated directions, and a kill-list. The selection process, in the open.",
+    body: [
+      "Before a single line of this site's real code existed, I generated four homepage directions against a written brief and judged them side by side. Not four mood boards — four working drafts, on one live canvas, each answering the same question differently: what is the hero of this page?",
+      "The brief had tests, not vibes: exactly one orchestrated motion moment; Arabic as a design actor, never garnish; a single warm gold moment; less scattered effect; and the shell must actually answer — a terminal you can type into, not a picture of one. Any direction that failed a test was out, no matter how good it looked.",
+      "The verdict was the direction that committed hardest: the shell is the hero. The terminal isn't chrome decorating a conventional hero section — it boots, tells you who I am as command output, and hands you the prompt. A quiet human row underneath keeps a person visible next to the machine. The losing directions weren't wasted: their good parts were harvested, and everything that didn't earn its place went to the graveyard — the neon-green costume, the per-section staggered reveals, the scanlines. Each has a kill date and a reason, and the list is on the page, under the journey.",
+      "That's the transferable part, and it's why I'm writing this: write the tests before you fall in love. A brief you can fail is the only brief worth having — for a homepage, a component API, or a product. This page passes its tests; the next brief is already stricter.",
+    ],
+  },
   {
     slug: "terminal-portfolio",
     title: "Why my portfolio is a terminal",

@@ -29,7 +29,7 @@ test("verify command prints stat provenance", async ({ page }) => {
 test("stats carry provenance chips", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByText("[record]").first()).toBeVisible();
-  await expect(page.getByText("[measured]")).toBeVisible();
+  await expect(page.getByText("[measured]").first()).toBeVisible();
 });
 
 test("featured projects and images render", async ({ page }) => {

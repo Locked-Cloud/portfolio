@@ -2,7 +2,7 @@ import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
   testDir: "tests",
-  testIgnore: /record\.spec\.ts|axe-dump\.spec\.ts/, // dev tools — record via playwright.record.config.ts
+  testIgnore: /record\.spec\.ts|axe-dump\.spec\.ts|shot\.spec\.ts/, // dev tools — run on demand
   timeout: 30_000,
   retries: 0,
   reporter: "line",

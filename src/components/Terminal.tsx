@@ -42,7 +42,7 @@ const HELP: string[] = [
   "  coverage    — what this page can't show",
   "  neofetch    — system card",
   "  goto <x>    — scroll to: proof · work · skills · log · github · blog · contact",
-  "  theme       — toggle matrix rain & scanlines",
+  "  theme       — toggle the matrix rain",
   "  github      — open github profile",
   "  social      — direct channels",
   "  contact     — how to reach me",
@@ -141,7 +141,7 @@ function Block({ id }: { id: BlockId }) {
             {...(p.link ? { target: "_blank", rel: "noreferrer" } : {})}
             className="block border border-phos/20 bg-phos/5 p-3 transition-colors hover:border-phos/50"
           >
-            <p className="text-[11px] text-gold">
+            <p className="text-[11px] text-phos">
               [{p.index}] {p.title}
             </p>
             <p className="mt-1 text-[12px] leading-snug text-mint/75">{p.tagline}</p>
@@ -232,7 +232,7 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
         {
           kind: "out",
           text: quiet
-            ? "quiet mode — matrix rain & scanlines off. run `theme` to bring the weather back."
+            ? "quiet mode — matrix rain off. run `theme` to bring the weather back."
             : "full weather restored.",
         },
       ]);

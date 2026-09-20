@@ -20,7 +20,7 @@ export default function Hero() {
           <h2 className="font-display text-xl font-bold tracking-tight text-mint">I. AHMED</h2>
           <div className="h-4 w-px bg-phos/20" />
           <p className="text-[11px] uppercase tracking-[0.2em] text-fog">
-            Cairo, Egypt <span className="text-gold">//</span> developer
+            Cairo, Egypt // developer
           </p>
         </div>
         <div className="flex flex-wrap items-center justify-center gap-6">

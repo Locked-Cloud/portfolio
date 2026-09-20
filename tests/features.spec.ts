@@ -66,3 +66,34 @@ test("CV toggles to Arabic", async ({ page }) => {
   expect(dir).toBe("rtl");
   await expect(page.getByRole("heading", { name: "إبراهيم أحمد" })).toBeVisible();
 });
+
+test("PULPOVR renders as full-width case study with counted LOC", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#work").scrollIntoViewIfNeeded();
+  const caseStudy = page.locator("#work article").first();
+  await expect(caseStudy.getByText("PULPOVR")).toBeVisible();
+  await expect(caseStudy.getByText("~7.8K LOC [counted]", { exact: false })).toBeVisible();
+  await expect(caseStudy.getByText("merit verdict 28/30", { exact: false })).toBeVisible();
+  // the effort-allocation bar carries the three counted segments
+  await expect(caseStudy.getByText("TypeScript / TSX")).toBeVisible();
+  await expect(caseStudy.getByText("C++ firmware")).toBeVisible();
+});
+
+test("graveyard lists killed ideas with reasons", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#log").scrollIntoViewIfNeeded();
+  await expect(page.getByText("git log --diff-filter=D --summary")).toBeVisible();
+  await expect(page.getByText("scanlines overlay")).toBeVisible();
+  await expect(page.getByText("neon-green CRT skin")).toBeVisible();
+  await expect(page.getByText("deletions are decisions", { exact: false })).toBeVisible();
+});
+
+test("devlog posts carry deep-link anchors and RSS feed ships", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("#post-how-this-homepage-was-chosen")).toBeVisible();
+  const res = await page.request.get("/rss.xml");
+  expect(res.status()).toBe(200);
+  const body = await res.text();
+  expect(body).toContain("<rss");
+  expect(body).toContain("how-this-homepage-was-chosen");
+});

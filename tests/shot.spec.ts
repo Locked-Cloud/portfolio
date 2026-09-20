@@ -1,0 +1,36 @@
+import { test } from "@playwright/test";
+
+// On-demand design screenshots:  SHOTS=1 npx playwright test tests/shot.spec.ts
+// Skipped in CI unless SHOTS is set.
+const run = !!process.env.SHOTS;
+
+test("capture design review shots", async ({ page }) => {
+  test.skip(!run, "set SHOTS=1 to capture");
+  await page.goto("/");
+  await page.waitForTimeout(5_000); // shell narrative
+
+  await page.screenshot({ path: "shots/01-hero.png" });
+
+  await page.locator("#proof").scrollIntoViewIfNeeded();
+  await page.waitForTimeout(3_000); // three.js load + first frames
+  await page.locator("#proof").screenshot({ path: "shots/02-proof.png" });
+
+  await page.locator("#work").scrollIntoViewIfNeeded();
+  await page.waitForTimeout(600);
+  await page.locator("#work").screenshot({ path: "shots/03-work.png" });
+
+  await page.locator("#blog").scrollIntoViewIfNeeded();
+  await page.waitForTimeout(600);
+  await page.locator("#blog").screenshot({ path: "shots/04-blog.png" });
+
+  await page.locator("#contact").scrollIntoViewIfNeeded();
+  await page.waitForTimeout(600);
+  await page.screenshot({ path: "shots/05-contact.png" });
+
+  await page.goto("/cv.html");
+  await page.waitForTimeout(800);
+  await page.screenshot({ path: "shots/06-cv-en.png", fullPage: true });
+  await page.getByRole("button", { name: "عربي" }).click();
+  await page.waitForTimeout(400);
+  await page.screenshot({ path: "shots/07-cv-ar.png", fullPage: true });
+});

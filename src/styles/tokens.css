@@ -90,20 +90,7 @@ body {
   text-transform: uppercase;
 }
 
-/* ─── CRT scanlines + vignette ─────────────────────────────────────────── */
-.scanlines {
-  pointer-events: none;
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0) 0px,
-    rgba(0, 0, 0, 0) 2px,
-    rgba(0, 0, 0, 0.12) 3px
-  );
-  opacity: 0.2;
-}
+/* ─── CRT vignette (scanlines were killed 2026-09 — see ~/graveyard) ───── */
 
 .terminal-scrollbar::-webkit-scrollbar {
   width: 4px;
@@ -194,8 +181,7 @@ body {
   transform: none;
 }
 
-/* ─── `theme` quiet mode — matrix rain & scanlines off ─────────────────── */
-body.quiet .scanlines,
+/* ─── `theme` quiet mode — the matrix rain goes quiet ──────────────────── */
 body.quiet .vignette {
   display: none;
 }
@@ -208,7 +194,8 @@ body.quiet canvas.fixed {
   color: #1a1512;
 }
 .cv-page .cv-muted {
-  color: #5a6b62;
+  /* dark enough to survive a laser printer in grayscale */
+  color: #46544c;
 }
 .cv-page .cv-h2 {
   color: #a34524;
@@ -280,6 +267,11 @@ body.quiet canvas.fixed {
   }
 }
 
+/* ─── Thumbnail exposure lift — frames that read near-black at card size ── */
+.thumb-lift {
+  filter: brightness(1.35) contrast(1.05);
+}
+
 /* ─── Accessibility ────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -293,11 +285,7 @@ body.quiet canvas.fixed {
   .glitch::before,
   .glitch::after,
   .cursor-blink,
-  .pulse-dot,
-  .scanlines {
+  .pulse-dot {
     animation: none;
-  }
-  .scanlines {
-    display: none;
   }
 }

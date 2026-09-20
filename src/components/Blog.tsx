@@ -13,7 +13,7 @@ export default function Blog() {
         {posts.map((post) => {
           const expanded = open === post.slug;
           return (
-            <article key={post.slug} data-reveal className="panel p-6 sm:p-8">
+            <article key={post.slug} id={`post-${post.slug}`} data-reveal className="panel p-6 sm:p-8">
               <button
                 type="button"
                 onClick={() => setOpen(expanded ? null : post.slug)}
@@ -25,7 +25,7 @@ export default function Blog() {
                     {post.title}
                   </h3>
                   <p className="text-[11px] tracking-widest text-fog">
-                    {post.date} <span className="text-gold">·</span> {post.minutes} min
+                    {post.date} · {post.minutes} min
                   </p>
                 </div>
                 <p className="mt-2 text-[13px] leading-relaxed text-mint/65">{post.excerpt}</p>
@@ -41,7 +41,7 @@ export default function Blog() {
                     </p>
                   ))}
                   <p className="text-[11px] tracking-widest text-fog">
-                    — ibrahim, {post.date} <span className="text-gold">·</span> run{" "}
+                    — ibrahim, {post.date} · run{" "}
                     <code className="text-phos">coverage</code> for what this page can't show
                   </p>
                 </div>

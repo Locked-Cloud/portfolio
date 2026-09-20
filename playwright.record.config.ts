@@ -4,7 +4,7 @@ import { defineConfig } from "@playwright/test";
 // Run: npm run record:demo  → video lands in test-results/demo-record/*.webm
 export default defineConfig({
   testDir: "tests",
-  testMatch: /record\.spec\.ts/,
+  testMatch: /record\.spec\.ts|shot\.spec\.ts/,
   timeout: 120_000,
   reporter: "line",
   use: {

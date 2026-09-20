@@ -33,6 +33,12 @@ export default function Proof() {
         arabic="ثلاثي الأبعاد"
       />
       <div className="panel relative overflow-hidden rounded-lg p-2" data-reveal>
+        <span
+          aria-hidden
+          className="pointer-events-none absolute bottom-4 right-5 z-10 text-[10px] tracking-[0.3em] text-fog/80"
+        >
+          DRAG TO ORBIT ↻
+        </span>
         <Suspense
           fallback={
             <div className="flex h-[420px] items-center justify-center text-[11px] tracking-[0.25em] text-fog">

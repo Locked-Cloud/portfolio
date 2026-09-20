@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "node scripts/rss.mjs && tsc --noEmit && vite build",
     "preview": "vite preview",
+    "rss": "node scripts/rss.mjs",
     "check:size": "node scripts/check-size.js",
     "record:demo": "playwright test -c playwright.record.config.ts"
   },
