@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ibrahim@cairo — devlog</title>
+    <link>https://locked-cloud.github.io/portfolio/#blog</link>
+    <atom:link href="https://locked-cloud.github.io/portfolio/rss.xml" rel="self" type="application/rss+xml"/>
+    <description>How, not just what — a front-end engineer in Cairo ships real-time 3D, SaaS on $0, and edge ML.</description>
+    <language>en</language>
+    <item>
+      <title>Four heroes, one verdict</title>
+      <link>https://locked-cloud.github.io/portfolio/#post-how-this-homepage-was-chosen</link>
+      <guid isPermaLink="true">https://locked-cloud.github.io/portfolio/#post-how-this-homepage-was-chosen</guid>
+      <pubDate>Mon, 21 Sep 2026 00:00:00 GMT</pubDate>
+      <description>The homepage you're on wasn't the first idea — it was the survivor of a written brief, four generated directions, and a kill-list. The selection process, in the open. (3 min read)</description>
+    </item>
+    <item>
+      <title>Why my portfolio is a terminal</title>
+      <link>https://locked-cloud.github.io/portfolio/#post-terminal-portfolio</link>
+      <guid isPermaLink="true">https://locked-cloud.github.io/portfolio/#post-terminal-portfolio</guid>
+      <pubDate>Mon, 21 Sep 2026 00:00:00 GMT</pubDate>
+      <description>A shell that answers, stats with provenance chips, and Arabic in the matrix rain — the design decisions behind CAIRO.SYS. (3 min read)</description>
+    </item>
+    <item>
+      <title>A dental digital twin on ~$30 of hardware</title>
+      <link>https://locked-cloud.github.io/portfolio/#post-dental-twin-hardware</link>
+      <guid isPermaLink="true">https://locked-cloud.github.io/portfolio/#post-dental-twin-hardware</guid>
+      <pubDate>Mon, 14 Sep 2026 00:00:00 GMT</pubDate>
+      <description>PULPOVR: an ESP32 and a 6-DOF IMU taped to a dental handpiece, streaming at 40 Hz into a Three.js molar. What I learned building end to end. (4 min read)</description>
+    </item>
+    <item>
+      <title>Shipping products on a $0 bill</title>
+      <link>https://locked-cloud.github.io/portfolio/#post-zero-dollar-shipping</link>
+      <guid isPermaLink="true">https://locked-cloud.github.io/portfolio/#post-zero-dollar-shipping</guid>
+      <pubDate>Mon, 07 Sep 2026 00:00:00 GMT</pubDate>
+      <description>Cloudflare Pages, Supabase free tier, pg_cron keep-alives, and manual-first Egyptian payments — how the $0 architecture actually holds. (4 min read)</description>
+    </item>
+  </channel>
+</rss>
