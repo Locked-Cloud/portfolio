@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ghFallback } from "../data/content";
+import { cachedFetchJson } from "../lib/gh";
 import type { GhUser } from "../App";
 import { SectionHead } from "./SectionHead";
 
@@ -17,23 +18,23 @@ function useRepos(): { repos: Repo[]; live: boolean } {
   const [live, setLive] = useState(false);
 
   useEffect(() => {
-    const controller = new AbortController();
-    fetch("https://api.github.com/users/Locked-Cloud/repos?per_page=100&sort=updated", {
-      signal: controller.signal,
-    })
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
-      .then((data: Repo[]) => {
-        const curated = data
-          .filter((r) => !r.fork && r.name !== "Locked-Cloud")
-          .sort((a, b) => b.stargazers_count - a.stargazers_count)
-          .slice(0, 6);
-        if (curated.length) {
-          setRepos(curated);
-          setLive(true);
-        }
-      })
-      .catch(() => undefined); // rate-limited → bundled snapshot stays
-    return () => controller.abort();
+    let cancelled = false;
+    cachedFetchJson<Repo[]>(
+      "https://api.github.com/users/Locked-Cloud/repos?per_page=100&sort=updated"
+    ).then((data) => {
+      if (!data || cancelled) return;
+      const curated = data
+        .filter((r) => !r.fork && r.name !== "Locked-Cloud")
+        .sort((a, b) => b.stargazers_count - a.stargazers_count)
+        .slice(0, 6);
+      if (curated.length) {
+        setRepos(curated);
+        setLive(true);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return { repos, live };

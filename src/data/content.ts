@@ -47,7 +47,7 @@ export const featuredProjects: Project[] = [
     id: "smart-parking",
     index: "02",
     title: "SMART-PARKING",
-    image: "/projects/smart-parking.jpg",
+    image: "./projects/smart-parking.jpg",
     imageAlt: "Miniature parking lot with teal detection boxes — generated in-style visual",
     arabic: "رؤية على الحافة",
     tagline: "Edge ML — the whole lifecycle on a Raspberry Pi 4",
@@ -67,7 +67,7 @@ export const featuredProjects: Project[] = [
     id: "bazarna",
     index: "03",
     title: "BAZARNA — بازارنا",
-    image: "/projects/bazarna.jpg",
+    image: "./projects/bazarna.jpg",
     imageAlt: "Wireframe bazaar alley with gold lanterns — generated in-style visual",
     tagline: "Egypt-first multi-tenant SaaS ecommerce",
     description:
@@ -85,7 +85,7 @@ export const featuredProjects: Project[] = [
     id: "lms",
     index: "04",
     title: "LMS-PLATFORM",
-    image: "/projects/lms.jpg",
+    image: "./projects/lms.jpg",
     imageAlt: "Dark terminal dashboard with progress bars and certificate seal — generated visual (code is private)",
     tagline: "9 months · 668 commits · one product",
     description:

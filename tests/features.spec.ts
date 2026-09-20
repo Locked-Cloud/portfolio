@@ -41,6 +41,18 @@ test("PULPOVR gallery opens and closes", async ({ page }) => {
   await expect(dialog).toBeHidden();
 });
 
+test("all local asset srcs are relative (subpath-hostable)", async ({ page }) => {
+  await page.goto("/");
+  const imgs = page.locator("#work img");
+  const count = await imgs.count();
+  expect(count).toBeGreaterThan(0);
+  for (let i = 0; i < count; i++) {
+    const src = await imgs.nth(i).getAttribute("src");
+    // absolute-root paths break under /portfolio/ hosting
+    expect(src?.startsWith("/")).toBe(false);
+  }
+});
+
 test("3D scene loads when scrolled into view", async ({ page }) => {
   await page.goto("/");
   await page.locator("#proof").scrollIntoViewIfNeeded();

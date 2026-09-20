@@ -12,6 +12,7 @@ import Blog from "./components/Blog";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import { observeReveals } from "./lib/reveal";
+import { cachedFetchJson } from "./lib/gh";
 import { ghFallback } from "./data/content";
 
 export interface GhUser {
@@ -36,21 +37,28 @@ export default function App() {
   });
 
   useEffect(() => {
-    const controller = new AbortController();
-    fetch("https://api.github.com/users/Locked-Cloud", { signal: controller.signal })
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
-      .then((d: { name: string; bio: string; avatar_url: string; public_repos: number; followers: number; html_url: string }) =>
-        setUser({
-          name: d.name ?? "Ibrahim Ahmed",
-          bio: d.bio ?? "",
-          avatar_url: d.avatar_url,
-          public_repos: d.public_repos,
-          followers: d.followers,
-          html_url: d.html_url,
-        })
-      )
-      .catch(() => undefined); // keep the bundled snapshot on failure
-    return () => controller.abort();
+    let cancelled = false;
+    cachedFetchJson<{
+      name: string | null;
+      bio: string | null;
+      avatar_url: string;
+      public_repos: number;
+      followers: number;
+      html_url: string;
+    }>("https://api.github.com/users/Locked-Cloud").then((d) => {
+      if (!d || cancelled) return;
+      setUser({
+        name: d.name ?? "Ibrahim Ahmed",
+        bio: d.bio ?? "",
+        avatar_url: d.avatar_url,
+        public_repos: d.public_repos,
+        followers: d.followers,
+        html_url: d.html_url,
+      });
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
