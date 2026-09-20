@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- CAIRO.SYS favicon — khayamiya triangles on the terminal -->
+  <rect width="64" height="64" fill="#070c0a"/>
+  <g>
+    <polygon points="32,8 44,28 20,28" fill="none" stroke="#2dd4a7" stroke-width="3"/>
+    <polygon points="14,34 26,54 2,54" fill="none" stroke="#2dd4a7" stroke-width="2" opacity="0.55"/>
+    <polygon points="50,34 62,54 38,54" fill="none" stroke="#2dd4a7" stroke-width="2" opacity="0.55"/>
+    <rect x="30" y="34" width="4" height="12" fill="#d9a441"/>
+    <rect x="30" y="50" width="4" height="4" fill="#d9a441"/>
+  </g>
+</svg>

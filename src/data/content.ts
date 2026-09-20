@@ -9,6 +9,8 @@ export interface Project {
   link?: string;
   status?: "LIVE" | "WIP" | "PRIV";
   year?: string;
+  image?: string;
+  imageAlt?: string;
   metrics?: { label: string; value: string }[];
 }
 
@@ -17,6 +19,8 @@ export const featuredProjects: Project[] = [
     id: "pulpoVr",
     index: "01",
     title: "PULPOVR",
+    image: "https://raw.githubusercontent.com/Locked-Cloud/dental-project/HEAD/docs/assets/hero_banner.jpg",
+    imageAlt: "PULPOVR cockpit — 3D tooth digital twin with telemetry gauges",
     arabic: "توأم رقمي لحظي",
     tagline: "Live endodontic guidance — real-time dental digital twin",
     description:
@@ -35,6 +39,8 @@ export const featuredProjects: Project[] = [
     id: "smart-parking",
     index: "02",
     title: "SMART-PARKING",
+    image: "/projects/smart-parking.jpg",
+    imageAlt: "Miniature parking lot with teal detection boxes — generated in-style visual",
     arabic: "رؤية على الحافة",
     tagline: "Edge ML — the whole lifecycle on a Raspberry Pi 4",
     description:
@@ -53,6 +59,8 @@ export const featuredProjects: Project[] = [
     id: "bazarna",
     index: "03",
     title: "BAZARNA — بازارنا",
+    image: "/projects/bazarna.jpg",
+    imageAlt: "Wireframe bazaar alley with gold lanterns — generated in-style visual",
     tagline: "Egypt-first multi-tenant SaaS ecommerce",
     description:
       "Storefronts with the payments Egyptians actually use — COD, InstaPay, Fawry, smart wallets — Arabic-first RTL, a visual page builder, a haggling engine «فاوضني», and an AI merchant twin. React + Supabase (RLS, Edge Functions, pg_cron) on Cloudflare Pages, engineered for a $0 stack.",
@@ -69,6 +77,8 @@ export const featuredProjects: Project[] = [
     id: "lms",
     index: "04",
     title: "LMS-PLATFORM",
+    image: "/projects/lms.jpg",
+    imageAlt: "Dark terminal dashboard with progress bars and certificate seal — generated visual (code is private)",
     tagline: "9 months · 668 commits · one product",
     description:
       "A course platform in production shape: React 19 + MUI 7 + Firebase, Express 5 backend. Measured performance work (bundle 1488→1425 kB, CSS 91→29 kB), per-tenant SEO with JSON-LD, and a security scan-diff tool with a 23-test suite.",

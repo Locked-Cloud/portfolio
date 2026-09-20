@@ -13,6 +13,15 @@ function ProjectCard({ p }: { p: Project }) {
       data-reveal
       className="panel group flex flex-col p-6 transition-colors duration-300 hover:border-phos/45"
     >
+      {p.image && (
+        <img
+          src={p.image}
+          alt={p.imageAlt ?? ""}
+          loading="lazy"
+          className="mb-5 aspect-[16/9] w-full border border-phos/15 object-cover"
+        />
+      )}
+
       <div className="flex items-center justify-between gap-3">
         <span className="text-[11px] tracking-[0.2em] text-fog">
           {p.index} · {p.year ?? "—"}

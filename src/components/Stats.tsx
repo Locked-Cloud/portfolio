@@ -14,7 +14,7 @@ export default function Stats({ repos }: { repos: number }) {
           <div key={s.label} data-reveal className="bg-bg2 px-6 py-7">
             <div className="flex items-start justify-between gap-2">
               <p className="text-[10px] tracking-[0.22em] text-fog">{s.label}</p>
-              <span className={`tag shrink-0 ${chipStyles[s.chip]}`}>{s.chip}</span>
+              <span className={`tag shrink-0 ${chipStyles[s.chip]}`}>[{s.chip}]</span>
             </div>
             <p className="mt-2 font-display text-3xl font-bold text-phos sm:text-4xl">
               {i === 0 ? repos : s.value}

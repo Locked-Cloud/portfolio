@@ -192,6 +192,21 @@ body {
   transform: none;
 }
 
+/* ─── CV page print rules ──────────────────────────────────────────────── */
+@page {
+  size: A4;
+  margin: 14mm;
+}
+@media print {
+  body {
+    background: #ffffff !important;
+  }
+  .cv-page {
+    max-width: none;
+    padding: 0;
+  }
+}
+
 /* ─── Accessibility ────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   html {
