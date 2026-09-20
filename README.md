@@ -1,6 +1,10 @@
-# Portfolio — Ibrahim Ahmed
+# Portfolio — Ibrahim Ahmed · CAIRO.SYS
 
-Personal portfolio site in the **Neo-Bazaar** design language (the same identity as [Bazarna](https://github.com/Locked-Cloud) — sand, terracotta, nile-teal, gold; khayamiya dividers; dual-script AR/EN accents).
+**Live:** https://locked-cloud.github.io/portfolio/ · CV: [/cv.html](https://locked-cloud.github.io/portfolio/cv.html)
+
+Terminal × Cairo identity: the hero **is** an interactive shell (type `help`, `verify`, `scorecard`, `neofetch`, `coverage`), every stat carries a provenance chip, and GitHub data loads live with a bundled fallback. Arabic glyphs fall in the matrix rain.
+
+Direction chosen from a 4-variant superdesign exploration (V2 — "the shell is the hero").
 
 **Stack:** React 18 · Vite · TypeScript · Tailwind CSS v4 (`@theme` tokens in `src/styles/tokens.css`) · zero runtime dependencies beyond React.
 
@@ -29,14 +33,27 @@ src/
 
 **To change the theme**: the five hex tokens at the top of `tokens.css`. Alternative identities are catalogued in `../saas/docs/portfolio-study/github-profile/THEMES.md`.
 
-## Deploy (Cloudflare Pages, $0)
+## Deploy
+
+Current hosting: **GitHub Pages** (`gh-pages` branch, auto-built from `dist`):
+
+```bash
+npm run build
+npx gh-pages -d dist          # pushes dist → gh-pages → live in ~1 min
+```
+
+To move to **Cloudflare Pages** (run `npx wrangler login` once first):
 
 ```bash
 npm run build
 npx wrangler pages deploy dist --project-name=ibrahim-portfolio
 ```
 
-Add a `public/_redirects` file with `/* /index.html 200` if you add client-side routing.
+The build uses a relative base (`./`), so it works at any path on either host.
+
+## CI
+
+GitHub Actions on every push: typecheck → build → Playwright smoke suite (6 tests: shell boots, terminal answers, provenance chips, project images, CV page).
 
 ## TODO before launch
 
