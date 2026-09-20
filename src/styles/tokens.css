@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+/* ─── Neo-Bazaar design tokens ───────────────────────────────────────────
+   Same identity as Bazarna (DESIGN.md): warm sand, ink, terracotta,
+   nile-teal, gold. Dual-script: Latin display + Arabic accents. */
+
+@theme {
+  --color-sand: #f5ede0;
+  --color-sand-deep: #ece0cc;
+  --color-card: #fbf6ec;
+  --color-ink: #1a1512;
+  --color-ink-soft: #2a2320;
+  --color-terracotta: #c4552d;
+  --color-terracotta-deep: #a34524;
+  --color-teal: #1f7a70;
+  --color-gold: #d9a441;
+
+  --font-display: "Space Grotesk", "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --font-body: "Inter", "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --font-arabic: "Aref Ruqaa", "IBM Plex Sans Arabic", serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-sand);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+
+/* ─── Scroll reveal ────────────────────────────────────────────────────── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ─── Mashrabiya lattice (hero backdrop, CSS-only) ─────────────────────── */
+.lattice {
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      transparent 0 22px,
+      rgba(26, 21, 18, 0.045) 22px 24px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0 22px,
+      rgba(26, 21, 18, 0.045) 22px 24px
+    );
+}
+
+/* ─── Motion ───────────────────────────────────────────────────────────── */
+@keyframes glow-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(3%, -4%) scale(1.06);
+  }
+}
+.glow {
+  animation: glow-drift 14s ease-in-out infinite;
+}
+
+@keyframes cue-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(7px);
+  }
+}
+.scroll-cue {
+  animation: cue-bob 2.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  [data-reveal] {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+  .glow,
+  .scroll-cue {
+    animation: none;
+  }
+}
