@@ -190,33 +190,99 @@ export const journey: JourneyStop[] = [
   },
 ];
 
-export const heroStats: { value: string; label: string; sub: string }[] = [
-  { value: "29", label: "PUBLIC REPOS", sub: "public surface" },
-  { value: "700+", label: "COMMITS / PRODUCT", sub: "one codebase, 9 months" },
-  { value: "40 Hz", label: "LIVE TELEMETRY", sub: "sensor → 3D scene" },
-  { value: "$0", label: "INFRA BILL", sub: "by design" },
+/* ─── V2 hero: stats carry their provenance (idea-generation discipline) ── */
+
+export interface StatClaim {
+  value: string;
+  label: string;
+  sub: string;
+  chip: "record" | "measured" | "by-design";
+  source: string;
+}
+
+export const statClaims: StatClaim[] = [
+  {
+    value: "29",
+    label: "PUBLIC REPOS",
+    sub: "public surface",
+    chip: "record",
+    source: "github.com/Locked-Cloud — public record",
+  },
+  {
+    value: "700+",
+    label: "COMMITS / PRODUCT",
+    sub: "one codebase, 9 months",
+    chip: "record",
+    source: "git log — LMS platform, 2025-12 → 2026-09 (private)",
+  },
+  {
+    value: "40 Hz",
+    label: "LIVE TELEMETRY",
+    sub: "sensor → 3D scene",
+    chip: "measured",
+    source: "PULPOVR — MPU-6050 stream over WebSocket",
+  },
+  {
+    value: "$0",
+    label: "INFRA BILL",
+    sub: "by design",
+    chip: "by-design",
+    source: "Cloudflare Pages + Supabase free tiers",
+  },
 ];
 
-/* ─── Terminal-era content ─────────────────────────────────────────────── */
+/* ─── Terminal narrative + command data ─────────────────────────────────── */
 
-export const bootLines: { text: string; tone?: "ok" | "warn" | "dim" }[] = [
-  { text: "CAIRO.SYS BIOS v2.6 — © 2026 Ibrahim Ahmed", tone: "dim" },
-  { text: "CPU ......... curiosity @ 4.2 GHz .............. OK", tone: "ok" },
-  { text: "MEM ......... 700+ commits mapped .............. OK", tone: "ok" },
-  { text: "GPU ......... Three.js rasterizer .............. OK", tone: "ok" },
-  { text: "RTL ......... Arabic / English dual-script .... OK", tone: "ok" },
-  { text: "NET ......... github.com/Locked-Cloud ....... LINKED", tone: "ok" },
-  { text: "WARN ........ neon levels set to 0 — professional mode", tone: "warn" },
-  { text: "Mounting /portfolio .......................... DONE", tone: "ok" },
+export const kernelLog: string[] = [
+  "[    0.000000] CAIRO.SYS kernel 6.4.2-ibrahim-ahmed",
+  "[    0.042188] initializing cairo interface layers…",
+  "[    0.104291] CPU: realtime-3d optimization enabled",
+  "[    0.293810] AUTH: user 'guest' granted read access",
 ];
 
-export const typedRoles: string[] = [
-  "react + typescript interfaces",
-  "real-time 3D — three.js / R3F",
-  "SaaS on a $0 stack",
-  "edge ML on a raspberry pi",
-  "arabic-first product design",
+export const stackChips: string[] = [
+  ".react-18", ".typescript", ".vite", ".tailwind-v4", ".three-js", ".supabase",
+  ".node-express", ".python", ".esp32-c", ".playwright",
 ];
+
+export const scorecard: { repo: string; stars: string; verdict: string }[] = [
+  { repo: "dental-project", stars: "★1", verdict: "7.5K LOC + firmware + best docs — CHOSEN" },
+  { repo: "Smart-Parking-System", stars: "★2", verdict: "edge-ML lifecycle + RPi4 deploy — CHOSEN" },
+  { repo: "MatLab-Code", stars: "★4", verdict: "514 LOC of course scripts — passed" },
+  { repo: "Maze_Solver", stars: "★4", verdict: "single-file solver — passed" },
+];
+
+export const neofetchArt: string[] = [
+  "        ▲",
+  "       ▲ ▲",
+  "      ▲ ▲ ▲",
+  "     ▲ ▲ ▲ ▲",
+  "    ▲ ▲ ▲ ▲ ▲",
+];
+
+export const neofetchSpecs: [string, string][] = [
+  ["kernel", "cairo.sys 6.4.2"],
+  ["host", "front-end engineer"],
+  ["uptime", "3+ years shipping"],
+  ["shell", "react 18 + vite"],
+  ["resolution", "40 Hz realtime"],
+  ["wm", "three.js / R3F"],
+  ["langs", "AR / EN (dual-script)"],
+  ["location", "cairo, eg — 30.04°N 31.23°E"],
+];
+
+export const coverageLines: string[] = [
+  "covered here:",
+  "  29 public repos — live via GitHub REST (or cached snapshot)",
+  "  featured projects — selected by engineering merit, not stars",
+  "not covered here:",
+  "  LMS platform — 668 commits, private. ask me about it.",
+  "  AC_Ecommerce — security-hardened API, not yet pushed",
+  "  the test suites — they live in private repos",
+  "policy: no number without a source — run `verify`",
+];
+
+export const COORDINATES = "30.0444° N, 31.2357° E";
 
 export interface Social {
   name: string;

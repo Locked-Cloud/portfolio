@@ -7,16 +7,13 @@ export default function Skills() {
       <SectionHead index="02 — SKILLS" title="THE TOOLBOX" note="cat /usr/bin/ibrahim" arabic="المهارات" />
 
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {skillGroups.map((g, i) => (
-          <div
-            key={g.title}
-            data-reveal
-            style={{ transitionDelay: `${i * 90}ms` }}
-            className="panel p-6 transition-colors hover:border-gold/40"
-          >
+        {skillGroups.map((g) => (
+          <div key={g.title} data-reveal className="panel p-6 transition-colors hover:border-gold/40">
             <div className="flex items-baseline justify-between">
               <h3 className="text-[12px] font-semibold tracking-[0.22em] text-mint">{g.title}</h3>
-              <span className="font-arabic text-sm text-gold/80">{g.arabic}</span>
+              <span dir="rtl" lang="ar" className="font-arabic text-sm text-gold/80">
+                {g.arabic}
+              </span>
             </div>
             <ul className="mt-4 space-y-2">
               {g.skills.map((s) => (

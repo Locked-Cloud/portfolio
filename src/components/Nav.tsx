@@ -14,7 +14,7 @@ export default function Nav() {
       <div className="panel flex items-center justify-between gap-4 px-5 py-3">
         <a href="#top" className="flex items-center gap-2.5 text-[12px] tracking-[0.22em] text-phos">
           <i className="pulse-dot block h-2 w-2 rounded-full bg-phos" />
-          IBRAHIM.SYS <span className="font-arabic text-[13px] tracking-normal text-gold">القاهرة</span>
+          IBRAHIM.SYS <span dir="rtl" lang="ar" className="font-arabic text-[13px] tracking-normal text-gold">القاهرة</span>
         </a>
         <nav className="hidden items-center gap-1 md:flex" aria-label="sections">
           {links.map((l) => (

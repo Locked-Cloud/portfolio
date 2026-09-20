@@ -7,12 +7,11 @@ const statusStyles: Record<NonNullable<Project["status"]>, string> = {
   PRIV: "border-fog/40 text-fog",
 };
 
-function ProjectCard({ p, delay }: { p: Project; delay: number }) {
+function ProjectCard({ p }: { p: Project }) {
   return (
     <article
       data-reveal
-      style={{ transitionDelay: `${delay}ms` }}
-      className="panel group flex flex-col p-6 transition-all duration-300 hover:-translate-y-1 hover:border-phos/45"
+      className="panel group flex flex-col p-6 transition-colors duration-300 hover:border-phos/45"
     >
       <div className="flex items-center justify-between gap-3">
         <span className="text-[11px] tracking-[0.2em] text-fog">
@@ -30,7 +29,11 @@ function ProjectCard({ p, delay }: { p: Project; delay: number }) {
           p.title
         )}
       </h3>
-      {p.arabic && <p className="mt-0.5 font-arabic text-sm text-gold/80">{p.arabic}</p>}
+      {p.arabic && (
+        <p dir="rtl" lang="ar" className="mt-0.5 font-arabic text-sm text-gold/80">
+          {p.arabic}
+        </p>
+      )}
       <p className="mt-1 text-[12px] tracking-wide text-phos">{p.tagline}</p>
 
       <p className="mt-3.5 flex-1 text-[13px] leading-relaxed text-mint/65">{p.description}</p>
@@ -59,8 +62,8 @@ export default function Projects() {
       <SectionHead index="01 — WORK" title="SHIPPED SYSTEMS" note="selected" arabic="الأعمال" />
 
       <div className="grid gap-5 md:grid-cols-2">
-        {featuredProjects.map((p, i) => (
-          <ProjectCard key={p.id} p={p} delay={i * 90} />
+        {featuredProjects.map((p) => (
+          <ProjectCard key={p.id} p={p} />
         ))}
       </div>
 

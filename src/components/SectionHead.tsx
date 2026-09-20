@@ -16,7 +16,11 @@ export function SectionHead({ index, title, note, arabic }: SectionHeadProps) {
         <h2 className="font-display text-3xl font-bold tracking-tight text-mint sm:text-4xl">
           {title}
         </h2>
-        {arabic && <span className="font-arabic text-xl text-gold/90">{arabic}</span>}
+        {arabic && (
+          <span dir="rtl" lang="ar" className="font-arabic text-xl text-gold/90">
+            {arabic}
+          </span>
+        )}
       </div>
       <div className="mt-5 h-px w-full bg-gradient-to-r from-phos/40 via-phos/10 to-transparent" />
     </div>

@@ -7,7 +7,7 @@ export default function Footer() {
           COMPILED IN CAIRO <span className="text-gold">·</span> NO TRACKERS{" "}
           <span className="text-gold">·</span> © {new Date().getFullYear()} IBRAHIM AHMED
         </p>
-        <p className="font-arabic text-[13px] tracking-normal text-gold/70">
+        <p dir="rtl" lang="ar" className="font-arabic text-[13px] tracking-normal text-gold/70">
           نفس الروح، شكل جديد
         </p>
       </div>
