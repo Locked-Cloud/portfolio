@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>ibrahim@cairo — devlog</title>
+    <title>ibrahim@sys — devlog</title>
     <link>https://locked-cloud.github.io/portfolio/#blog</link>
     <atom:link href="https://locked-cloud.github.io/portfolio/rss.xml" rel="self" type="application/rss+xml"/>
-    <description>How, not just what — a front-end engineer in Cairo ships real-time 3D, SaaS on $0, and edge ML.</description>
+    <description>How, not just what — a front-end engineer ships real-time 3D, SaaS on $0, and edge ML.</description>
     <language>en</language>
     <item>
       <title>Four heroes, one verdict</title>
@@ -18,7 +18,7 @@
       <link>https://locked-cloud.github.io/portfolio/#post-terminal-portfolio</link>
       <guid isPermaLink="true">https://locked-cloud.github.io/portfolio/#post-terminal-portfolio</guid>
       <pubDate>Mon, 21 Sep 2026 00:00:00 GMT</pubDate>
-      <description>A shell that answers, stats with provenance chips, and Arabic in the matrix rain — the design decisions behind CAIRO.SYS. (3 min read)</description>
+      <description>A shell that answers, stats with provenance chips, and a CRT that commits — the design decisions behind IBRAHIM.SYS. (3 min read)</description>
     </item>
     <item>
       <title>A dental digital twin on ~$30 of hardware</title>
