@@ -28,16 +28,10 @@ export default function Proof() {
     <section id="proof" ref={ref} className="mx-auto mt-28 max-w-6xl scroll-mt-24 px-4">
       <SectionHead
         index="00 — PROOF"
-        title="REAL-TIME 3D, LIVE"
-        note="not a video — drag it"
+        title="LIVE TELEMETRY — 40 Hz"
+        note="sensor → scene, live"
       />
       <div className="panel relative overflow-hidden rounded-lg p-2" data-reveal>
-        <span
-          aria-hidden
-          className="pointer-events-none absolute bottom-4 right-5 z-10 text-[10px] tracking-[0.3em] text-fog/80"
-        >
-          DRAG TO ORBIT ↻
-        </span>
         <Suspense
           fallback={
             <div className="flex h-[420px] items-center justify-center text-[11px] tracking-[0.25em] text-fog">
@@ -53,14 +47,16 @@ export default function Proof() {
         </Suspense>
       </div>
       <p className="mt-4 text-center text-[12px] text-fog">
-        a procedural wireframe molar with its canal path in gold — the same idea that drives{" "}
+        a procedural wireframe molar — three canals in gold, apex located, telemetry
+        streaming from the render loop. the same idea that drives{" "}
         <a
           href="#work"
           className="text-phos underline decoration-phos/40 underline-offset-4 hover:text-phos-bright"
         >
           PULPOVR
-        </a>
-        . three.js is dynamically imported the moment you scrolled here.
+        </a>{" "}
+        at 40 Hz. three.js is dynamically imported the moment you scrolled here — drag
+        the tooth and watch ω spike.
       </p>
     </section>
   );

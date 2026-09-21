@@ -59,6 +59,20 @@ test("3D scene loads when scrolled into view", async ({ page }) => {
   await expect(page.locator("#proof canvas")).toBeVisible({ timeout: 20_000 });
 });
 
+test("telemetry HUD proves the scene is live", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#proof").scrollIntoViewIfNeeded();
+  await expect(page.locator("#proof canvas")).toBeVisible({ timeout: 20_000 });
+  // frame counter + fps stream from the render loop
+  await expect(page.getByText(/frame \d{6}/)).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByText(/\d+ fps/)).toBeVisible();
+  await expect(page.getByText(/yaw -?\d+\.\d+° · pitch -?\d+\.\d+°/)).toBeVisible();
+  // the sweep resolves and reports its finding
+  await expect(page.getByText("SCAN COMPLETE — 3 CANALS LOCATED")).toBeVisible({
+    timeout: 15_000,
+  });
+});
+
 test("CV toggles to Arabic", async ({ page }) => {
   await page.goto("/cv.html");
   await page.getByRole("button", { name: "عربي" }).click();
