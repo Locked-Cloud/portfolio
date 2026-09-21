@@ -184,7 +184,7 @@ export const skillGroups: SkillGroup[] = [
   },
   {
     title: "SECURITY",
-    skills: ["Bug bounty — XSS · IDOR · SSRF · SQLi · broken auth", "Burp Suite · OWASP ZAP", "nuclei · ffuf", "Reverse engineering — Ghidra · radare2 · x64dbg", "Secure coding — RLS models · scan-diff tooling"],
+    skills: ["Bug bounty — XSS · IDOR · SSRF · SQLi · broken auth", "Burp Suite · OWASP ZAP", "nuclei · ffuf", "Reverse engineering — Ghidra · radare2 · x64dbg", "Malware analysis — static triage · sandboxed dynamics · YARA", "Secure coding — RLS models · scan-diff tooling"],
   },
   {
     title: "MOBILE",
@@ -352,7 +352,7 @@ export const kernelLog: string[] = [
 
 export const stackChips: string[] = [
   ".react-18", ".typescript", ".vite", ".tailwind-v4", ".three-js", ".supabase",
-  ".node-express", ".python", ".esp32-c", ".playwright", ".flutter", ".ghidra",
+  ".node-express", ".python", ".esp32-c", ".playwright", ".flutter", ".ghidra", ".yara",
 ];
 
 export const scorecard: { repo: string; stars: string; verdict: string }[] = [
@@ -446,6 +446,21 @@ export interface Post {
 }
 
 export const posts: Post[] = [
+  {
+    slug: "malware-analysis-lab",
+    title: "Malware analysis: static first, sandbox always",
+    date: "2026-09-22",
+    minutes: 4,
+    excerpt:
+      "The defensive kind — reading samples instead of writing them. Triage discipline, isolated labs, YARA rules, and why this made me a safer developer.",
+    body: [
+      "Malware analysis, the way I practice it, is a defensive discipline: you take a sample that already exists and you answer three questions — what does it do, how did it get in, and how do we detect it next time. Nobody in this workflow writes malware. You read it, the way a doctor reads an X-ray.",
+      "Static first, because most samples tell their story before they ever run. Hash the file and check its reputation — if it's known, you're done. Then the cheap observations: readable strings, imported functions, section entropy. A binary that imports process-injection APIs and shows one high-entropy section and no readable strings has told you it's packed before you've executed anything. Tools: a good hex editor, PE-bear for structure, DIE for packers, Ghidra when it's time to actually read code.",
+      "Dynamic only inside a sandbox, always. An isolated VM with snapshots, no route to anything I care about, and fake services where the sample expects a network. Then you let it run and watch what it actually does — files written, persistence installed, endpoints contacted — with x64dbg on breakpoints and a capture on the wire. The rule is boring and absolute: the sample never touches a host that matters, and never reaches a real network.",
+      "Observations become detection: that's YARA. A rule that names the packing signature, the import set, the strings that made the sample identifiable — so the next scanner pass catches its relatives. Writing a YARA rule is the moment analysis stops being private curiosity and becomes a contribution to defense.",
+      "Why does a front-end and full-stack developer do this? Because the attacks that reach my layer come through supply chains — one hostile npm package is a sample, and `npm install` is its execution vector. The same reflex — hash, diff, inspect imports, isolate — is what the scan-diff tooling on this site runs against dependencies. Reading malware made me a safer builder, which is the only kind of malware analyst a product team should want.",
+    ],
+  },
   {
     slug: "bug-bounty-lab",
     title: "My bug bounty lab: Burp → nuclei → Ghidra",

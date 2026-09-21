@@ -51,6 +51,7 @@ const HELP: string[] = [
   "  nmap        — scan ibrahim.sys",
   "  ps          — projects as processes",
   "  df          — where the lines live",
+  "  file        — identify the kernel",
   "  hack        — do not run this",
   "  trace       — find the visitor",
   "  banner      — the flag",
@@ -67,8 +68,8 @@ const HELP: string[] = [
 const COMMAND_NAMES = [
   "help", "whoami", "projects", "stack", "skills", "log", "verify", "scorecard",
   "coverage", "neofetch", "arsenal", "encode", "decode", "hex", "sha256", "rot13",
-  "uuid", "nmap", "ps", "df", "hack", "trace", "banner", "matrix", "goto", "theme",
-  "github", "social", "contact", "uptime", "date", "echo", "sudo", "clear",
+  "uuid", "nmap", "ps", "df", "file", "hack", "trace", "banner", "matrix", "goto",
+  "theme", "github", "social", "contact", "uptime", "date", "echo", "sudo", "clear",
 ];
 
 /* ── working codecs — real transforms, not decoration ──────────────────── */
@@ -218,9 +219,15 @@ function commands(): Record<string, Line[]> {
       { kind: "out", text: "security toolkit — what i actually run:" },
       { kind: "out", text: "  web      burp suite · owasp zap · nuclei · ffuf" },
       { kind: "out", text: "  re       ghidra · radare2 · x64dbg" },
+      { kind: "out", text: "  malw     static triage → sandboxed dynamics → yara" },
       { kind: "out", text: "  classes  xss · idor · ssrf · sqli · broken auth" },
       { kind: "out", text: "  lab      hackthebox — machines + prolabs (see `social`)" },
       { kind: "out", text: "  practice bounty scopes + own labs — nothing outside scope." },
+    ],
+    file: [
+      { kind: "out", text: "ibrahim.sys: ELF 64-bit LSB executable, x86-64, dynamically linked" },
+      { kind: "out", text: "sha256: ~7.8k lines, hand-written — 0/64 engines flag it" },
+      { kind: "out", text: "verdict: clean. full source published — run `verify`." },
     ],
     contact: [
       { kind: "out", text: "fastest channel: email — see contact section below" },

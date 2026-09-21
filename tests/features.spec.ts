@@ -91,11 +91,13 @@ test("graveyard lists killed ideas with reasons", async ({ page }) => {
 test("devlog posts carry deep-link anchors and RSS feed ships", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#post-how-this-homepage-was-chosen")).toBeVisible();
+  await expect(page.locator("#post-malware-analysis-lab")).toBeVisible();
   const res = await page.request.get("/rss.xml");
   expect(res.status()).toBe(200);
   const body = await res.text();
   expect(body).toContain("<rss");
   expect(body).toContain("how-this-homepage-was-chosen");
+  expect(body).toContain("malware-analysis-lab");
 });
 
 test("tmux status bar: session, windows, live clock", async ({ page }) => {
@@ -275,4 +277,17 @@ test("cv carries availability, not location", async ({ page }) => {
   await page.goto("/cv.html");
   await expect(page.getByText(/open to: remote/)).toBeVisible();
   await expect(page.getByText("Cairo, Egypt")).toBeHidden();
+});
+
+test("malware analysis ships as a skill, an arsenal line, and a file scan", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#skills").scrollIntoViewIfNeeded();
+  await expect(page.getByText("Malware analysis — static triage · sandboxed dynamics · YARA")).toBeVisible();
+  const input = page.getByLabel("terminal input");
+  await input.fill("arsenal");
+  await input.press("Enter");
+  await expect(page.getByText("static triage → sandboxed dynamics → yara")).toBeVisible();
+  await input.fill("file");
+  await input.press("Enter");
+  await expect(page.getByText("0/64 engines flag it", { exact: false })).toBeVisible();
 });
