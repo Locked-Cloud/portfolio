@@ -376,7 +376,7 @@ export const neofetchSpecs: [string, string][] = [
   ["uptime", "3+ years shipping"],
   ["shell", "react 18 + vite"],
   ["resolution", "40 Hz realtime"],
-  ["wm", "three.js / R3F"],
+  ["wm", "dom-native"],
   ["langs", "EN · AR docs"],
   ["location", "undisclosed"],
 ];

@@ -5,7 +5,7 @@ import MatrixRain from "./components/MatrixRain";
 import BootOverlay from "./components/BootOverlay";
 import Statusbar from "./components/Statusbar";
 import Stats from "./components/Stats";
-import Proof from "./components/Proof";
+import Session from "./components/Session";
 import Projects from "./components/Projects";
 import Skills from "./components/Skills";
 import Journey from "./components/Journey";
@@ -75,7 +75,7 @@ export default function App() {
         <main>
           <Hero />
           <Stats repos={user.public_repos} />
-          <Proof />
+          <Session />
           <Projects />
           <Skills />
           <Journey />

@@ -3,7 +3,7 @@ import { currentFocus } from "../data/content";
 
 const SECTIONS = [
   { id: "top", n: 0, label: "shell" },
-  { id: "proof", n: 1, label: "3d" },
+  { id: "session", n: 1, label: "session" },
   { id: "work", n: 2, label: "work" },
   { id: "skills", n: 3, label: "skills" },
   { id: "log", n: 4, label: "log" },

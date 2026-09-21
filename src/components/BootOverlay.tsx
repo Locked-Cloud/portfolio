@@ -4,7 +4,7 @@ const LINES = [
   "IBRAHIM.SYS BIOS 6.4.2 — (c) ibrahim industries",
   "MEM CHECK ................ 65536K OK",
   "CPU ..................... REALTIME-3D [ENABLED]",
-  "GPU ..................... WIREFRAME-CAPABLE",
+  "GPU ..................... NOT REQUIRED — −192 KB",
   "NET ..................... GITHUB API [ARMED]",
   "SEC ..................... ARSENAL LOADED [ARMED]",
   "MOUNT /work /skills /log /github /blog",

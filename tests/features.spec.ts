@@ -53,24 +53,26 @@ test("all local asset srcs are relative (subpath-hostable)", async ({ page }) =>
   }
 });
 
-test("3D scene loads when scrolled into view", async ({ page }) => {
+test("session section sees the visitor, live", async ({ page }) => {
   await page.goto("/");
-  await page.locator("#proof").scrollIntoViewIfNeeded();
-  await expect(page.locator("#proof canvas")).toBeVisible({ timeout: 20_000 });
+  const s = page.locator("#session");
+  await expect(s).toBeVisible();
+  await expect(s.getByText("pointer travel")).toBeVisible();
+  // it responds to the visitor — a click lands in the counters and the packet log
+  await page.mouse.click(640, 300);
+  await expect(s.getByText(/CLK #1 at \(640, 300\)/)).toBeVisible({ timeout: 5_000 });
+  await page.mouse.click(700, 320);
+  await expect(s.getByText(/CLK #2/)).toBeVisible();
+  // the page receipts measured in this very browser
+  await expect(s.getByText(/entry js/)).toBeVisible({ timeout: 5_000 });
+  await expect(s.getByText(/budget 120 KB/i)).toBeVisible();
+  await expect(s.getByText("REMOVED — −192 KB gz", { exact: false })).toBeVisible();
 });
 
-test("telemetry HUD proves the scene is live", async ({ page }) => {
+test("statusbar carries the session window tab", async ({ page }) => {
   await page.goto("/");
-  await page.locator("#proof").scrollIntoViewIfNeeded();
-  await expect(page.locator("#proof canvas")).toBeVisible({ timeout: 20_000 });
-  // frame counter + fps stream from the render loop
-  await expect(page.getByText(/frame \d{6}/)).toBeVisible({ timeout: 10_000 });
-  await expect(page.getByText(/\d+ fps/)).toBeVisible();
-  await expect(page.getByText(/yaw -?\d+\.\d+° · pitch -?\d+\.\d+°/)).toBeVisible();
-  // the sweep resolves and reports its finding
-  await expect(page.getByText("SCAN COMPLETE — 3 CANALS LOCATED")).toBeVisible({
-    timeout: 15_000,
-  });
+  const bar = page.locator("[data-statusbar]");
+  await expect(bar.getByRole("link", { name: "1:session" })).toBeVisible();
 });
 
 test("CV toggles to Arabic", async ({ page }) => {

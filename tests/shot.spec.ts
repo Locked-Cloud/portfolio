@@ -31,9 +31,9 @@ test("capture design review shots", async ({ page }) => {
 
   await page.screenshot({ path: "shots/01-hero.png" });
 
-  await page.locator("#proof").scrollIntoViewIfNeeded();
-  await page.waitForTimeout(3_000); // three.js load + first frames
-  await page.locator("#proof").screenshot({ path: "shots/02-proof.png" });
+  await page.locator("#session").scrollIntoViewIfNeeded();
+  await page.waitForTimeout(1_200); // let receipts + first packets land
+  await page.locator("#session").screenshot({ path: "shots/02-session.png" });
 
   await page.locator("#work").scrollIntoViewIfNeeded();
   await page.waitForTimeout(600);

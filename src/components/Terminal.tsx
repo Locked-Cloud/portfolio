@@ -55,7 +55,7 @@ const HELP: string[] = [
   "  hack        — do not run this",
   "  trace       — find the visitor",
   "  banner      — the flag",
-  "  goto <x>    — scroll to: proof · work · skills · log · github · blog · contact",
+  "  goto <x>    — scroll to: session · work · skills · log · github · blog · contact",
   "  theme       — toggle the matrix rain",
   "  github      — open github profile",
   "  social      — direct channels",
@@ -99,14 +99,13 @@ function codecLines(cmd: string, rawArg: string): Line[] {
 
 const GOTO_TARGETS: Record<string, string> = {
   top: "top",
-  proof: "proof",
+  session: "session",
   work: "work",
   skills: "skills",
   log: "log",
   github: "github",
   blog: "blog",
   contact: "contact",
-  "3d": "proof",
 };
 
 function commands(): Record<string, Line[]> {
@@ -358,7 +357,7 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
         setLines((l) => [
           ...l,
           prompt,
-          { kind: "err", text: `goto: unknown target '${arg}' — try proof · work · skills · log · github · blog · contact` },
+          { kind: "err", text: `goto: unknown target '${arg}' — try session · work · skills · log · github · blog · contact` },
         ]);
       }
       return;
