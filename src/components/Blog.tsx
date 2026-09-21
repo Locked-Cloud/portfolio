@@ -7,7 +7,7 @@ export default function Blog() {
 
   return (
     <section id="blog" className="mx-auto mt-28 max-w-6xl scroll-mt-24 px-4">
-      <SectionHead index="05 — BLOG" title="DEVLOG" note="how, not just what" arabic="المدوّنة" />
+      <SectionHead index="05 — BLOG" title="DEVLOG" note="how, not just what" />
 
       <div className="space-y-5">
         {posts.map((post) => {

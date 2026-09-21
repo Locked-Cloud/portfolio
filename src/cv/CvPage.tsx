@@ -32,7 +32,7 @@ const AR: CvDict = {
   print: "طباعة / PDF",
   profileTitle: "نبذة",
   profile:
-    "مهندس واجهات أمامية وطالب علوم حاسب في القاهرة. أبني واجهات تحمل روح القاهرة لا كاليفورنيا — ثلاثي الأبعاد اللحظي بـThree.js، ومنصات SaaS متعددة المستأجرين على بنية تحتية بتكلفة صفر، وتعلّم آلي يعمل على أجهزة حافة. أتحرك عبر الطبقات كلها: برمجات ESP32 المدمجة، وخدمات Node/Express وSupabase، وواجهات React 18/19 بـTypeScript.",
+    "مهندس واجهات أمامية وطالب علوم حاسب. أبني واجهات سريعة الاستجابة — ثلاثي الأبعاد اللحظي بـThree.js، ومنصات SaaS متعددة المستأجرين على بنية تحتية بتكلفة صفر، وتعلّم آلي يعمل على أجهزة حافة. أتحرك عبر الطبقات كلها: برمجات ESP32 المدمجة، وخدمات Node/Express وSupabase، وواجهات React 18/19 بـTypeScript.",
   workTitle: "أعمال مختارة",
   skillsTitle: "المهارات",
   timelineTitle: "المسيرة",
@@ -48,7 +48,7 @@ const AR: CvDict = {
     "Python & vision": "بايثون والرؤية — تطبيقات رؤية حاسوبية وأدوات جمع بيانات",
     "Shipping real apps": "شحن تطبيقات حقيقية — PWA إنتاجي وواجهات API محصّنة",
     "The LMS years": "سنوات الـLMS — 668 commit على منتج واحد بأدوات أداء وأمان",
-    "Real-time & Cairo-flavored SaaS": "لحظي وSaaS بطعم القاهرة — بث المستشعرات إلى ثلاثي الأبعاد، ومنصة السوق المصري",
+    "Real-time & SaaS": "اللحظي ومنصات SaaS — بث المستشعرات إلى ثلاثي الأبعاد، ومنصة تجارة إلكترونية",
   },
   footer: "كل رقم في هذه الصفحة له مصدر — نفّذ الأمر verify في طرفية الموقع · نفس الروح، شكل جديد",
 };
@@ -61,14 +61,14 @@ const EN: CvDict = {
   role: "Front-end Engineer — Cairo, Egypt · real-time 3D web · SaaS · edge ML",
   profileTitle: "Profile",
   profile:
-    "Front-end engineer and CS student in Cairo. I build interfaces that feel like Cairo, not California — real-time 3D (Three.js), multi-tenant SaaS on $0 infrastructure, and machine learning deployed on edge hardware. Comfortable across the whole stack: ESP32 firmware, Node/Express and Supabase backends, and React 18/19 frontends in TypeScript.",
+    "Front-end engineer and CS student. I build interfaces that answer back — real-time 3D (Three.js), multi-tenant SaaS on $0 infrastructure, and machine learning deployed on edge hardware. Comfortable across the whole stack: ESP32 firmware, Node/Express and Supabase backends, and React 18/19 frontends in TypeScript.",
   workTitle: "Selected work",
   skillsTitle: "Skills",
   timelineTitle: "Timeline",
   groups: {},
   projectNotes: {},
   timeline: {},
-  footer: "sources for every number: run verify in the site terminal · نفس الروح، شكل جديد",
+  footer: "sources for every number: run verify in the site terminal",
 };
 
 export default function CvPage() {

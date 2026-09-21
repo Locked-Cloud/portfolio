@@ -4,11 +4,11 @@ import { SectionHead } from "./SectionHead";
 export default function Journey() {
   return (
     <section id="log" className="mx-auto mt-28 max-w-6xl scroll-mt-24 px-4">
-      <SectionHead index="03 — LOG" title="GIT LOG — JOURNEY" note="press j to scroll, like a pro" arabic="الرحلة" />
+      <SectionHead index="03 — LOG" title="GIT LOG — JOURNEY" note="press j to scroll, like a pro" />
 
       <div className="panel p-6 sm:p-8" data-reveal>
         <p className="text-[11px] tracking-[0.2em] text-fog">
-          ibrahim@cairo:~$ <span className="text-phos">git log --oneline --reverse</span>
+          ibrahim@sys:~$ <span className="text-phos">git log --oneline --reverse</span>
         </p>
         <ol className="mt-5 space-y-0">
           {journey.map((j, i) => (
@@ -39,7 +39,7 @@ export default function Journey() {
       {/* ~/graveyard — the kill-list. deletions are decisions. */}
       <div className="panel mt-5 p-6 sm:p-8" data-reveal>
         <p className="text-[11px] tracking-[0.2em] text-fog">
-          ibrahim@cairo:~$ <span className="text-phos">git log --diff-filter=D --summary</span>
+          ibrahim@sys:~$ <span className="text-phos">git log --diff-filter=D --summary</span>
         </p>
         <ul className="mt-3 space-y-2">
           {graveyard.map((g) => (

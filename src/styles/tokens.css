@@ -2,25 +2,25 @@
 /* NOTE: the /cv entry's tree isn't reached by Tailwind's auto source scan —
    its page uses the plain-CSS .cv-* classes below, deliberately. */
 
-/* ─── CAIRO.SYS — terminal × Neo-Bazaar ──────────────────────────────────
-   The RADE.SYS hacker-terminal concept, professionalized and fused with
-   the Bazarna identity: warm-dark ink, phosphor nile-teal (not neon
-   green), gold as the alert accent, Arabic glyphs in the rain. */
+/* ─── IBRAHIM.SYS — full CRT terminal ─────────────────────────────────────
+   Direction pivot 2026-09-21: the restrained teal pass died (see ~/graveyard).
+   This is a green-phosphor CRT through and through — scanlines, flicker,
+   glow, all-mono type. One warm accent (gold) survives for warnings only. */
 
 @theme {
-  --color-bg: #070c0a;
-  --color-bg2: #0b1310;
-  --color-panel: #0d1714;
-  --color-phos: #2dd4a7;
-  --color-phos-bright: #7ef0cd;
-  --color-mint: #d6efe4;
-  --color-fog: #7ca394;
+  --color-bg: #050806;
+  --color-bg2: #0a130c;
+  --color-panel: #0a1510;
+  --color-phos: #3dff88;
+  --color-phos-bright: #b0ffcf;
+  --color-mint: #d8f5e4;
+  --color-fog: #7fb894;
   --color-gold: #d9a441;
   --color-terra: #e0713f;
-  --color-danger: #ff6b5a;
+  --color-danger: #ff5f56;
   --color-cyan: #4dffe7;
 
-  --font-display: "Space Grotesk", "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --font-display: "IBM Plex Mono", "IBM Plex Sans Arabic", ui-monospace, monospace;
   --font-body: "IBM Plex Mono", "IBM Plex Sans Arabic", ui-monospace, monospace;
   --font-arabic: "IBM Plex Sans Arabic", sans-serif;
 }
@@ -43,15 +43,15 @@ body {
 
 /* ─── Shared surfaces ──────────────────────────────────────────────────── */
 .panel {
-  border: 1px solid rgba(45, 212, 167, 0.18);
-  background: rgba(13, 23, 20, 0.82);
+  border: 1px solid rgba(61, 255, 136, 0.18);
+  background: rgba(8, 18, 12, 0.86);
   backdrop-filter: blur(12px);
-  box-shadow: 0 0 40px rgba(45, 212, 167, 0.05);
+  box-shadow: 0 0 40px rgba(61, 255, 136, 0.05);
 }
 
 .btn {
   display: inline-block;
-  border: 1px solid rgba(45, 212, 167, 0.5);
+  border: 1px solid rgba(61, 255, 136, 0.5);
   color: var(--color-phos);
   padding: 0.65rem 1.4rem;
   font-size: 0.8rem;
@@ -60,9 +60,9 @@ body {
   transition: all 0.2s ease;
 }
 .btn:hover {
-  background: rgba(45, 212, 167, 0.1);
+  background: rgba(61, 255, 136, 0.1);
   border-color: var(--color-phos);
-  box-shadow: 0 0 18px rgba(45, 212, 167, 0.18);
+  box-shadow: 0 0 18px rgba(61, 255, 136, 0.18);
 }
 .btn.solid {
   background: var(--color-phos);
@@ -90,25 +90,64 @@ body {
   text-transform: uppercase;
 }
 
-/* ─── CRT vignette (scanlines were killed 2026-09 — see ~/graveyard) ───── */
+/* ─── CRT kit: scanlines + flicker + vignette + glow ───────────────────── */
+.scanlines {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.16) 3px
+  );
+}
+
+/* faint irregular phosphor flicker — barely there, just alive */
+.crt-flicker {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  background: var(--color-phos);
+  opacity: 0;
+  mix-blend-mode: overlay;
+  animation: crt-flicker 6.4s steps(1) infinite;
+}
+@keyframes crt-flicker {
+  0%, 100% { opacity: 0; }
+  7%  { opacity: 0.014; }
+  8%  { opacity: 0; }
+  31% { opacity: 0.022; }
+  32% { opacity: 0; }
+  63% { opacity: 0.016; }
+  64% { opacity: 0; }
+  87% { opacity: 0.03; }
+  88% { opacity: 0; }
+}
+
+.glow {
+  text-shadow: 0 0 10px rgba(61, 255, 136, 0.4);
+}
 
 .terminal-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
 .terminal-scrollbar::-webkit-scrollbar-track {
-  background: rgba(45, 212, 167, 0.05);
+  background: rgba(61, 255, 136, 0.05);
 }
 .terminal-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(45, 212, 167, 0.2);
+  background: rgba(61, 255, 136, 0.2);
 }
 .vignette {
   pointer-events: none;
   position: fixed;
   inset: 0;
-  z-index: 1;
+  z-index: 44;
   background:
-    radial-gradient(ellipse at center, transparent 42%, rgba(0, 0, 0, 0.6) 100%),
-    linear-gradient(180deg, rgba(0, 12, 8, 0.4), transparent 16%, transparent 84%, rgba(0, 0, 0, 0.5));
+    radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.62) 100%),
+    linear-gradient(180deg, rgba(0, 10, 5, 0.45), transparent 16%, transparent 84%, rgba(0, 0, 0, 0.55));
 }
 
 /* ─── Glitch name ──────────────────────────────────────────────────────── */
@@ -161,8 +200,8 @@ body {
 
 /* ─── Status dot ───────────────────────────────────────────────────────── */
 @keyframes pulse-dot {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(45, 212, 167, 0.5); }
-  50% { box-shadow: 0 0 0 6px rgba(45, 212, 167, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(61, 255, 136, 0.5); }
+  50% { box-shadow: 0 0 0 6px rgba(61, 255, 136, 0); }
 }
 .pulse-dot {
   animation: pulse-dot 2s ease-in-out infinite;
@@ -181,12 +220,19 @@ body {
   transform: none;
 }
 
-/* ─── `theme` quiet mode — the matrix rain goes quiet ──────────────────── */
+/* ─── `theme` quiet mode — the CRT powers down ─────────────────────────── */
+body.quiet .scanlines,
+body.quiet .crt-flicker,
 body.quiet .vignette {
   display: none;
 }
 body.quiet canvas.fixed {
   opacity: 0 !important;
+}
+
+/* ─── Thumbnail exposure lift — frames that read near-black at card size ── */
+.thumb-lift {
+  filter: brightness(1.35) contrast(1.05);
 }
 
 /* ─── CV paper theme — plain CSS (deterministic; immune to utility scan) ── */
@@ -267,11 +313,6 @@ body.quiet canvas.fixed {
   }
 }
 
-/* ─── Thumbnail exposure lift — frames that read near-black at card size ── */
-.thumb-lift {
-  filter: brightness(1.35) contrast(1.05);
-}
-
 /* ─── Accessibility ────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -285,7 +326,12 @@ body.quiet canvas.fixed {
   .glitch::before,
   .glitch::after,
   .cursor-blink,
-  .pulse-dot {
+  .pulse-dot,
+  .crt-flicker {
     animation: none;
+  }
+  .scanlines,
+  .crt-flicker {
+    display: none;
   }
 }

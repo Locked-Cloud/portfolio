@@ -30,13 +30,13 @@ export default function Scene3D() {
       renderer.domElement.style.cursor = "grab";
 
       const scene = new THREE.Scene();
-      scene.fog = new THREE.Fog(0x070c0a, 4, 11);
+      scene.fog = new THREE.Fog(0x050806, 4, 11);
 
       const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 50);
       camera.position.set(0, 0.4, 6.2);
       camera.lookAt(0, -0.2, 0);
 
-      const teal = 0x2dd4a7;
+      const phos = 0x3dff88;
       const gold = 0xd9a441;
 
       // ── the molar ──
@@ -47,21 +47,21 @@ export default function Scene3D() {
         return new THREE.LineSegments(edges, mat);
       };
 
-      const crown = wire(new THREE.IcosahedronGeometry(1.35, 2), teal, 0.34);
+      const crown = wire(new THREE.IcosahedronGeometry(1.35, 2), phos, 0.34);
       crown.scale.set(1.15, 0.85, 1.15);
       crown.position.y = 0.55;
       group.add(crown);
 
       const rootGeo = new THREE.ConeGeometry(0.42, 1.9, 8, 3);
-      const rootA = wire(rootGeo, teal, 0.3);
+      const rootA = wire(rootGeo, phos, 0.3);
       rootA.position.set(-0.5, -0.75, 0.15);
       rootA.rotation.z = 0.16;
       group.add(rootA);
-      const rootB = wire(rootGeo, teal, 0.3);
+      const rootB = wire(rootGeo, phos, 0.3);
       rootB.position.set(0.5, -0.75, -0.15);
       rootB.rotation.z = -0.16;
       group.add(rootB);
-      const rootC = wire(rootGeo, teal, 0.22);
+      const rootC = wire(rootGeo, phos, 0.22);
       rootC.position.set(0.05, -0.7, 0.62);
       rootC.rotation.x = -0.22;
       group.add(rootC);
@@ -103,7 +103,7 @@ export default function Scene3D() {
       const warm = new THREE.PointLight(gold, 26, 14);
       warm.position.set(2.6, 1.8, 2.4);
       scene.add(warm);
-      const cool = new THREE.PointLight(teal, 18, 14);
+      const cool = new THREE.PointLight(phos, 18, 14);
       cool.position.set(-2.8, -1.2, 2.2);
       scene.add(cool);
 

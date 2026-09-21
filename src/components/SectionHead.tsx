@@ -2,27 +2,25 @@ interface SectionHeadProps {
   index: string;
   title: string;
   note?: string;
-  arabic?: string;
 }
 
-export function SectionHead({ index, title, note, arabic }: SectionHeadProps) {
+/** tmux-pane section header: box-drawn index rail, glowing mono title. */
+export function SectionHead({ index, title, note }: SectionHeadProps) {
   return (
     <div data-reveal className="mb-10">
-      <p className="text-[11px] tracking-[0.3em] text-fog">
-        <span className="text-gold">//</span> {index}
-        {note ? <span className="ml-3 text-fog/60">{note}</span> : null}
+      <p className="text-[11px] tracking-[0.24em] text-fog">
+        <span className="text-phos">┌─[</span> {index} <span className="text-phos">]─</span>
+        {note ? <span className="ml-3 text-fog/70"># {note}</span> : null}
       </p>
-      <div className="mt-2 flex flex-wrap items-baseline justify-between gap-3">
-        <h2 className="font-display text-3xl font-bold tracking-tight text-mint sm:text-4xl">
-          {title}
-        </h2>
-        {arabic && (
-          <span dir="rtl" lang="ar" className="font-arabic text-xl text-gold/90">
-            {arabic}
-          </span>
-        )}
-      </div>
-      <div className="mt-5 h-px w-full bg-gradient-to-r from-phos/40 via-phos/10 to-transparent" />
+      <h2 className="glow mt-2.5 font-display text-3xl font-bold tracking-tight text-phos-bright sm:text-4xl">
+        {title}
+      </h2>
+      <p
+        aria-hidden
+        className="mt-3 select-none overflow-hidden whitespace-nowrap text-[11px] leading-none text-phos/25"
+      >
+        ────────────────────────────────────────────────────────────────────────────────────────────────
+      </p>
     </div>
   );
 }

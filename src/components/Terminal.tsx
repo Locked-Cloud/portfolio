@@ -11,7 +11,6 @@ import {
   coverageLines,
   kernelLog,
   stackChips,
-  COORDINATES,
   GITHUB_URL,
 } from "../data/content";
 
@@ -20,11 +19,11 @@ type Line = { kind: "in" | "out" | "err"; text: string } | { kind: "block"; bloc
 
 const SCRIPT: Line[] = [
   ...kernelLog.map((text): Line => ({ kind: "out", text })),
-  { kind: "in", text: "ibrahim@cairo:~$ whoami" },
+  { kind: "in", text: "ibrahim@sys:~$ whoami" },
   { kind: "block", block: "whoami" },
-  { kind: "in", text: "ibrahim@cairo:~$ cat projects/active.md" },
+  { kind: "in", text: "ibrahim@sys:~$ cat projects/active.md" },
   { kind: "block", block: "projects" },
-  { kind: "in", text: "ibrahim@cairo:~$ ls -a .stack" },
+  { kind: "in", text: "ibrahim@sys:~$ ls -a .stack" },
   { kind: "block", block: "stack" },
   { kind: "out", text: "" },
   { kind: "out", text: "your turn — type `help`" },
@@ -41,6 +40,9 @@ const HELP: string[] = [
   "  scorecard   — merit vs. stars",
   "  coverage    — what this page can't show",
   "  neofetch    — system card",
+  "  hack        — do not run this",
+  "  trace       — find the visitor",
+  "  banner      — the flag",
   "  goto <x>    — scroll to: proof · work · skills · log · github · blog · contact",
   "  theme       — toggle the matrix rain",
   "  github      — open github profile",
@@ -104,6 +106,28 @@ function commands(): Record<string, Line[]> {
     social: socials.map(
       (s): Line => ({ kind: "out", text: `  ${s.name.padEnd(10)} ${s.handle} ${s.live ? "" : "(todo)"}` })
     ),
+    banner: [
+      { kind: "out", text: "   ▲ ▲    IBRAHIM.SYS v6.4.2" },
+      { kind: "out", text: "  ▲ ▲ ▲   real-time 3d · saas · edge ml" },
+      { kind: "out", text: "   ▲ ▲    location: undisclosed" },
+    ],
+    hack: [
+      { kind: "out", text: "initiating handshake with 127.0.0.1 …" },
+      { kind: "out", text: "[*] scanning ports .............. 22, 443 open" },
+      { kind: "out", text: "[*] cracking /dev/motivation .... found: unlimited" },
+      { kind: "out", text: "[*] injecting caffeine .......... ok" },
+      { kind: "out", text: "[██████████] 100%" },
+      { kind: "out", text: "ACCESS GRANTED — everything here is already yours. MIT-licensed." },
+    ],
+    trace: [
+      { kind: "out", text: "traceroute to visitor:" },
+      { kind: "out", text: "  1  gateway.local ............... 0.4 ms" },
+      { kind: "out", text: "  2  core1.backbone .............. 1.1 ms" },
+      { kind: "out", text: "  3  ixp.exchange-01 ............. 2.8 ms" },
+      { kind: "out", text: "  4  your.isp .................... ~12 ms" },
+      { kind: "out", text: "  5  you.right.now ............... 0 ms ← hello, visitor." },
+    ],
+    matrix: [{ kind: "out", text: "the rain never stops. (`theme` makes it quiet.)" }],
     contact: [
       { kind: "out", text: "fastest channel: email — see contact section below" },
       { kind: "out", text: "or run `github` and open an issue on any repo" },
@@ -122,11 +146,8 @@ function Block({ id }: { id: BlockId }) {
         <p className="font-display text-lg font-bold text-mint">IBRAHIM AHMED</p>
         <p className="text-fog italic">front-end engineer · creative technologist</p>
         <p className="mt-2 max-w-2xl text-mint/80">
-          building interfaces that feel like <span className="text-terra">Cairo</span>, not
-          California — real-time 3D web, SaaS products, and ML that runs on $45 hardware.{" "}
-          <span dir="rtl" lang="ar" className="font-arabic text-phos/90">
-            نفس الروح، شكل جديد.
-          </span>
+          building interfaces that answer back — real-time 3D web, SaaS products, and ML
+          that runs on <span className="text-terra">$45 hardware</span>.
         </p>
       </div>
     );
@@ -190,7 +211,7 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
 
   const run = (raw: string) => {
     const cmd = raw.trim();
-    const prompt: Line = { kind: "in", text: `ibrahim@cairo:~$ ${cmd}` };
+    const prompt: Line = { kind: "in", text: `ibrahim@sys:~$ ${cmd}` };
     if (!cmd) {
       setLines((l) => [...l, prompt]);
       return;
@@ -286,7 +307,7 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
             <i className="h-3 w-3 rounded-full bg-phos/50" />
           </span>
           <span className="ml-3 text-[11px] uppercase tracking-[0.2em] text-fog">
-            ibrahim@cairo — 128×48
+            ibrahim@sys — 128×48
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -325,7 +346,7 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
 
       {/* prompt */}
       <div className="flex items-center gap-2 border-t border-phos/15 px-5 py-3.5 sm:px-6">
-        <span className="shrink-0 text-[13px] text-phos-bright">ibrahim@cairo:~$</span>
+        <span className="shrink-0 text-[13px] text-phos-bright">ibrahim@sys:~$</span>
         <input
           ref={inputRef ?? localInput}
           value={value}
@@ -341,8 +362,8 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
 
       {/* footer hints */}
       <div className="flex items-center justify-between border-t border-phos/15 bg-white/5 px-5 py-2.5 text-[10px] tracking-widest text-fog sm:px-6">
-        <p>TIPS: TYPE &lsquo;VERIFY&rsquo;, &lsquo;SCORECARD&rsquo;, OR &lsquo;CLEAR&rsquo;</p>
-        <p className="hidden sm:block">LOC: {COORDINATES}</p>
+        <p>TIPS: TYPE &lsquo;HACK&rsquo;, &lsquo;VERIFY&rsquo;, OR &lsquo;TRACE&rsquo;</p>
+        <p className="hidden sm:block">SESSION: GUEST · TTY1</p>
       </div>
     </div>
   );

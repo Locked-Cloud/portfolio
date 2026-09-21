@@ -1,12 +1,11 @@
 import { useEffect, useRef } from "react";
 
-const GLYPHS =
-  "01أبتثجحخدذرزسشصضطظعغفقكلمنهوي<>/\\{}[]()$#@%&*+=~^;:.";
+const GLYPHS = "01<>/\\{}[]()$#@%&*+=~^;:.ABCDEF0x";
 
 /**
- * Matrix rain with Arabic + latin glyphs. Fixed full-screen canvas at low
- * opacity behind the app. Pauses when the tab is hidden, skipped entirely
- * under prefers-reduced-motion.
+ * Matrix rain, green phosphor. Fixed full-screen canvas at low opacity
+ * behind the app. Pauses when the tab is hidden, skipped entirely under
+ * prefers-reduced-motion. Rare gold sparks tie into the single warm accent.
  */
 export default function MatrixRain() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -42,13 +41,13 @@ export default function MatrixRain() {
       if (t - last < 66) return; // ~15fps — rain doesn't need more
       last = t;
 
-      ctx.fillStyle = "rgba(7, 12, 10, 0.1)";
+      ctx.fillStyle = "rgba(5, 8, 6, 0.1)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       for (let i = 0; i < drops.length; i++) {
         const glyph = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
-        const gold = Math.random() < 0.03;
-        ctx.fillStyle = gold ? "rgba(217, 164, 65, 0.9)" : "rgba(45, 212, 167, 0.8)";
+        const gold = Math.random() < 0.025;
+        ctx.fillStyle = gold ? "rgba(217, 164, 65, 0.9)" : "rgba(61, 255, 136, 0.8)";
         ctx.fillText(glyph, i * fontSize, drops[i] * fontSize);
         if (drops[i] * fontSize > canvas.height && Math.random() > 0.976) {
           drops[i] = 0;
@@ -68,7 +67,7 @@ export default function MatrixRain() {
     <canvas
       ref={canvasRef}
       aria-hidden
-      className="pointer-events-none fixed inset-0 z-0 h-full w-full opacity-[0.10]"
+      className="pointer-events-none fixed inset-0 z-0 h-full w-full opacity-[0.12]"
     />
   );
 }

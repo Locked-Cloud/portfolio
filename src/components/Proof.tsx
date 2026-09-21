@@ -30,7 +30,6 @@ export default function Proof() {
         index="00 — PROOF"
         title="REAL-TIME 3D, LIVE"
         note="not a video — drag it"
-        arabic="ثلاثي الأبعاد"
       />
       <div className="panel relative overflow-hidden rounded-lg p-2" data-reveal>
         <span

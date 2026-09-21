@@ -2,7 +2,6 @@ export interface Project {
   id: string;
   index: string;
   title: string;
-  arabic?: string;
   tagline: string;
   description: string;
   tech: string[];
@@ -31,7 +30,6 @@ export const featuredProjects: Project[] = [
       { src: `${PULPOVR_ASSETS}/digital_twin_3d.jpg`, alt: "Digital twin — 3D tooth with canal path" },
       { src: `${PULPOVR_ASSETS}/analytics_dashboard.jpg`, alt: "Student analytics dashboard" },
     ],
-    arabic: "توأم رقمي لحظي",
     tagline: "Live endodontic guidance — real-time dental digital twin",
     description:
       "A 6-DOF IMU mounted on a dental handpiece streams telemetry at 40 Hz over WebSocket into an interactive Three.js molar — apex-locator safety HUD, trajectory panels, student analytics. Built end to end: React 18 + TypeScript frontend, Express + WebSocket backend, ESP32 firmware in C++.",
@@ -52,7 +50,6 @@ export const featuredProjects: Project[] = [
     image: "./projects/smart-parking.jpg",
     imageAlt: "Miniature parking lot with teal detection boxes — generated in-style visual",
     lift: true,
-    arabic: "رؤية على الحافة",
     tagline: "Edge ML — the whole lifecycle on a Raspberry Pi 4",
     description:
       "An 8-step pipeline — capture, auto-label, two-stage YOLO fine-tuning, NCNN export — deployed to a Raspberry Pi 4 running real-time occupancy detection at 12–20 FPS with temporal smoothing. Ships with a plug-and-play baseline model and a full deployment guide.",
@@ -69,12 +66,12 @@ export const featuredProjects: Project[] = [
   {
     id: "bazarna",
     index: "03",
-    title: "BAZARNA — بازارنا",
+    title: "BAZARNA",
     image: "./projects/bazarna.jpg",
     imageAlt: "Wireframe bazaar alley with gold lanterns — generated in-style visual",
     tagline: "Egypt-first multi-tenant SaaS ecommerce",
     description:
-      "Storefronts with the payments Egyptians actually use — COD, InstaPay, Fawry, smart wallets — Arabic-first RTL, a visual page builder, a haggling engine «فاوضني», and an AI merchant twin. React + Supabase (RLS, Edge Functions, pg_cron) on Cloudflare Pages, engineered for a $0 stack.",
+      "Storefronts with the payments Egyptians actually use — COD, InstaPay, Fawry, smart wallets — Arabic-first RTL, a visual page builder, a haggling engine (fawadni), and an AI merchant twin. React + Supabase (RLS, Edge Functions, pg_cron) on Cloudflare Pages, engineered for a $0 stack.",
     tech: ["React 18", "Tailwind v4", "Supabase", "RLS", "Cloudflare", "RTL / i18n"],
     status: "WIP",
     year: "2026",
@@ -150,29 +147,24 @@ export const moreProjects: Project[] = [
 
 export interface SkillGroup {
   title: string;
-  arabic: string;
   skills: string[];
 }
 
 export const skillGroups: SkillGroup[] = [
   {
     title: "FRONTEND",
-    arabic: "الواجهات",
     skills: ["React 18 / 19", "TypeScript", "Vite", "Tailwind CSS v4", "Three.js / R3F", "MUI 7", "TanStack Query", "Zustand", "RTL & i18n"],
   },
   {
     title: "BACKEND",
-    arabic: "الخدمات",
     skills: ["Node.js / Express 5", "Supabase · Postgres · RLS", "Edge Functions", "Firebase", "JWT & OTP flows", "pg_cron jobs"],
   },
   {
     title: "SYSTEMS",
-    arabic: "الأنظمة",
     skills: ["C / C++ — ESP32 firmware", "GPGPU simulation", "Python — YOLO · NCNN · OpenCV", "Playwright pipelines", "MATLAB", "Assembly"],
   },
   {
     title: "PRACTICES",
-    arabic: "الأساليب",
     skills: ["Row-Level Security models", "Performance budgets — measured", "Conventional commits", "AI-assisted dev pipelines", "$0 / free-tier architecture"],
   },
 ];
@@ -212,24 +204,37 @@ export const journey: JourneyStop[] = [
   {
     hash: "e5c88a3",
     year: "2026",
-    title: "Real-time & Cairo-flavored SaaS",
-    note: "PULPOVR streams sensor data into 3D. Bazarna productizes the Egyptian souq. This portfolio ships.",
+    title: "Real-time & SaaS",
+    note: "PULPOVR streams sensor data into 3D. Bazarna productizes marketplace commerce. This portfolio ships.",
   },
 ];
 
-/* ─── ~/graveyard — decisions with a kill date (idea-generation discipline) ── */
+/* ─── ~/graveyard — decisions with a kill date (idea-generation discipline).
+   A living document: entries can come back. Revivals are on record too. ── */
 
 export interface GraveItem {
   name: string;
   killed: string;
   reason: string;
+  revived?: string;
 }
 
 export const graveyard: GraveItem[] = [
   {
+    name: "teal restraint pass",
+    killed: "2026-09-21",
+    reason: "read as a designed page wearing a terminal costume — the client called it: full CRT instead",
+  },
+  {
+    name: "arabic as design actor",
+    killed: "2026-09-21",
+    reason: "direction change — english-first terminal; the bilingual /cv keeps the other face",
+  },
+  {
     name: "neon-green CRT skin",
     killed: "2026-09",
-    reason: "borrowed aesthetic — kept the shell, swapped the costume for phosphor teal",
+    revived: "2026-09-21 — full green-phosphor direction",
+    reason: "killed for reading as borrowed; revived when the brief became 'be a terminal'",
   },
   {
     name: "per-section staggered reveals",
@@ -239,7 +244,8 @@ export const graveyard: GraveItem[] = [
   {
     name: "scanlines overlay",
     killed: "2026-09",
-    reason: "one accessory too many — the Arabic rain stays, the CRT film goes",
+    revived: "2026-09-21 — CRT commit means CRT",
+    reason: "killed as one accessory too many; revived with the whole outfit",
   },
   {
     name: "github-readme-stats cards",
@@ -249,7 +255,7 @@ export const graveyard: GraveItem[] = [
   {
     name: "cloudflare-pages deploy",
     killed: "2026-09",
-    reason: "GitHub Pages won at $0 — one command swaps it back",
+    reason: "GitHub Pages won at $0 — one command swaps back",
   },
 ];
 
@@ -311,8 +317,8 @@ export const statClaims: StatClaim[] = [
 /* ─── Terminal narrative + command data ─────────────────────────────────── */
 
 export const kernelLog: string[] = [
-  "[    0.000000] CAIRO.SYS kernel 6.4.2-ibrahim-ahmed",
-  "[    0.042188] initializing cairo interface layers…",
+  "[    0.000000] IBRAHIM.SYS kernel 6.4.2",
+  "[    0.042188] initializing interface layers…",
   "[    0.104291] CPU: realtime-3d optimization enabled",
   "[    0.293810] AUTH: user 'guest' granted read access",
 ];
@@ -338,14 +344,14 @@ export const neofetchArt: string[] = [
 ];
 
 export const neofetchSpecs: [string, string][] = [
-  ["kernel", "cairo.sys 6.4.2"],
+  ["kernel", "ibrahim.sys 6.4.2"],
   ["host", "front-end engineer"],
   ["uptime", "3+ years shipping"],
   ["shell", "react 18 + vite"],
   ["resolution", "40 Hz realtime"],
   ["wm", "three.js / R3F"],
-  ["langs", "AR / EN (dual-script)"],
-  ["location", "cairo, eg — 30.04°N 31.23°E"],
+  ["langs", "EN · AR docs"],
+  ["location", "undisclosed"],
 ];
 
 export const coverageLines: string[] = [
@@ -359,7 +365,7 @@ export const coverageLines: string[] = [
   "policy: no number without a source — run `verify`",
 ];
 
-export const COORDINATES = "30.0444° N, 31.2357° E";
+export const COORDINATES = "30.0444° N, 31.2357° E"; // CV-only fact; main site says "undisclosed"
 
 export interface Social {
   name: string;
@@ -415,9 +421,10 @@ export const posts: Post[] = [
       "The homepage you're on wasn't the first idea — it was the survivor of a written brief, four generated directions, and a kill-list. The selection process, in the open.",
     body: [
       "Before a single line of this site's real code existed, I generated four homepage directions against a written brief and judged them side by side. Not four mood boards — four working drafts, on one live canvas, each answering the same question differently: what is the hero of this page?",
-      "The brief had tests, not vibes: exactly one orchestrated motion moment; Arabic as a design actor, never garnish; a single warm gold moment; less scattered effect; and the shell must actually answer — a terminal you can type into, not a picture of one. Any direction that failed a test was out, no matter how good it looked.",
-      "The verdict was the direction that committed hardest: the shell is the hero. The terminal isn't chrome decorating a conventional hero section — it boots, tells you who I am as command output, and hands you the prompt. A quiet human row underneath keeps a person visible next to the machine. The losing directions weren't wasted: their good parts were harvested, and everything that didn't earn its place went to the graveyard — the neon-green costume, the per-section staggered reveals, the scanlines. Each has a kill date and a reason, and the list is on the page, under the journey.",
-      "That's the transferable part, and it's why I'm writing this: write the tests before you fall in love. A brief you can fail is the only brief worth having — for a homepage, a component API, or a product. This page passes its tests; the next brief is already stricter.",
+      "The brief had tests, not vibes: exactly one orchestrated motion moment; one accent, used sparingly; less scattered effect; and the shell must actually answer — a terminal you can type into, not a picture of one. Any direction that failed a test was out, no matter how good it looked.",
+      "The verdict was the direction that committed hardest: the shell is the hero. The terminal isn't chrome decorating a conventional hero section — it boots, tells you who I am as command output, and hands you the prompt. A quiet human row underneath keeps a person visible next to the machine. The losing directions weren't wasted: their good parts were harvested, and everything that didn't earn its place went to the graveyard — the per-section staggered reveals, the readme-stats cards. Each has a kill date and a reason, and the list is on the page, under the journey.",
+      "Postscript, because the graveyard is a living document: the winning direction itself was killed weeks later. The restrained teal pass read as a designed page wearing a terminal costume — so the site went full green-phosphor CRT: scanlines, a BIOS boot, a tmux status bar. The tests survived the rewrite; only the direction didn't. That's the point of writing tests instead of falling in love.",
+      "That's the transferable part, and it's why I'm writing this: write the tests before you fall in love. A brief you can fail is the only brief worth having — for a homepage, a component API, or a product.",
     ],
   },
   {
@@ -426,10 +433,10 @@ export const posts: Post[] = [
     date: "2026-09-21",
     minutes: 3,
     excerpt:
-      "A shell that answers, stats with provenance chips, and Arabic in the matrix rain — the design decisions behind CAIRO.SYS.",
+      "A shell that answers, stats with provenance chips, and a CRT that commits — the design decisions behind IBRAHIM.SYS.",
     body: [
       "Most portfolios are a grid of cards. Mine boots a kernel log, tells you who I am as command output, and hands you the prompt. That choice came from a collision: a hacker-terminal reference (matrix rain, scanlines, a shell you can type into) met my own design language — the warm, Arabic-first identity I built for Bazarna, an Egypt-first SaaS.",
-      "Neon green on black is a costume. I swapped it for phosphor nile-teal on warm-dark ink, used gold exactly once (the availability chip), and let Arabic glyphs fall through the matrix rain next to the latin ones. The terminal says Cairo, not Hollywood.",
+      "The first pass treated neon green as a costume and professionalized it — phosphor teal, warm-dark ink, Arabic glyphs falling through the matrix rain. Tasteful, and wrong: it read as a designed page wearing a terminal costume, not a terminal. So the rebuild committed: green phosphor on near-black, scanlines, a BIOS boot screen, a tmux status bar pinned to the bottom of your viewport, everything in one mono typeface. When the brief says terminal, be a terminal.",
       "The part I care most about is invisible until you type `verify`: every number on the page carries its source — [record], [measured], [by-design]. 29 repos is a public record. 40 Hz telemetry is a measurement from PULPOVR, my dental digital-twin project. $0 infra is an architecture decision, and I can show you the plan. `scorecard` prints the selection method: my two best projects have 1 and 2 stars; the 4-star repos are course scripts. Merit, not stars.",
       "A portfolio is a claim. This one tries to make its claims executable.",
     ],

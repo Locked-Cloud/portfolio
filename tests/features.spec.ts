@@ -97,3 +97,20 @@ test("devlog posts carry deep-link anchors and RSS feed ships", async ({ page })
   expect(body).toContain("<rss");
   expect(body).toContain("how-this-homepage-was-chosen");
 });
+
+test("tmux status bar: session, windows, live clock", async ({ page }) => {
+  await page.goto("/");
+  const bar = page.locator("[data-statusbar]");
+  await expect(bar).toBeVisible();
+  await expect(bar.getByText("[IBRAHIM.SYS]")).toBeVisible();
+  await expect(bar.getByRole("link", { name: "2:work" })).toBeVisible();
+  await expect(bar.getByText(/\d{2}:\d{2}:\d{2}/)).toBeVisible();
+});
+
+test("hack command grants access", async ({ page }) => {
+  await page.goto("/");
+  const input = page.getByLabel("terminal input");
+  await input.fill("hack");
+  await input.press("Enter");
+  await expect(page.getByText("ACCESS GRANTED", { exact: false })).toBeVisible();
+});

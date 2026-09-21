@@ -1,8 +1,20 @@
-import { test } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 
 // On-demand design screenshots:  SHOTS=1 npx playwright test tests/shot.spec.ts
 // Skipped in CI unless SHOTS is set.
 const run = !!process.env.SHOTS;
+
+test("capture boot overlay", async ({ page }) => {
+  test.skip(!run, "set SHOTS=1 to capture");
+  // boot is skipped for automation (navigator.webdriver) — mask it so the
+  // overlay actually plays in this capture
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "webdriver", { get: () => false });
+  });
+  await page.goto("/");
+  await expect(page.getByText("ACCESS GRANTED")).toBeVisible({ timeout: 6_000 });
+  await page.screenshot({ path: "shots/00-boot.png" });
+});
 
 test("capture design review shots", async ({ page }) => {
   test.skip(!run, "set SHOTS=1 to capture");

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
 import MatrixRain from "./components/MatrixRain";
+import BootOverlay from "./components/BootOverlay";
+import Statusbar from "./components/Statusbar";
 import Stats from "./components/Stats";
 import Proof from "./components/Proof";
 import Projects from "./components/Projects";
@@ -63,9 +65,12 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen bg-bg font-body text-mint">
+      <BootOverlay />
       <MatrixRain />
       <div className="vignette" aria-hidden />
-      <div className="relative z-10">
+      <div className="scanlines" aria-hidden />
+      <div className="crt-flicker" aria-hidden />
+      <div className="relative z-10 pb-9">
         <Nav />
         <main>
           <Hero />
@@ -80,6 +85,7 @@ export default function App() {
         </main>
         <Footer />
       </div>
+      <Statusbar />
     </div>
   );
 }

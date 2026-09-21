@@ -121,11 +121,6 @@ function CaseStudy({
               {p.title} <span className="text-phos">↗</span>
             </a>
           </h3>
-          {p.arabic && (
-            <p dir="rtl" lang="ar" className="mt-0.5 font-arabic text-sm text-fog">
-              {p.arabic}
-            </p>
-          )}
           <p className="mt-1 text-[12.5px] tracking-wide text-phos">{p.tagline}</p>
           <p className="mt-3.5 text-[13px] leading-relaxed text-mint/65">{p.description}</p>
 
@@ -212,11 +207,6 @@ function ProjectCard({
           p.title
         )}
       </h3>
-      {p.arabic && (
-        <p dir="rtl" lang="ar" className="mt-0.5 font-arabic text-sm text-fog">
-          {p.arabic}
-        </p>
-      )}
       <p className="mt-1 text-[12px] tracking-wide text-phos">{p.tagline}</p>
 
       <p className="mt-3.5 flex-1 text-[13px] leading-relaxed text-mint/65">{p.description}</p>
@@ -248,7 +238,7 @@ export default function Projects() {
 
   return (
     <section id="work" className="mx-auto mt-28 max-w-6xl scroll-mt-24 px-4">
-      <SectionHead index="01 — WORK" title="SHIPPED SYSTEMS" note="selected" arabic="الأعمال" />
+      <SectionHead index="01 — WORK" title="SHIPPED SYSTEMS" note="selected" />
 
       {flagship && (
         <CaseStudy
@@ -279,7 +269,7 @@ export default function Projects() {
 
       <div className="panel mt-6 p-6" data-reveal>
         <p className="text-[11px] tracking-[0.2em] text-fog">
-          ibrahim@cairo:~$ <span className="text-phos">ls -la ~/more</span>
+          ibrahim@sys:~$ <span className="text-phos">ls -la ~/more</span>
         </p>
         <ul className="mt-4 divide-y divide-phos/8">
           {moreProjects.map((p) => (

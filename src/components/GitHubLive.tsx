@@ -49,7 +49,6 @@ export default function GitHubLive({ user }: { user: GhUser }) {
         index="04 — GITHUB"
         title="GITHUB · LIVE"
         note={live ? "rest v3 · live" : "cached snapshot · api offline"}
-        arabic="الحساب"
       />
 
       <div className="panel p-6 sm:p-8" data-reveal>

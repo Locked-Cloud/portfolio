@@ -44,10 +44,10 @@ const items = posts
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>ibrahim@cairo — devlog</title>
+    <title>ibrahim@sys — devlog</title>
     <link>${SITE}#blog</link>
     <atom:link href="${SITE}rss.xml" rel="self" type="application/rss+xml"/>
-    <description>How, not just what — a front-end engineer in Cairo ships real-time 3D, SaaS on $0, and edge ML.</description>
+    <description>How, not just what — a front-end engineer ships real-time 3D, SaaS on $0, and edge ML.</description>
     <language>en</language>
 ${items}
   </channel>

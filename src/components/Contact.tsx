@@ -27,7 +27,7 @@ export default function Contact() {
         <Khayamiya />
       </div>
       <div className="mx-auto mt-14 max-w-6xl scroll-mt-24 px-4" id="contact-anchor">
-        <SectionHead index="06 — CONTACT" title="SECURE CHANNEL" note="open channel, actually" arabic="نتكلّم؟" />
+        <SectionHead index="06 — CONTACT" title="SECURE CHANNEL" note="open channel, actually" />
 
         <div className="grid gap-5 lg:grid-cols-2">
           <div className="panel p-6 sm:p-8" data-reveal>
