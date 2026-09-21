@@ -7,6 +7,13 @@
     <description>How, not just what — a front-end engineer ships real-time 3D, SaaS on $0, and edge ML.</description>
     <language>en</language>
     <item>
+      <title>Malware analysis: static first, sandbox always</title>
+      <link>https://locked-cloud.github.io/portfolio/#post-malware-analysis-lab</link>
+      <guid isPermaLink="true">https://locked-cloud.github.io/portfolio/#post-malware-analysis-lab</guid>
+      <pubDate>Tue, 22 Sep 2026 00:00:00 GMT</pubDate>
+      <description>The defensive kind — reading samples instead of writing them. Triage discipline, isolated labs, YARA rules, and why this made me a safer developer. (4 min read)</description>
+    </item>
+    <item>
       <title>My bug bounty lab: Burp → nuclei → Ghidra</title>
       <link>https://locked-cloud.github.io/portfolio/#post-bug-bounty-lab</link>
       <guid isPermaLink="true">https://locked-cloud.github.io/portfolio/#post-bug-bounty-lab</guid>
