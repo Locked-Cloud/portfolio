@@ -67,16 +67,22 @@ test("CV toggles to Arabic", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "إبراهيم أحمد" })).toBeVisible();
 });
 
-test("PULPOVR renders as full-width case study with counted LOC", async ({ page }) => {
+test("work section is a TUI browser: select, preview, keyboard nav", async ({ page }) => {
   await page.goto("/");
   await page.locator("#work").scrollIntoViewIfNeeded();
-  const caseStudy = page.locator("#work article").first();
-  await expect(caseStudy.getByText("PULPOVR")).toBeVisible();
-  await expect(caseStudy.getByText("~7.8K LOC [counted]", { exact: false })).toBeVisible();
-  await expect(caseStudy.getByText("merit verdict 28/30", { exact: false })).toBeVisible();
-  // the effort-allocation bar carries the three counted segments
-  await expect(caseStudy.getByText("TypeScript / TSX")).toBeVisible();
-  await expect(caseStudy.getByText("C++ firmware")).toBeVisible();
+  const listbox = page.getByRole("listbox", { name: "project files" });
+  await expect(listbox).toBeVisible();
+  // flagship selected on arrival — counted LOC + verdict ride the preview
+  await expect(page.getByText("~7.8K LOC [counted]", { exact: false })).toBeVisible();
+  await expect(page.getByText("merit verdict 28/30", { exact: false })).toBeVisible();
+  await expect(page.getByText("TypeScript / TSX")).toBeVisible();
+  // click-select bazarna
+  await listbox.getByRole("option", { name: /03-bazarna/ }).click();
+  await expect(page.getByRole("heading", { name: /BAZARNA/ })).toBeVisible();
+  // keyboard: focus the pane, arrow back up to smart-parking
+  await listbox.focus();
+  await page.keyboard.press("ArrowUp");
+  await expect(page.getByRole("heading", { name: /SMART-PARKING/ })).toBeVisible();
 });
 
 test("graveyard lists killed ideas with reasons", async ({ page }) => {
@@ -161,10 +167,13 @@ test("skills section carries SECURITY and MOBILE groups", async ({ page }) => {
   await expect(page.getByText("/mobile")).toBeVisible();
 });
 
-test("flutter plant-diseases card renders with visual", async ({ page }) => {
+test("flutter project previews with its visual", async ({ page }) => {
   await page.goto("/");
   await page.locator("#work").scrollIntoViewIfNeeded();
-  await expect(page.getByRole("link", { name: "PLANT-DISEASES ↗" })).toBeVisible();
+  await page
+    .getByRole("listbox", { name: "project files" })
+    .getByRole("option", { name: /05-plant-diseases/ })
+    .click();
   await expect(page.getByAltText(/Wireframe phone scanning a leaf/)).toBeVisible();
   await expect(page.getByText("1.7K", { exact: true })).toBeVisible();
 });

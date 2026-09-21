@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type KeyboardEvent } from "react";
 import { featuredProjects, moreProjects, pulpoLoc, type Project } from "../data/content";
 import { SectionHead } from "./SectionHead";
 
@@ -23,7 +23,7 @@ function GalleryModal({
   onClose: () => void;
 }) {
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
+    const onKey = (e: globalThis.KeyboardEvent) => {
       if (e.key === "Escape") onClose();
       if (e.key === "ArrowRight") onIndex((index + 1) % gallery.length);
       if (e.key === "ArrowLeft") onIndex((index - 1 + gallery.length) % gallery.length);
@@ -73,75 +73,185 @@ function GalleryModal({
   );
 }
 
-/** The flagship breaks the grid: one full-width case-study row, real evidence. */
-function CaseStudy({
-  p,
-  onGallery,
-}: {
-  p: Project;
-  onGallery: (p: Project) => void;
-}) {
-  const specs: [string, string][] = [
-    ["telemetry", "40 Hz [measured]"],
-    ["codebase", `${pulpoLoc.total} LOC [counted]`],
-    ["layers", "firmware → 3D"],
-    ["license", "MIT"],
-    ["selection", "merit verdict 28/30 — chosen"],
-  ];
-  return (
-    <article data-reveal className="panel overflow-hidden">
-      <div className="grid lg:grid-cols-[1.15fr_1fr]">
-        <button
-          type="button"
-          onClick={() => onGallery(p)}
-          className="group relative block border-b border-phos/15 lg:border-b-0 lg:border-r"
-          aria-label={`open ${p.title} image gallery`}
-        >
-          <img
-            src={p.image}
-            alt={p.imageAlt ?? ""}
-            loading="lazy"
-            className="aspect-[16/10] h-full w-full object-cover transition-opacity group-hover:opacity-90"
-          />
-          <span className="tag absolute bottom-3 left-3 border-phos/40 bg-bg/85 text-phos">
-            view gallery ↗
-          </span>
-        </button>
+/** list-row "file size" — LOC where counted, dash where not */
+function fileSize(p: Project): string {
+  if (p.id === "pulpoVr") return pulpoLoc.total.replace("~", "");
+  if (p.id === "plant-diseases") return "1.7K";
+  return "—";
+}
 
+/**
+ * ~/work as a TUI file manager (ranger-style): select a directory on the
+ * left — click or ↑↓ — and the right pane cats its README. Enter opens
+ * the source repo. The flagship (first entry) is selected on arrival.
+ */
+export default function Projects() {
+  const [gallery, setGallery] = useState<Gallery | null>(null);
+  const [gIdx, setGIdx] = useState(0);
+  const [sel, setSel] = useState(0);
+  const p = featuredProjects[sel];
+
+  const onListKey = (e: KeyboardEvent<HTMLUListElement>) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setSel((s) => Math.min(s + 1, featuredProjects.length - 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setSel((s) => Math.max(s - 1, 0));
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      setSel(0);
+    } else if (e.key === "End") {
+      e.preventDefault();
+      setSel(featuredProjects.length - 1);
+    } else if (e.key === "Enter" && p?.link) {
+      window.open(p.link, "_blank", "noreferrer");
+    }
+  };
+
+  if (!p) return null;
+
+  return (
+    <section id="work" className="mx-auto mt-28 max-w-6xl scroll-mt-24 px-4">
+      <SectionHead index="01 — WORK" title="SHIPPED SYSTEMS" note="ranger — pick a file" />
+
+      <div className="panel grid overflow-hidden md:grid-cols-[290px_1fr]" data-reveal>
+        {/* ── left: the directory listing ── */}
+        <div className="border-b border-phos/15 md:border-b-0 md:border-r">
+          <p className="border-b border-phos/10 px-4 py-2.5 text-[10px] tracking-[0.22em] text-fog">
+            ~/WORK — {featuredProjects.length} OBJECTS
+          </p>
+          <ul
+            role="listbox"
+            aria-label="project files"
+            tabIndex={0}
+            onKeyDown={onListKey}
+            className="terminal-scrollbar outline-none focus-visible:shadow-[inset_0_0_0_1px_rgba(61,255,136,0.5)]"
+          >
+            {featuredProjects.map((proj, i) => {
+              const active = i === sel;
+              return (
+                <li key={proj.id} role="none">
+                  <button
+                    type="button"
+                    role="option"
+                    aria-selected={active}
+                    onClick={() => setSel(i)}
+                    className={`flex w-full items-baseline gap-2.5 px-4 py-2.5 text-left text-[12.5px] transition-colors ${
+                      active
+                        ? "bg-phos font-semibold text-bg"
+                        : "text-mint/80 hover:bg-phos/10 hover:text-mint"
+                    }`}
+                  >
+                    <span aria-hidden className="w-3 shrink-0">
+                      {active ? "▶" : ""}
+                    </span>
+                    <span className="truncate">
+                      {String(i + 1).padStart(2, "0")}-{proj.id}/
+                    </span>
+                    <span
+                      className={`ml-auto shrink-0 text-[10px] tracking-wider ${
+                        active ? "text-bg/70" : "text-fog"
+                      }`}
+                    >
+                      {fileSize(proj).padStart(4)} {proj.year}
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+          <p className="border-t border-phos/10 px-4 py-2.5 text-[10px] tracking-[0.18em] text-fog">
+            ↑↓ SELECT · ENTER OPEN SRC
+          </p>
+        </div>
+
+        {/* ── right: cat the selected README ── */}
         <div className="p-6 sm:p-8">
-          <div className="flex items-center justify-between gap-3">
+          <p className="text-[11px] tracking-[0.2em] text-fog">
+            ibrahim@sys:~${" "}
+            <span className="text-phos">
+              cat ~/work/{String(sel + 1).padStart(2, "0")}-{p.id}/README.md
+            </span>
+          </p>
+
+          <div className="mt-4 flex items-center justify-between gap-3">
             <span className="text-[11px] tracking-[0.2em] text-fog">
               {p.index} · {p.year ?? "—"}
             </span>
             {p.status && <span className={`tag ${statusStyles[p.status]}`}>{p.status}</span>}
           </div>
 
-          <h3 className="mt-3 font-display text-2xl font-bold tracking-wide text-mint">
-            <a href={p.link} target="_blank" rel="noreferrer" className="hover:text-phos-bright">
-              {p.title} <span className="text-phos">↗</span>
-            </a>
+          <h3 className="glow mt-3 font-display text-2xl font-bold tracking-wide text-phos-bright">
+            {p.link ? (
+              <a href={p.link} target="_blank" rel="noreferrer">
+                {p.title} <span className="text-phos">↗</span>
+              </a>
+            ) : (
+              p.title
+            )}
           </h3>
-          <p className="mt-1 text-[12.5px] tracking-wide text-phos">{p.tagline}</p>
-          <p className="mt-3.5 text-[13px] leading-relaxed text-mint/65">{p.description}</p>
+          <p className="mt-1 text-[13px] tracking-wide text-phos">{p.tagline}</p>
+
+          {p.image && (
+            <button
+              type="button"
+              onClick={() => {
+                if (p.gallery) {
+                  setGallery(p.gallery);
+                  setGIdx(0);
+                }
+              }}
+              className={`relative mt-5 block ${p.gallery ? "cursor-zoom-in" : "cursor-default"}`}
+              aria-label={p.gallery ? `open ${p.title} image gallery` : undefined}
+            >
+              <img
+                src={p.image}
+                alt={p.imageAlt ?? ""}
+                loading="lazy"
+                className={`aspect-[16/9] w-full border border-phos/15 object-cover ${p.lift ? "thumb-lift" : ""}`}
+              />
+              {p.gallery && (
+                <span className="tag absolute bottom-3 left-3 border-phos/40 bg-bg/85 text-phos">
+                  view gallery ↗
+                </span>
+              )}
+            </button>
+          )}
+
+          <p className="mt-5 text-[13px] leading-relaxed text-mint/65">{p.description}</p>
 
           {/* where the effort went — counted from HEAD, not estimated */}
-          <div aria-hidden className="mt-6 flex h-2 w-full overflow-hidden border border-phos/20">
-            {pulpoLoc.split.map((s, i) => (
-              <span key={s.lang} style={{ width: `${s.pct}%` }} className={LOC_COLORS[i]} />
-            ))}
-          </div>
-          <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
-            {pulpoLoc.split.map((s, i) => (
-              <li key={s.lang} className="flex items-center gap-1.5 text-[10.5px] text-fog">
-                <i aria-hidden className={`h-2 w-2 ${LOC_COLORS[i]}`} />
-                {s.lang} <span className="text-mint/75">{s.loc}</span>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-1.5 text-[10px] tracking-wider text-fog">loc — {pulpoLoc.source}</p>
+          {p.id === "pulpoVr" && (
+            <div className="mt-6">
+              <div aria-hidden className="flex h-2 w-full overflow-hidden border border-phos/20">
+                {pulpoLoc.split.map((s, i) => (
+                  <span key={s.lang} style={{ width: `${s.pct}%` }} className={LOC_COLORS[i]} />
+                ))}
+              </div>
+              <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+                {pulpoLoc.split.map((s, i) => (
+                  <li key={s.lang} className="flex items-center gap-1.5 text-[10.5px] text-fog">
+                    <i aria-hidden className={`h-2 w-2 ${LOC_COLORS[i]}`} />
+                    {s.lang} <span className="text-mint/75">{s.loc}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-1.5 text-[10px] tracking-wider text-fog">loc — {pulpoLoc.source}</p>
+            </div>
+          )}
 
           <dl className="mt-5 divide-y divide-phos/10 border-t border-phos/12">
-            {specs.map(([k, v]) => (
+            {(p.id === "pulpoVr"
+              ? ([
+                  ["telemetry", "40 Hz [measured]"],
+                  ["codebase", `${pulpoLoc.total} LOC [counted]`],
+                  ["layers", "firmware → 3D"],
+                  ["license", "MIT"],
+                  ["selection", "merit verdict 28/30 — chosen"],
+                ] as [string, string][])
+              : p.metrics?.map((m) => [m.label, m.value] as [string, string]) ?? []
+            ).map(([k, v]) => (
               <div key={k} className="flex items-baseline justify-between gap-4 py-2">
                 <dt className="text-[10.5px] uppercase tracking-[0.18em] text-fog">{k}</dt>
                 <dd className="text-right text-[12.5px] text-mint">{v}</dd>
@@ -149,118 +259,14 @@ function CaseStudy({
             ))}
           </dl>
 
-          <a href={p.link} target="_blank" rel="noreferrer" className="btn solid mt-6">
-            view source ↗
-          </a>
-        </div>
-      </div>
-    </article>
-  );
-}
+          <p className="mt-4 text-[11px] leading-relaxed text-fog">{p.tech.join(" · ")}</p>
 
-function ProjectCard({
-  p,
-  onGallery,
-}: {
-  p: Project;
-  onGallery: (p: Project) => void;
-}) {
-  return (
-    <article
-      data-reveal
-      className="panel group flex flex-col p-6 transition-colors duration-300 hover:border-phos/45"
-    >
-      {p.image && (
-        <button
-          type="button"
-          onClick={() => p.gallery && onGallery(p)}
-          className={`mb-5 block ${p.gallery ? "cursor-zoom-in" : "cursor-default"}`}
-          aria-label={p.gallery ? `open ${p.title} image gallery` : undefined}
-        >
-          <img
-            src={p.image}
-            alt={p.imageAlt ?? ""}
-            loading="lazy"
-            className={`aspect-[16/9] w-full border border-phos/15 object-cover ${p.lift ? "thumb-lift" : ""}`}
-          />
-          {p.gallery && (
-            <span className="tag absolute mt-2 ml-2 border-phos/40 bg-bg/80 text-phos">
-              view {p.gallery.length} ↗
-            </span>
+          {p.link && (
+            <a href={p.link} target="_blank" rel="noreferrer" className="btn solid mt-6">
+              view source ↗
+            </a>
           )}
-        </button>
-      )}
-
-      <div className="flex items-center justify-between gap-3">
-        <span className="text-[11px] tracking-[0.2em] text-fog">
-          {p.index} · {p.year ?? "—"}
-        </span>
-        {p.status && <span className={`tag ${statusStyles[p.status]}`}>{p.status}</span>}
-      </div>
-
-      <h3 className="mt-3 font-display text-xl font-bold tracking-wide text-mint group-hover:text-phos-bright">
-        {p.link ? (
-          <a href={p.link} target="_blank" rel="noreferrer">
-            {p.title} <span className="text-phos">↗</span>
-          </a>
-        ) : (
-          p.title
-        )}
-      </h3>
-      <p className="mt-1 text-[12px] tracking-wide text-phos">{p.tagline}</p>
-
-      <p className="mt-3.5 flex-1 text-[13px] leading-relaxed text-mint/65">{p.description}</p>
-
-      {p.metrics && (
-        <dl className="mt-5 grid grid-cols-3 gap-3 border-t border-phos/12 pt-4">
-          {p.metrics.map((m) => (
-            <div key={m.label}>
-              <dd className="font-display text-sm font-bold text-phos-bright">{m.value}</dd>
-              <dt className="text-[10px] tracking-wider text-fog/70">{m.label}</dt>
-            </div>
-          ))}
-        </dl>
-      )}
-
-      <p className="mt-4 text-[11px] leading-relaxed text-fog">
-        {p.tech.join(" · ")}
-      </p>
-    </article>
-  );
-}
-
-type Gallery = NonNullable<Project["gallery"]>;
-
-export default function Projects() {
-  const [gallery, setGallery] = useState<Gallery | null>(null);
-  const [gIdx, setGIdx] = useState(0);
-  const [flagship, ...rest] = featuredProjects;
-
-  return (
-    <section id="work" className="mx-auto mt-28 max-w-6xl scroll-mt-24 px-4">
-      <SectionHead index="01 — WORK" title="SHIPPED SYSTEMS" note="selected" />
-
-      {flagship && (
-        <CaseStudy
-          p={flagship}
-          onGallery={(proj: Project) => {
-            setGallery(proj.gallery ?? null);
-            setGIdx(0);
-          }}
-        />
-      )}
-
-      <div className="mt-5 grid gap-5 md:grid-cols-2">
-        {rest.map((p) => (
-          <ProjectCard
-            key={p.id}
-            p={p}
-            onGallery={(proj: Project) => {
-              setGallery(proj.gallery ?? null);
-              setGIdx(0);
-            }}
-          />
-        ))}
+        </div>
       </div>
 
       {gallery && (
@@ -272,24 +278,22 @@ export default function Projects() {
           ibrahim@sys:~$ <span className="text-phos">ls -la ~/more</span>
         </p>
         <ul className="mt-4 divide-y divide-phos/8">
-          {moreProjects.map((p) => (
-            <li key={p.id} className="flex flex-wrap items-baseline gap-x-4 gap-y-1 py-3">
-              {p.link ? (
+          {moreProjects.map((m) => (
+            <li key={m.id} className="flex flex-wrap items-baseline gap-x-4 gap-y-1 py-3">
+              {m.link ? (
                 <a
-                  href={p.link}
+                  href={m.link}
                   target="_blank"
                   rel="noreferrer"
                   className="text-[13px] font-semibold text-mint hover:text-phos"
                 >
-                  {p.title} ↗
+                  {m.title} ↗
                 </a>
               ) : (
-                <span className="text-[13px] font-semibold text-mint">{p.title}</span>
+                <span className="text-[13px] font-semibold text-mint">{m.title}</span>
               )}
-              <span className="text-[12px] text-fog">{p.tagline}</span>
-              <span className="ml-auto text-[11px] text-fog/60">
-                {p.tech.join(" · ")}
-              </span>
+              <span className="text-[12px] text-fog">{m.tagline}</span>
+              <span className="ml-auto text-[11px] text-fog/60">{m.tech.join(" · ")}</span>
             </li>
           ))}
         </ul>
@@ -297,3 +301,5 @@ export default function Projects() {
     </section>
   );
 }
+
+type Gallery = NonNullable<Project["gallery"]>;
