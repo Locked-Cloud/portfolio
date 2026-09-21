@@ -403,9 +403,13 @@ export interface Social {
 
 export const socials: Social[] = [
   { name: "GitHub", handle: "@Locked-Cloud", url: "https://github.com/Locked-Cloud", live: true },
-  { name: "LinkedIn", handle: "/in/ibrahim-ahmed", url: "#", live: false }, // TODO: real URL
-  { name: "Email", handle: "ibrahim@—", url: "mailto:you@example.com", live: true }, // TODO: real address
+  { name: "LinkedIn", handle: "/in/lockedcloud", url: "https://www.linkedin.com/in/lockedcloud/", live: true },
+  { name: "Hack The Box", handle: "users/1908251", url: "https://app.hackthebox.com/users/1908251", live: true },
+  { name: "Email", handle: "locked.cloud1day@gmail.com", url: "mailto:locked.cloud1day@gmail.com", live: true },
 ];
+
+/** what the open-to-work signal actually covers */
+export const availability = "remote · cairo on-site · relocation · freelance";
 
 /** Snapshot fallback if the GitHub API is rate-limited — data from the 2026-09 study. */
 export const ghFallback = {
@@ -425,10 +429,10 @@ export const ghFallback = {
 };
 
 export const GITHUB_URL = "https://github.com/Locked-Cloud";
-export const EMAIL_TODO = "you@example.com"; // TODO: replace with real address
+export const EMAIL = "locked.cloud1day@gmail.com";
 
 /** what's actually being built right now — shown in the tmux bar */
-export const currentFocus = "bazarna";
+export const currentFocus = "bounty lab";
 
 /* ─── Blog / devlog ────────────────────────────────────────────────────── */
 
@@ -442,6 +446,21 @@ export interface Post {
 }
 
 export const posts: Post[] = [
+  {
+    slug: "bug-bounty-lab",
+    title: "My bug bounty lab: Burp → nuclei → Ghidra",
+    date: "2026-09-22",
+    minutes: 3,
+    excerpt:
+      "No war stories yet — just the lab I run daily, the scope discipline that keeps it legal, and why a front-end dev hunts bugs at all.",
+    body: [
+      "This post has no findings in it, on purpose. What it has is the lab: the tools I run daily and the rules I follow, so that when the war stories come, they'll be earned.",
+      "The kit: Burp Suite is the daily driver — repeater and intruder for manual work, because the interesting bugs never fall to automated scans. OWASP ZAP covers the quick pass, nuclei runs template checks at scale, ffuf does content discovery. When a target has a binary component, Ghidra and radare2 come out; x64dbg for the Windows side. Type `arsenal` in the terminal above — the policy line prints with the tools.",
+      "Scope discipline is the whole game. I hunt on programs with published scopes and on my own lab targets, nothing else. Read the policy before the first request, stay inside the defined scope, report instead of exploit. That line in `arsenal` — bounty scopes + own labs, nothing outside — is not flavor text; it's the operating rule.",
+      "Practice happens on Hack The Box machines and deliberately vulnerable targets before any real program gets touched — the classes that matter are XSS, IDOR, SSRF, SQLi, and broken auth. My HTB profile is linked in the contact section; the graphs there are the honest scoreboard.",
+      "Why does a front-end engineer do this? Because every class above lives in the layer I build every day. Hunting IDOR teaches you exactly how an API leaks objects to a curious client; hunting XSS teaches you what your framework escapes and what it doesn't. The loop is short: finding bugs makes me write fewer of them — the LMS security scan-diff tooling on this site came out of exactly that reflex.",
+    ],
+  },
   {
     slug: "how-this-homepage-was-chosen",
     title: "Four heroes, one verdict",

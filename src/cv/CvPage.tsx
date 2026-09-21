@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { featuredProjects, skillGroups, journey, GITHUB_URL, EMAIL_TODO } from "../data/content";
+import { featuredProjects, skillGroups, journey, availability, GITHUB_URL, EMAIL } from "../data/content";
 
 /**
  * One-page printable CV, bilingual — EN and AR faces of the same document.
@@ -26,7 +26,7 @@ interface CvDict {
 
 const AR: CvDict = {
   name: "إبراهيم أحمد",
-  role: "مهندس واجهات أمامية — القاهرة، مصر · ويب ثلاثي الأبعاد لحظي · SaaS · تعلّم آلي على الحافة",
+  role: "مهندس واجهات أمامية & full-stack · ويب ثلاثي الأبعاد لحظي · SaaS · تعلّم آلي على الحافة · أمن تطبيقات",
   hint: "هذه الصفحة تُطبع على ورقة A4 واحدة — Ctrl+P → حفظ كـ PDF",
   site: "← الموقع",
   print: "طباعة / PDF",
@@ -58,7 +58,7 @@ const EN: CvDict = {
   site: "← site",
   print: "print / pdf",
   name: "IBRAHIM AHMED",
-  role: "Front-end Engineer — Cairo, Egypt · real-time 3D web · SaaS · edge ML",
+  role: "Front-end & Full-stack Engineer · real-time 3D web · SaaS · edge ML · security",
   profileTitle: "Profile",
   profile:
     "Front-end engineer and CS student. I build interfaces that answer back — real-time 3D (Three.js), multi-tenant SaaS on $0 infrastructure, and machine learning deployed on edge hardware. Comfortable across the whole stack: ESP32 firmware, Node/Express and Supabase backends, and React 18/19 frontends in TypeScript.",
@@ -105,8 +105,9 @@ export default function CvPage() {
         <h1 className="font-display text-3xl font-bold tracking-tight">{t.name}</h1>
         <p className="cv-teal mt-1 text-[13px]">{t.role}</p>
         <p className="cv-muted mt-2 text-[11.5px]">
-          {GITHUB_URL.replace("https://", "")} · {EMAIL_TODO}
+          {GITHUB_URL.replace("https://", "")} · {EMAIL}
         </p>
+        <p className="cv-teal mt-1 text-[11px]">{ar ? `متاح: عن بُعد · حضوري · انتقال · عمل حر` : `open to: ${availability}`}</p>
       </header>
 
       <section className="mb-6">

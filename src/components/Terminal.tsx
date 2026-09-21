@@ -219,6 +219,7 @@ function commands(): Record<string, Line[]> {
       { kind: "out", text: "  web      burp suite · owasp zap · nuclei · ffuf" },
       { kind: "out", text: "  re       ghidra · radare2 · x64dbg" },
       { kind: "out", text: "  classes  xss · idor · ssrf · sqli · broken auth" },
+      { kind: "out", text: "  lab      hackthebox — machines + prolabs (see `social`)" },
       { kind: "out", text: "  practice bounty scopes + own labs — nothing outside scope." },
     ],
     contact: [

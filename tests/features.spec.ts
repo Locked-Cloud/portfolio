@@ -176,7 +176,7 @@ test("status bar shows live uptime", async ({ page }) => {
 
 test("status bar carries the current focus", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator("[data-statusbar]").getByText(/focus: bazarna/)).toBeVisible();
+  await expect(page.locator("[data-statusbar]").getByText(/focus: bounty lab/)).toBeVisible();
 });
 
 test("nmap scans ibrahim.sys", async ({ page }) => {
@@ -258,4 +258,21 @@ test("sitemap ships for crawlers", async ({ page }) => {
   const res = await page.request.get("/sitemap.xml");
   expect(res.status()).toBe(200);
   expect(await res.text()).toContain("<urlset");
+});
+
+test("contact section carries the real channels", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#contact").scrollIntoViewIfNeeded();
+  await expect(page.getByRole("link", { name: "/in/lockedcloud ↗" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "users/1908251 ↗" })).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "locked.cloud1day@gmail.com ↗" })
+  ).toBeVisible();
+  await expect(page.getByText(/remote · cairo on-site · relocation · freelance/)).toBeVisible();
+});
+
+test("cv carries availability, not location", async ({ page }) => {
+  await page.goto("/cv.html");
+  await expect(page.getByText(/open to: remote/)).toBeVisible();
+  await expect(page.getByText("Cairo, Egypt")).toBeHidden();
 });

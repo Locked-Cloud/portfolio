@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { socials, EMAIL_TODO } from "../data/content";
+import { socials, availability, EMAIL } from "../data/content";
 import { SectionHead, Khayamiya } from "./SectionHead";
 
 export default function Contact() {
@@ -7,13 +7,13 @@ export default function Contact() {
   const [message, setMessage] = useState("");
   const [copied, setCopied] = useState(false);
 
-  const mailto = `mailto:${EMAIL_TODO}?subject=${encodeURIComponent(
+  const mailto = `mailto:${EMAIL}?subject=${encodeURIComponent(
     `portfolio contact — ${alias || "hello"}`
   )}&body=${encodeURIComponent(message)}`;
 
   const copyEmail = async () => {
     try {
-      await navigator.clipboard.writeText(EMAIL_TODO);
+      await navigator.clipboard.writeText(EMAIL);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1800);
     } catch {
@@ -88,6 +88,9 @@ export default function Contact() {
             <button type="button" onClick={copyEmail} className="btn mt-7">
               {copied ? "copied ✓" : "copy email"}
             </button>
+            <p className="mt-6 border-t border-phos/10 pt-4 text-[11px] tracking-[0.14em] text-fog">
+              open to: <span className="text-phos">{availability}</span>
+            </p>
             <p className="mt-6 text-[12px] leading-relaxed text-mint/55">
               From the shell you can also run{" "}
               <span className="text-phos">contact</span>,{" "}

@@ -16,6 +16,14 @@ test("capture boot overlay", async ({ page }) => {
   await page.screenshot({ path: "shots/00-boot.png" });
 });
 
+test("capture og image (1200x630, real render)", async ({ page }) => {
+  test.skip(!run, "set SHOTS=1 to capture");
+  await page.setViewportSize({ width: 1200, height: 630 });
+  await page.goto("/");
+  await page.waitForTimeout(5_500); // boot-skipped (webdriver) + shell script landed
+  await page.screenshot({ path: "shots/og-render.png" });
+});
+
 test("capture design review shots", async ({ page }) => {
   test.skip(!run, "set SHOTS=1 to capture");
   await page.goto("/");
