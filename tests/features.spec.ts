@@ -173,3 +173,89 @@ test("status bar shows live uptime", async ({ page }) => {
     timeout: 5_000,
   });
 });
+
+test("status bar carries the current focus", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("[data-statusbar]").getByText(/focus: bazarna/)).toBeVisible();
+});
+
+test("nmap scans ibrahim.sys", async ({ page }) => {
+  await page.goto("/");
+  const input = page.getByLabel("terminal input");
+  await input.fill("nmap");
+  await input.press("Enter");
+  await expect(page.getByText("1337/tcp    open   pwn")).toBeVisible();
+  await expect(page.getByText("Nmap scan report for ibrahim.sys")).toBeVisible();
+});
+
+test("ps lists projects as processes", async ({ page }) => {
+  await page.goto("/");
+  const input = page.getByLabel("terminal input");
+  await input.fill("ps aux");
+  await input.press("Enter");
+  await expect(page.getByText("bug-bounty-lab   [always-on]")).toBeVisible();
+  await expect(page.getByText("your-session     [reading]")).toBeVisible();
+});
+
+test("df reports counted lines", async ({ page }) => {
+  await page.goto("/");
+  const input = page.getByLabel("terminal input");
+  await input.fill("df -h");
+  await input.press("Enter");
+  await expect(page.getByText("where the lines live")).toBeVisible();
+  await expect(page.getByText("total: ~7.8K lines across firmware → 3D")).toBeVisible();
+});
+
+test("sha256 uses real webcrypto", async ({ page }) => {
+  await page.goto("/");
+  const input = page.getByLabel("terminal input");
+  await input.fill("sha256 hello");
+  await input.press("Enter");
+  await expect(
+    page.getByText("sha256: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824")
+  ).toBeVisible();
+});
+
+test("rot13 and uuid work", async ({ page }) => {
+  await page.goto("/");
+  const input = page.getByLabel("terminal input");
+  await input.fill("rot13 hello");
+  await input.press("Enter");
+  await expect(page.getByText("rot13: uryyb")).toBeVisible();
+  await input.fill("uuid");
+  await input.press("Enter");
+  await expect(page.getByText(/^uuid: [0-9a-f-]{36}$/)).toBeVisible();
+});
+
+test("?run= links auto-execute commands", async ({ page }) => {
+  await page.goto("/?run=hack");
+  await expect(page.getByText("ACCESS GRANTED", { exact: false })).toBeVisible({
+    timeout: 15_000,
+  });
+});
+
+test("konami code pours the rain", async ({ page }) => {
+  await page.goto("/");
+  await page.waitForTimeout(5_000); // let the shell script finish
+  for (const k of ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight"]) {
+    await page.keyboard.press(k);
+  }
+  await page.keyboard.type("ba");
+  await expect(page.getByText("KONAMI ACCEPTED", { exact: false })).toBeVisible();
+  expect(await page.evaluate(() => document.body.classList.contains("godmode"))).toBe(true);
+});
+
+test("mobile command chips run commands", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  const chips = page.getByRole("toolbar", { name: "quick commands" });
+  await expect(chips).toBeVisible();
+  await chips.getByRole("button", { name: "hack" }).click();
+  await expect(page.getByText("ACCESS GRANTED", { exact: false })).toBeVisible();
+});
+
+test("sitemap ships for crawlers", async ({ page }) => {
+  const res = await page.request.get("/sitemap.xml");
+  expect(res.status()).toBe(200);
+  expect(await res.text()).toContain("<urlset");
+});

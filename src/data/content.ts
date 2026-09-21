@@ -427,6 +427,9 @@ export const ghFallback = {
 export const GITHUB_URL = "https://github.com/Locked-Cloud";
 export const EMAIL_TODO = "you@example.com"; // TODO: replace with real address
 
+/** what's actually being built right now — shown in the tmux bar */
+export const currentFocus = "bazarna";
+
 /* ─── Blog / devlog ────────────────────────────────────────────────────── */
 
 export interface Post {

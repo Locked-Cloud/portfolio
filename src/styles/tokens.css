@@ -230,6 +230,11 @@ body.quiet canvas.fixed {
   opacity: 0 !important;
 }
 
+/* ─── konami god mode — the rain pours ──────────────────────────────────── */
+body.godmode canvas.fixed {
+  opacity: 0.55 !important;
+}
+
 /* ─── Thumbnail exposure lift — frames that read near-black at card size ── */
 .thumb-lift {
   filter: brightness(1.35) contrast(1.05);

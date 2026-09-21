@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://locked-cloud.github.io/portfolio/sitemap.xml

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { currentFocus } from "../data/content";
 
 const SECTIONS = [
   { id: "top", n: 0, label: "shell" },
@@ -77,6 +78,9 @@ export default function Statusbar() {
             );
           })}
         </nav>
+        <span className="ml-1 hidden shrink-0 lg:inline">
+          ┃ focus: <span className="text-phos-bright">{currentFocus}</span>
+        </span>
         <span className="truncate text-fog md:hidden">
           {SECTIONS.find((s) => s.id === active)?.label ?? "shell"}
         </span>

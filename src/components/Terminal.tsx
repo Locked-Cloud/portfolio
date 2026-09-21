@@ -11,6 +11,7 @@ import {
   coverageLines,
   kernelLog,
   stackChips,
+  pulpoLoc,
   GITHUB_URL,
 } from "../data/content";
 
@@ -44,6 +45,12 @@ const HELP: string[] = [
   "  encode <s>  — text → base64 (works, try it)",
   "  decode <s>  — base64 → text",
   "  hex <s>     — text → hex",
+  "  sha256 <s>  — real hash, via webcrypto",
+  "  rot13 <s>   — rotate it",
+  "  uuid        — mint one",
+  "  nmap        — scan ibrahim.sys",
+  "  ps          — projects as processes",
+  "  df          — where the lines live",
   "  hack        — do not run this",
   "  trace       — find the visitor",
   "  banner      — the flag",
@@ -59,9 +66,9 @@ const HELP: string[] = [
 /** tab-completion surface — everything the prompt knows */
 const COMMAND_NAMES = [
   "help", "whoami", "projects", "stack", "skills", "log", "verify", "scorecard",
-  "coverage", "neofetch", "arsenal", "encode", "decode", "hex", "hack", "trace",
-  "banner", "matrix", "goto", "theme", "github", "social", "contact", "uptime",
-  "date", "echo", "sudo", "clear",
+  "coverage", "neofetch", "arsenal", "encode", "decode", "hex", "sha256", "rot13",
+  "uuid", "nmap", "ps", "df", "hack", "trace", "banner", "matrix", "goto", "theme",
+  "github", "social", "contact", "uptime", "date", "echo", "sudo", "clear",
 ];
 
 /* ── working codecs — real transforms, not decoration ──────────────────── */
@@ -71,12 +78,18 @@ const fromB64 = (s: string) =>
   new TextDecoder().decode(Uint8Array.from(atob(s.trim()), (c) => c.charCodeAt(0)));
 const toHex = (s: string) =>
   Array.from(new TextEncoder().encode(s), (b) => b.toString(16).padStart(2, "0")).join(" ");
+const rot13 = (s: string) =>
+  s.replace(/[a-z]/gi, (c) => {
+    const base = c <= "Z" ? 65 : 97;
+    return String.fromCharCode(((c.charCodeAt(0) - base + 13) % 26) + base);
+  });
 
 function codecLines(cmd: string, rawArg: string): Line[] {
   if (!rawArg) return [{ kind: "err", text: `${cmd}: give me an argument — try \`${cmd} hello\`` }];
   try {
     if (cmd === "encode") return [{ kind: "out", text: `b64: ${toB64(rawArg)}` }];
     if (cmd === "decode") return [{ kind: "out", text: `txt: ${fromB64(rawArg)}` }];
+    if (cmd === "rot13") return [{ kind: "out", text: `rot13: ${rot13(rawArg)}` }];
     return [{ kind: "out", text: `hex: ${toHex(rawArg)}` }];
   } catch {
     return [{ kind: "err", text: `${cmd}: not valid input for this codec` }];
@@ -159,6 +172,48 @@ function commands(): Record<string, Line[]> {
       { kind: "out", text: "  5  you.right.now ............... 0 ms ← hello, visitor." },
     ],
     matrix: [{ kind: "out", text: "the rain never stops. (`theme` makes it quiet.)" }],
+    nmap: [
+      { kind: "out", text: "Starting Nmap 7.94 ( good-faith scan — bounty scopes + own labs only )" },
+      { kind: "out", text: "Nmap scan report for ibrahim.sys (127.0.0.1)" },
+      { kind: "out", text: "Host is up (0.00042s latency)." },
+      { kind: "out", text: "" },
+      { kind: "out", text: "PORT      STATE  SERVICE" },
+      { kind: "out", text: "22/tcp    open   react-18" },
+      { kind: "out", text: "80/tcp    open   typescript" },
+      { kind: "out", text: "443/tcp   open   three-js" },
+      { kind: "out", text: "3000/tcp  open   vite-dev" },
+      { kind: "out", text: "5432/tcp  open   supabase-pg" },
+      { kind: "out", text: "8080/tcp  open   node-express" },
+      { kind: "out", text: "8883/tcp  open   esp32-mqtt" },
+      { kind: "out", text: "1337/tcp  open   pwn" },
+      { kind: "out", text: "" },
+      { kind: "out", text: "Nmap done: 1 host up. every service documented — run `verify`." },
+    ],
+    ps: [
+      { kind: "out", text: "USER     PID  COMMAND" },
+      ...featuredProjects.map(
+        (p, i): Line => ({
+          kind: "out",
+          text: `ibrahim  ${String(i + 1).padStart(3)}   ${p.title.toLowerCase().padEnd(17)} ${
+            p.status === "PRIV" ? "[private]" : p.status === "WIP" ? "[wip]" : "[running]"
+          }`,
+        })
+      ),
+      { kind: "out", text: "ibrahim   98   this-portfolio    [deployed]" },
+      { kind: "out", text: "ibrahim   99   bug-bounty-lab   [always-on]" },
+      { kind: "out", text: "guest    777   your-session     [reading]" },
+    ],
+    df: [
+      { kind: "out", text: "df -h — where the lines live (counted, not estimated)" },
+      ...pulpoLoc.split.map(
+        (s): Line => ({
+          kind: "out",
+          text: `  /dev/${s.lang.toLowerCase().replace(/[^a-z]/g, "").slice(0, 9).padEnd(10)}${s.loc.padEnd(7)}lines ${String(s.pct).padStart(3)}%`,
+        })
+      ),
+      { kind: "out", text: `  total: ${pulpoLoc.total} lines across firmware → 3D` },
+      { kind: "out", text: `  source: ${pulpoLoc.source}` },
+    ],
     arsenal: [
       { kind: "out", text: "security toolkit — what i actually run:" },
       { kind: "out", text: "  web      burp suite · owasp zap · nuclei · ffuf" },
@@ -227,19 +282,28 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
   const scrollRef = useRef<HTMLDivElement>(null);
   const localInput = useRef<HTMLInputElement>(null);
 
-  /* the one orchestrated moment: the shell tells the story on arrival */
+  /* the one orchestrated moment: the shell tells the story on arrival.
+     scriptTimerRef lets run() cancel it — a user command mid-boot takes over. */
+  const scriptTimerRef = useRef<number | null>(null);
+  const scriptDoneRef = useRef(false);
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) {
       setLines(SCRIPT);
+      scriptDoneRef.current = true;
       return;
     }
     let step = 0;
     const timer = window.setInterval(() => {
       step += 1;
       setLines(SCRIPT.slice(0, step));
-      if (step >= SCRIPT.length) window.clearInterval(timer);
+      if (step >= SCRIPT.length) {
+        window.clearInterval(timer);
+        scriptTimerRef.current = null;
+        scriptDoneRef.current = true;
+      }
     }, 360);
+    scriptTimerRef.current = timer;
     return () => window.clearInterval(timer);
   }, []);
 
@@ -251,6 +315,12 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
   const run = (raw: string) => {
     const cmd = raw.trim();
     const prompt: Line = { kind: "in", text: `ibrahim@sys:~$ ${cmd}` };
+    // taking the prompt mid-boot ends the story — the user drives now
+    if (scriptTimerRef.current !== null) {
+      window.clearInterval(scriptTimerRef.current);
+      scriptTimerRef.current = null;
+      scriptDoneRef.current = true;
+    }
     if (!cmd) {
       setLines((l) => [...l, prompt]);
       return;
@@ -299,8 +369,26 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
       ]);
       return;
     }
-    if (key === "encode" || key === "decode" || key === "hex") {
+    if (key === "encode" || key === "decode" || key === "hex" || key === "rot13") {
       setLines((l) => [...l, prompt, ...codecLines(key, rawArg)]);
+      return;
+    }
+    if (key === "sha256") {
+      if (!rawArg) {
+        setLines((l) => [...l, prompt, { kind: "err", text: "sha256: give me an argument" }]);
+        return;
+      }
+      // real hash — the browser's own webcrypto
+      crypto.subtle
+        .digest("SHA-256", new TextEncoder().encode(rawArg))
+        .then((buf) => {
+          const hex = Array.from(new Uint8Array(buf), (b) => b.toString(16).padStart(2, "0")).join("");
+          setLines((l) => [...l, prompt, { kind: "out", text: `sha256: ${hex}` }]);
+        });
+      return;
+    }
+    if (key === "uuid") {
+      setLines((l) => [...l, prompt, { kind: "out", text: `uuid: ${crypto.randomUUID()}` }]);
       return;
     }
 
@@ -353,6 +441,44 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
       setValue("");
     }
   };
+
+  /* shareable command links — /?run=hack auto-fires once the script lands */
+  const autoRanRef = useRef(false);
+  useEffect(() => {
+    if (autoRanRef.current || !scriptDoneRef.current) return;
+    autoRanRef.current = true;
+    const cmd = new URLSearchParams(window.location.search).get("run");
+    if (!cmd) return;
+    const key = cmd.trim().toLowerCase().split(/\s+/)[0];
+    if (!COMMAND_NAMES.includes(key)) return; // no arbitrary injection
+    const t = window.setTimeout(() => run(cmd), 600);
+    return () => window.clearTimeout(t);
+  }, [lines, run]);
+
+  /* konami code — the rain pours for four seconds */
+  useEffect(() => {
+    const seq = [
+      "ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown",
+      "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a",
+    ];
+    let idx = 0;
+    const onKey = (e: globalThis.KeyboardEvent) => {
+      const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+      idx = k === seq[idx] ? idx + 1 : k === seq[0] ? 1 : 0;
+      if (idx === seq.length) {
+        idx = 0;
+        document.body.classList.add("godmode");
+        setLines((l) => [
+          ...l,
+          { kind: "in", text: "ibrahim@sys:~$ ↑↑↓↓←→←→ba" },
+          { kind: "out", text: "KONAMI ACCEPTED — god mode: the rain pours. 4s." },
+        ]);
+        window.setTimeout(() => document.body.classList.remove("godmode"), 4000);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   return (
     <div
@@ -419,6 +545,24 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
           spellCheck={false}
           aria-label="terminal input"
         />
+      </div>
+
+      {/* touch chips — a prompt is useless on phones without them */}
+      <div
+        className="flex gap-2 overflow-x-auto border-t border-phos/15 px-4 py-2.5 md:hidden"
+        role="toolbar"
+        aria-label="quick commands"
+      >
+        {["help", "projects", "verify", "scorecard", "hack", "arsenal", "encode hello"].map((c) => (
+          <button
+            key={c}
+            type="button"
+            className="tag shrink-0 border-phos/35 text-phos"
+            onClick={() => run(c)}
+          >
+            {c}
+          </button>
+        ))}
       </div>
 
       {/* footer hints */}
