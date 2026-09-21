@@ -100,12 +100,31 @@ export const featuredProjects: Project[] = [
       { label: "span", value: "9 mo" },
     ],
   },
+  {
+    id: "plant-diseases",
+    index: "05",
+    title: "PLANT-DISEASES",
+    image: "./projects/flutter.svg",
+    imageAlt: "Wireframe phone scanning a leaf with a detection box — in-style visual (the app is real)",
+    tagline: "Flutter · leaf-scan diagnosis app",
+    description:
+      "A Flutter app that diagnoses plant diseases from leaf photos — image recognition through a REST service, a curated disease database with symptoms and treatments, scan history, and translation. 1.7K lines of Dart targeting five platforms.",
+    tech: ["Flutter", "Dart", "image_picker", "REST", "Provider state"],
+    link: "https://github.com/Locked-Cloud/flutter-plant-diseases",
+    status: "LIVE",
+    year: "2024",
+    metrics: [
+      { label: "loc", value: "1.7K" },
+      { label: "platforms", value: "5" },
+      { label: "screens", value: "10+" },
+    ],
+  },
 ];
 
 export const moreProjects: Project[] = [
   {
     id: "free-state",
-    index: "05",
+    index: "06",
     title: "free-state",
     tagline: "production PWA",
     description: "Installable PWA: offline pages, service-worker caching, OTP auth, ~1,000 files.",
@@ -115,7 +134,7 @@ export const moreProjects: Project[] = [
   },
   {
     id: "raiv",
-    index: "06",
+    index: "07",
     title: "RAIV-GPGPU",
     tagline: "GPU fetch-stage simulator",
     description: "C simulation of a GPGPU instruction-fetch stage — cache, scheduler, decoder, RAM traces.",
@@ -125,7 +144,7 @@ export const moreProjects: Project[] = [
   },
   {
     id: "webscraper",
-    index: "07",
+    index: "08",
     title: "WebScraper_PlayWright",
     tagline: "data pipelines at scale",
     description: "Adaptive batching, retry backoff, checkpointing, proxy validation, GUI.",
@@ -135,7 +154,7 @@ export const moreProjects: Project[] = [
   },
   {
     id: "canny",
-    index: "08",
+    index: "09",
     title: "Canny-Edge-Live",
     tagline: "real-time computer vision",
     description: "Live-camera edge detection with OpenCV — where the CV journey started.",
@@ -162,6 +181,14 @@ export const skillGroups: SkillGroup[] = [
   {
     title: "SYSTEMS",
     skills: ["C / C++ — ESP32 firmware", "GPGPU simulation", "Python — YOLO · NCNN · OpenCV", "Playwright pipelines", "MATLAB", "Assembly"],
+  },
+  {
+    title: "SECURITY",
+    skills: ["Bug bounty — XSS · IDOR · SSRF · SQLi · broken auth", "Burp Suite · OWASP ZAP", "nuclei · ffuf", "Reverse engineering — Ghidra · radare2 · x64dbg", "Secure coding — RLS models · scan-diff tooling"],
+  },
+  {
+    title: "MOBILE",
+    skills: ["Flutter · Dart", "image_picker → REST diagnosis flows", "5 platform targets — android · ios · macos · linux · web", "Scan history & provider state"],
   },
   {
     title: "PRACTICES",
@@ -325,7 +352,7 @@ export const kernelLog: string[] = [
 
 export const stackChips: string[] = [
   ".react-18", ".typescript", ".vite", ".tailwind-v4", ".three-js", ".supabase",
-  ".node-express", ".python", ".esp32-c", ".playwright",
+  ".node-express", ".python", ".esp32-c", ".playwright", ".flutter", ".ghidra",
 ];
 
 export const scorecard: { repo: string; stars: string; verdict: string }[] = [

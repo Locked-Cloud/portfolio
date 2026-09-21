@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const SECTIONS = [
   { id: "top", n: 0, label: "shell" },
@@ -18,6 +18,7 @@ const SECTIONS = [
 export default function Statusbar() {
   const [active, setActive] = useState("top");
   const [now, setNow] = useState(() => new Date());
+  const startRef = useRef(Date.now());
 
   useEffect(() => {
     const tick = window.setInterval(() => setNow(new Date()), 1000);
@@ -41,6 +42,15 @@ export default function Statusbar() {
   }, []);
 
   const clock = now.toLocaleTimeString("en-GB", { hour12: false });
+
+  /* session uptime, tmux-style — seconds since this tab mounted */
+  const secs = Math.max(0, Math.floor((now.getTime() - startRef.current) / 1000));
+  const up =
+    secs >= 3600
+      ? `${Math.floor(secs / 3600)}h${String(Math.floor((secs % 3600) / 60)).padStart(2, "0")}m`
+      : secs >= 60
+        ? `${Math.floor(secs / 60)}m${String(secs % 60).padStart(2, "0")}s`
+        : `${secs}s`;
 
   return (
     <div
@@ -72,6 +82,7 @@ export default function Statusbar() {
         </span>
       </div>
       <div className="flex shrink-0 items-center gap-3 text-fog">
+        <span className="hidden sm:inline">up {up}</span>
         <span className="hidden sm:inline">guest@sys</span>
         <span className="text-phos">{clock}</span>
       </div>

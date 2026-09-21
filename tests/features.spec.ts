@@ -114,3 +114,62 @@ test("hack command grants access", async ({ page }) => {
   await input.press("Enter");
   await expect(page.getByText("ACCESS GRANTED", { exact: false })).toBeVisible();
 });
+
+test("codec commands actually transform", async ({ page }) => {
+  await page.goto("/");
+  const input = page.getByLabel("terminal input");
+  await input.fill("encode hello");
+  await input.press("Enter");
+  await expect(page.getByText("b64: aGVsbG8=")).toBeVisible();
+  await input.fill("decode aGVsbG8=");
+  await input.press("Enter");
+  await expect(page.getByText("txt: hello")).toBeVisible();
+  await input.fill("hex AB");
+  await input.press("Enter");
+  await expect(page.getByText("hex: 41 42")).toBeVisible();
+  await input.fill("decode !!!not-base64!!!");
+  await input.press("Enter");
+  await expect(page.getByText("not valid input", { exact: false })).toBeVisible();
+});
+
+test("tab completes commands", async ({ page }) => {
+  await page.goto("/");
+  const input = page.getByLabel("terminal input");
+  await input.fill("ars");
+  await input.press("Tab");
+  await expect(input).toHaveValue("arsenal ");
+  await input.fill("enc");
+  await input.press("Tab");
+  await expect(input).toHaveValue("encode ");
+});
+
+test("arsenal lists the security toolkit", async ({ page }) => {
+  await page.goto("/");
+  const input = page.getByLabel("terminal input");
+  await input.fill("arsenal");
+  await input.press("Enter");
+  await expect(page.getByText("security toolkit — what i actually run:")).toBeVisible();
+  await expect(page.getByText("bounty scopes + own labs", { exact: false })).toBeVisible();
+});
+
+test("skills section carries SECURITY and MOBILE groups", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#skills").scrollIntoViewIfNeeded();
+  await expect(page.getByText("/security")).toBeVisible();
+  await expect(page.getByText("/mobile")).toBeVisible();
+});
+
+test("flutter plant-diseases card renders with visual", async ({ page }) => {
+  await page.goto("/");
+  await page.locator("#work").scrollIntoViewIfNeeded();
+  await expect(page.getByRole("link", { name: "PLANT-DISEASES ↗" })).toBeVisible();
+  await expect(page.getByAltText(/Wireframe phone scanning a leaf/)).toBeVisible();
+  await expect(page.getByText("1.7K", { exact: true })).toBeVisible();
+});
+
+test("status bar shows live uptime", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("[data-statusbar]").getByText(/up \d+[hms]/)).toBeVisible({
+    timeout: 5_000,
+  });
+});

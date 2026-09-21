@@ -40,6 +40,10 @@ const HELP: string[] = [
   "  scorecard   — merit vs. stars",
   "  coverage    — what this page can't show",
   "  neofetch    — system card",
+  "  arsenal     — the security toolkit",
+  "  encode <s>  — text → base64 (works, try it)",
+  "  decode <s>  — base64 → text",
+  "  hex <s>     — text → hex",
   "  hack        — do not run this",
   "  trace       — find the visitor",
   "  banner      — the flag",
@@ -51,6 +55,33 @@ const HELP: string[] = [
   "  uptime      — years at the keyboard",
   "  clear       — wipe the screen",
 ];
+
+/** tab-completion surface — everything the prompt knows */
+const COMMAND_NAMES = [
+  "help", "whoami", "projects", "stack", "skills", "log", "verify", "scorecard",
+  "coverage", "neofetch", "arsenal", "encode", "decode", "hex", "hack", "trace",
+  "banner", "matrix", "goto", "theme", "github", "social", "contact", "uptime",
+  "date", "echo", "sudo", "clear",
+];
+
+/* ── working codecs — real transforms, not decoration ──────────────────── */
+const toB64 = (s: string) =>
+  btoa(Array.from(new TextEncoder().encode(s), (b) => String.fromCharCode(b)).join(""));
+const fromB64 = (s: string) =>
+  new TextDecoder().decode(Uint8Array.from(atob(s.trim()), (c) => c.charCodeAt(0)));
+const toHex = (s: string) =>
+  Array.from(new TextEncoder().encode(s), (b) => b.toString(16).padStart(2, "0")).join(" ");
+
+function codecLines(cmd: string, rawArg: string): Line[] {
+  if (!rawArg) return [{ kind: "err", text: `${cmd}: give me an argument — try \`${cmd} hello\`` }];
+  try {
+    if (cmd === "encode") return [{ kind: "out", text: `b64: ${toB64(rawArg)}` }];
+    if (cmd === "decode") return [{ kind: "out", text: `txt: ${fromB64(rawArg)}` }];
+    return [{ kind: "out", text: `hex: ${toHex(rawArg)}` }];
+  } catch {
+    return [{ kind: "err", text: `${cmd}: not valid input for this codec` }];
+  }
+}
 
 const GOTO_TARGETS: Record<string, string> = {
   top: "top",
@@ -128,6 +159,13 @@ function commands(): Record<string, Line[]> {
       { kind: "out", text: "  5  you.right.now ............... 0 ms ← hello, visitor." },
     ],
     matrix: [{ kind: "out", text: "the rain never stops. (`theme` makes it quiet.)" }],
+    arsenal: [
+      { kind: "out", text: "security toolkit — what i actually run:" },
+      { kind: "out", text: "  web      burp suite · owasp zap · nuclei · ffuf" },
+      { kind: "out", text: "  re       ghidra · radare2 · x64dbg" },
+      { kind: "out", text: "  classes  xss · idor · ssrf · sqli · broken auth" },
+      { kind: "out", text: "  practice bounty scopes + own labs — nothing outside scope." },
+    ],
     contact: [
       { kind: "out", text: "fastest channel: email — see contact section below" },
       { kind: "out", text: "or run `github` and open an issue on any repo" },
@@ -146,8 +184,9 @@ function Block({ id }: { id: BlockId }) {
         <p className="font-display text-lg font-bold text-mint">IBRAHIM AHMED</p>
         <p className="text-fog italic">front-end engineer · creative technologist</p>
         <p className="mt-2 max-w-2xl text-mint/80">
-          building interfaces that answer back — real-time 3D web, SaaS products, and ML
-          that runs on <span className="text-terra">$45 hardware</span>.
+          front-end &amp; full-stack — real-time 3D web, SaaS products, Flutter apps, and
+          ML that runs on <span className="text-terra">$45 hardware</span>. bug bounty +
+          reverse engineering on the side.
         </p>
       </div>
     );
@@ -229,7 +268,8 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
       return;
     }
     const key = cmd.split(/\s+/)[0].toLowerCase();
-    const arg = cmd.split(/\s+/).slice(1).join(" ").toLowerCase();
+    const rawArg = cmd.split(/\s+/).slice(1).join(" ");
+    const arg = rawArg.toLowerCase();
 
     if (key === "goto") {
       const id = GOTO_TARGETS[arg];
@@ -257,6 +297,10 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
             : "full weather restored.",
         },
       ]);
+      return;
+    }
+    if (key === "encode" || key === "decode" || key === "hex") {
+      setLines((l) => [...l, prompt, ...codecLines(key, rawArg)]);
       return;
     }
 
@@ -290,6 +334,23 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
       const next = histIdx - 1;
       setHistIdx(Math.max(next, -1));
       setValue(next >= 0 ? history[next] : "");
+    } else if (e.key === "Tab") {
+      // shell etiquette: complete the command in progress
+      e.preventDefault();
+      const v = value.trimStart().toLowerCase();
+      if (!v || v.includes(" ")) return;
+      const hit = COMMAND_NAMES.find((c) => c.startsWith(v));
+      if (hit) setValue(hit + " ");
+    } else if (e.ctrlKey && e.key === "l") {
+      e.preventDefault();
+      setLines([]);
+      setValue("");
+    } else if (e.ctrlKey && e.key === "c") {
+      e.preventDefault();
+      if (value) {
+        setLines((l) => [...l, { kind: "in", text: `ibrahim@sys:~$ ${value}^C` }]);
+      }
+      setValue("");
     }
   };
 

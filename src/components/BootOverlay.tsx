@@ -6,6 +6,7 @@ const LINES = [
   "CPU ..................... REALTIME-3D [ENABLED]",
   "GPU ..................... WIREFRAME-CAPABLE",
   "NET ..................... GITHUB API [ARMED]",
+  "SEC ..................... ARSENAL LOADED [ARMED]",
   "MOUNT /work /skills /log /github /blog",
   "LOAD  kernel/ibrahim.sys [██████████] 100%",
   "AUTH .................... GUEST → READ-ONLY",

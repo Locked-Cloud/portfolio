@@ -6,7 +6,7 @@ export default function Skills() {
     <section id="skills" className="mx-auto mt-28 max-w-6xl scroll-mt-24 px-4">
       <SectionHead index="02 — SKILLS" title="THE TOOLBOX" note="cat /usr/bin/ibrahim" />
 
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {skillGroups.map((g) => (
           <div key={g.title} data-reveal className="panel p-6 transition-colors hover:border-phos/45">
             <h3 className="text-[12px] font-semibold tracking-[0.22em] text-mint">

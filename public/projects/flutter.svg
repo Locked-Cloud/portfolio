@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360">
+  <!-- PLANT-DISEASES card visual — wireframe phone leaf-scan, phosphor palette -->
+  <rect width="640" height="360" fill="#050806"/>
+  <rect x="4" y="4" width="632" height="352" fill="none" stroke="#3dff88" stroke-opacity="0.22"/>
+
+  <!-- scan grid backdrop -->
+  <g stroke="#3dff88" stroke-opacity="0.07">
+    <path d="M0 90 H640 M0 180 H640 M0 270 H640"/>
+    <path d="M160 0 V360 M320 0 V360 M480 0 V360"/>
+  </g>
+
+  <!-- phone -->
+  <rect x="150" y="52" width="150" height="256" rx="10" fill="#0a130c" stroke="#3dff88" stroke-opacity="0.55" stroke-width="2"/>
+  <rect x="204" y="62" width="42" height="6" rx="3" fill="#3dff88" fill-opacity="0.35"/>
+  <!-- leaf inside phone -->
+  <path d="M225 200 C 190 190 178 150 208 122 C 240 140 244 186 225 200 Z" fill="none" stroke="#3dff88" stroke-opacity="0.8" stroke-width="2"/>
+  <path d="M225 200 L 206 128" stroke="#3dff88" stroke-opacity="0.45" stroke-width="1.5"/>
+  <!-- detection box -->
+  <rect x="182" y="112" width="66" height="66" fill="none" stroke="#d9a441" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <rect x="182" y="100" width="66" height="12" fill="#d9a441"/>
+  <text x="215" y="109" font-family="monospace" font-size="9" fill="#050806" text-anchor="middle">LEAF 98.2%</text>
+  <!-- phone bottom bar -->
+  <rect x="150" y="278" width="150" height="30" fill="#071009"/>
+  <text x="225" y="297" font-family="monospace" font-size="10" fill="#3dff88" text-anchor="middle">DIAGNOSE</text>
+
+  <!-- terminal readout -->
+  <g font-family="monospace" font-size="12" fill="#7fb894">
+    <text x="330" y="92">$ flutter run --scan</text>
+    <text x="330" y="114" fill="#3dff88">&gt; capturing leaf_04.jpg …</text>
+    <text x="330" y="136">&gt; POST /diagnose 200 OK</text>
+    <text x="330" y="162" fill="#d8f5e4">class:   early_blight</text>
+    <text x="330" y="184" fill="#d8f5e4">conf:    0.982</text>
+    <text x="330" y="206" fill="#d8f5e4">plan:    treat · copper spray</text>
+    <text x="330" y="232" fill="#7fb894">db:      symptoms + treatments</text>
+    <text x="330" y="254" fill="#7fb894">history: saved (provider state)</text>
+    <text x="330" y="276" fill="#3dff88">platforms: android · ios · macos · linux · web</text>
+  </g>
+  <rect x="330" y="292" width="160" height="8" fill="none" stroke="#3dff88" stroke-opacity="0.3"/>
+  <rect x="330" y="292" width="157" height="8" fill="#3dff88" fill-opacity="0.55"/>
+
+  <!-- corner ticks -->
+  <g stroke="#3dff88" stroke-opacity="0.5" stroke-width="2" fill="none">
+    <path d="M14 26 V14 H26"/>
+    <path d="M626 334 V346 H614"/>
+  </g>
+</svg>
