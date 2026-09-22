@@ -262,7 +262,9 @@ export default function Session() {
         <p className="text-[11px] tracking-[0.2em] text-fog">
           ibrahim@sys:~$ <span className="text-phos">tcpdump -i session0 -c 8</span>
         </p>
-        <ul className="mt-4 space-y-1.5">
+        {/* fixed height: the log grows with the visitor's own events —
+            reserving the space keeps the page below from shifting (no CLS) */}
+        <ul className="mt-4 h-[176px] space-y-1.5 overflow-hidden">
           {log.map((p, i) => (
             <li key={`${p.t}-${i}`} className="text-[12px] text-mint/70">
               <span className="text-fog/70">{p.t}</span>{" "}

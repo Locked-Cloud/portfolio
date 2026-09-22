@@ -102,10 +102,10 @@ test("CV toggles to Arabic", async ({ page }) => {
 
 test("work section is a TUI browser: select, preview, keyboard nav", async ({ page }) => {
   await page.goto("/");
-  // wait for webfont swap — truncated list rows reflow with the real font,
-  // and clicking mid-swap is a CI-only flake
-  await page.evaluate(() => document.fonts.ready);
+  // smooth-scroll + reveal are still animating right after scrollIntoView —
+  // clicking mid-flight hits stale coordinates (CI-only flake). settle first.
   await page.locator("#work").scrollIntoViewIfNeeded();
+  await page.waitForTimeout(700);
   const listbox = page.getByRole("listbox", { name: "project files" });
   await expect(listbox).toBeVisible();
   // flagship selected on arrival — counted LOC + verdict ride the preview
@@ -205,12 +205,12 @@ test("skills section carries SECURITY and MOBILE groups", async ({ page }) => {
 
 test("flutter project previews with its visual", async ({ page }) => {
   await page.goto("/");
-  await page.evaluate(() => document.fonts.ready);
   await page.locator("#work").scrollIntoViewIfNeeded();
-  await page
-    .getByRole("listbox", { name: "project files" })
-    .getByRole("option", { name: /05-plant-diseases/ })
-    .click();
+  await page.waitForTimeout(700);
+  // keyboard path: layout-independent (no coordinate click to race)
+  const listbox = page.getByRole("listbox", { name: "project files" });
+  await listbox.focus();
+  await page.keyboard.press("End"); // last entry = 05-plant-diseases
   await expect(page.getByRole("heading", { name: /PLANT-DISEASES/ })).toBeVisible();
   await expect(page.getByAltText(/Wireframe phone scanning a leaf/)).toBeVisible();
   await expect(page.getByText("1.7K", { exact: true })).toBeVisible();
