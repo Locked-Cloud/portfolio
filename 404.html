@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>404 — IBRAHIM.SYS</title>
+<style>
+:root{
+  --bg:#050806;--green:#3dff88;--bright:#b0ffcf;--dim:#7fb894;
+  --gold:#d9a441;--body:#d8f5e4;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{
+  margin:0;background:var(--bg);color:var(--body);
+  font:16px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  display:flex;align-items:center;justify-content:center;
+}
+/* CRT scanlines */
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(to bottom,
+    rgba(0,0,0,.16) 0 1px,transparent 1px 3px);
+}
+main{max-width:34rem;padding:2rem 1.25rem}
+.kern{font-size:.72rem;letter-spacing:.08em;color:var(--dim)}
+.prompt{margin:.9rem 0 1.6rem;word-break:break-all}
+.prompt .u{color:var(--green)}
+.prompt .path{color:var(--dim)}
+h1{
+  margin:0 0 .8rem;font-size:clamp(1.4rem,5vw,2.1rem);
+  font-weight:700;color:var(--bright);letter-spacing:.04em;
+  text-shadow:0 0 10px rgba(61,255,136,.4);
+}
+.diag{color:var(--dim);font-size:.85rem;margin:0 0 1.8rem}
+nav{display:flex;flex-wrap:wrap;gap:.6rem;margin:0 0 1.8rem}
+nav a{color:var(--green);text-decoration:none;padding:.15rem .3rem}
+nav a:hover{background:var(--green);color:var(--bg)}
+.hint{font-size:.78rem;color:var(--dim)}
+.hint code{color:var(--gold)}
+</style>
+</head>
+<body>
+<main>
+  <p class="kern">IBRAHIM.SYS — kernel 6.4.2</p>
+  <p class="prompt"><span class="u">ibrahim@sys</span>:~$ cd <span class="path" id="p"></span></p>
+  <h1>404 — SEGMENT NOT FOUND</h1>
+  <p class="diag">the path you requested does not map to any mounted segment.<br>
+  inode missing · address bus silent · no vector in ROM</p>
+  <nav>
+    <a href="./">[ ~/home ]</a>
+    <a href="./cv.html">[ ~/cv ]</a>
+    <a href="./rss.xml">[ ~/devlog rss ]</a>
+  </nav>
+  <p class="hint">tip: the shell answers at home — try <code>`goto work`</code></p>
+</main>
+<script>document.getElementById('p').textContent=location.pathname;</script>
+</body>
+</html>
