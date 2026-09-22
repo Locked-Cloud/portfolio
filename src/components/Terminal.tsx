@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type RefObject } from "react";
+import SnakeGame from "./SnakeGame";
 import {
   featuredProjects,
   skillGroups,
@@ -55,6 +56,11 @@ const HELP: string[] = [
   "  hack        — do not run this",
   "  trace       — find the visitor",
   "  banner      — the flag",
+  "  man <cmd>   — the manual",
+  "  history     — what you typed this session",
+  "  !!          — run the last one again",
+  "  share <cmd> — copy a ?run= deep-link",
+  "  snake       — the arcade break",
   "  goto <x>    — scroll to: session · work · skills · log · github · blog · contact",
   "  theme       — the matrix rain · or theme amber · blue · green",
   "  github      — open github profile",
@@ -70,7 +76,61 @@ const COMMAND_NAMES = [
   "coverage", "neofetch", "arsenal", "encode", "decode", "hex", "sha256", "rot13",
   "uuid", "nmap", "ps", "df", "file", "hack", "trace", "banner", "matrix", "goto",
   "theme", "github", "social", "contact", "uptime", "date", "echo", "sudo", "clear",
+  "man", "history", "snake",
 ];
+
+/* ── man pages — the shell documents itself ────────────────────────────── */
+const MAN: Record<string, string[]> = {
+  verify: [
+    "VERIFY(1)",
+    "  prints the source behind every stat on this page.",
+    "  policy: no number without a source — chips [record]/[measured]/[by-design].",
+  ],
+  scorecard: [
+    "SCORECARD(1)",
+    "  project selection by engineering merit, not stars.",
+    "  the least-starred repos are the flagships — pin accordingly.",
+  ],
+  coverage: [
+    "COVERAGE(1)",
+    "  what this page honestly cannot show: private repos, unpushed work.",
+    "  gaps are named, not hidden.",
+  ],
+  arsenal: [
+    "ARSENAL(1)",
+    "  the security toolkit actually in use — web, RE, malware triage.",
+    "  scope policy: bounty programs + own labs. nothing else.",
+  ],
+  hack: [
+    "HACK(1)",
+    "  theater. the only intrusion here is into your expectations.",
+    "  everything on this page is already yours — MIT-licensed.",
+  ],
+  snake: [
+    "SNAKE(6)",
+    "  the arcade break. arrows steer, gold is food, esc quits.",
+    "  section 6: games. every serious system ships one.",
+  ],
+  goto: [
+    "GOTO(1)",
+    "  scroll to a section: session · work · skills · log · github · blog · contact.",
+  ],
+  theme: [
+    "THEME(1)",
+    "  no argument: toggle the matrix rain.",
+    "  amber | blue | green: swap the phosphor tube.",
+  ],
+  encode: [
+    "ENCODE(1)",
+    "  text → base64, for real. decode reverses it, hex dumps it.",
+    "  sha256 uses the browser's own webcrypto.",
+  ],
+  share: [
+    "SHARE(1)",
+    "  copies a ?run= deep-link — opens the site and auto-runs the command.",
+    "  `share hack`, then paste it to someone who types slow.",
+  ],
+};
 
 /* ── phosphor tubes for `theme <color>` — runtime CSS-var swap ─────────── */
 const PHOSPHORS: Record<string, [string, string]> = {
@@ -298,6 +358,7 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
   const [value, setValue] = useState("");
   const [history, setHistory] = useState<string[]>([]);
   const [histIdx, setHistIdx] = useState(-1);
+  const [snakeOpen, setSnakeOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const localInput = useRef<HTMLInputElement>(null);
 
@@ -421,6 +482,72 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
       setLines((l) => [...l, prompt, { kind: "out", text: `uuid: ${crypto.randomUUID()}` }]);
       return;
     }
+    if (key === "man") {
+      if (!arg) {
+        setLines((l) => [...l, prompt, { kind: "err", text: "what manual page do you want? try `man verify`" }]);
+      } else {
+        const page = MAN[arg];
+        setLines((l) => [
+          ...l,
+          prompt,
+          ...(page
+            ? page.map((text): Line => ({ kind: "out", text }))
+            : [{ kind: "err" as const, text: `No manual entry for ${arg}` }]),
+        ]);
+      }
+      return;
+    }
+    if (key === "history") {
+      setLines((l) => [
+        ...l,
+        prompt,
+        { kind: "out", text: `${history.length} commands this session:` },
+        ...[...history]
+          .reverse()
+          .map((c, i): Line => ({ kind: "out", text: `  ${String(i + 1).padStart(3)}  ${c}` })),
+      ]);
+      return;
+    }
+    if (key === "!!") {
+      const last = history.find((c) => c !== "!!");
+      if (!last) {
+        setLines((l) => [...l, prompt, { kind: "err", text: "!!: no previous command" }]);
+      } else {
+        setLines((l) => [...l, { kind: "in", text: `ibrahim@sys:~$ !! → ${last}` }]);
+        run(last);
+      }
+      return;
+    }
+    if (key === "share") {
+      const target = rawArg || history.find((c) => c !== "share" && c !== "!!");
+      const tKey = target?.trim().toLowerCase().split(/\s+/)[0];
+      if (!target || !tKey || !COMMAND_NAMES.includes(tKey)) {
+        setLines((l) => [
+          ...l,
+          prompt,
+          {
+            kind: "err",
+            text: target
+              ? `share: \`${tKey}\` isn't auto-runnable — try \`share hack\``
+              : "share: nothing to share — run a command first",
+          },
+        ]);
+        return;
+      }
+      const url = `${location.origin}${location.pathname}?run=${encodeURIComponent(target.trim())}`;
+      navigator.clipboard
+        ?.writeText(url)
+        .then(
+          () => setLines((l) => [...l, prompt, { kind: "out", text: `copied: ${url}` }]),
+          () => setLines((l) => [...l, prompt, { kind: "out", text: `clipboard blocked — ${url}` }])
+        );
+      return;
+    }
+    if (key === "snake") {
+      setLines((l) => [...l, prompt]);
+      setSnakeOpen(true);
+      return;
+    }
 
     const out = commands()[key];
     if (out) {
@@ -437,6 +564,7 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
   };
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (snakeOpen) return; // the game owns the keyboard while it runs
     if (e.key === "Enter") {
       run(value);
       setValue("");
@@ -536,9 +664,18 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
       {/* output */}
       <div
         ref={scrollRef}
-        className="terminal-scrollbar grow overflow-y-auto px-5 py-4 text-[13px] leading-relaxed sm:px-6"
+        className="terminal-scrollbar relative grow overflow-y-auto px-5 py-4 text-[13px] leading-relaxed sm:px-6"
         aria-live="polite"
       >
+        {snakeOpen && (
+          <SnakeGame
+            onExit={(score) => {
+              setSnakeOpen(false);
+              setLines((l) => [...l, { kind: "out", text: `snake closed — final score ${score}` }]);
+              (inputRef ?? localInput).current?.focus();
+            }}
+          />
+        )}
         {lines.map((line, i) =>
           line.kind === "block" ? (
             <Block key={i} id={line.block} />

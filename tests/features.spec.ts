@@ -338,3 +338,57 @@ test("malware analysis ships as a skill, an arsenal line, and a file scan", asyn
   await input.press("Enter");
   await expect(page.getByText("0/64 engines flag it", { exact: false })).toBeVisible();
 });
+
+test("snake: the arcade break", async ({ page }) => {
+  await page.goto("/");
+  const input = page.getByLabel("terminal input");
+  await input.fill("snake");
+  await input.press("Enter");
+  const game = page.getByRole("application", { name: "snake game" });
+  await expect(game).toBeVisible();
+  await expect(game.getByText(/SCORE \d+/)).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.getByText(/snake closed — final score \d+/)).toBeVisible();
+});
+
+test("man pages document the shell", async ({ page }) => {
+  await page.goto("/");
+  const input = page.getByLabel("terminal input");
+  await input.fill("man verify");
+  await input.press("Enter");
+  await expect(page.getByText("VERIFY(1)")).toBeVisible();
+  await expect(page.getByText("no number without a source", { exact: false })).toBeVisible();
+  await input.fill("man definitely-not-a-command");
+  await input.press("Enter");
+  await expect(page.getByText("No manual entry for definitely-not-a-command")).toBeVisible();
+});
+
+test("history, !! rerun, and share links", async ({ page }) => {
+  await page.goto("/");
+  const input = page.getByLabel("terminal input");
+  await input.fill("help");
+  await input.press("Enter");
+  await expect(page.getByText("available commands:")).toBeVisible();
+  await input.fill("history");
+  await input.press("Enter");
+  await expect(page.getByText("commands this session:")).toBeVisible();
+  await input.fill("share hack");
+  await input.press("Enter");
+  await expect(page.getByText(/run=hack/)).toBeVisible();
+  await input.fill("!!");
+  await input.press("Enter");
+  await expect(page.getByText("!! → share hack")).toBeVisible();
+});
+
+test("pwa manifest and 404 page ship as static assets", async ({ page }) => {
+  const manifest = await page.request.get("/manifest.webmanifest");
+  expect(manifest.status()).toBe(200);
+  expect(await manifest.text()).toContain('"display": "standalone"');
+  const icon = await page.request.get("/icons/icon-192.png");
+  expect(icon.status()).toBe(200);
+  // vite preview SPA-fallbacks unknown paths, so assert the page itself
+  // ships — GitHub Pages serves it automatically with a real 404 status
+  const notFound = await page.request.get("/404.html");
+  expect(notFound.status()).toBe(200);
+  expect(await notFound.text()).toContain("SEGMENT NOT FOUND");
+});

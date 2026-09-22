@@ -6,25 +6,25 @@ test("record demo session", async ({ page }) => {
   await page.waitForTimeout(6_000); // boot narrative
 
   const input = page.getByLabel("terminal input");
-  for (const cmd of ["help", "verify", "scorecard", "neofetch", "coverage"]) {
+  for (const cmd of ["help", "verify", "scorecard", "arsenal", "encode hello", "hack"]) {
     await input.fill(cmd);
     await input.press("Enter");
-    await page.waitForTimeout(2_600);
+    await page.waitForTimeout(2_400);
   }
 
-  await input.fill("goto proof");
+  await input.fill("goto session");
   await input.press("Enter");
-  await page.waitForTimeout(3_500); // 3D scene loads
-  await page.mouse.move(640, 400);
-  await page.mouse.down();
-  await page.mouse.move(900, 340, { steps: 30 }); // spin the tooth
-  await page.mouse.up();
-  await page.waitForTimeout(1_500);
+  await page.waitForTimeout(2_600); // telemetry + receipts land
 
   await input.fill("goto work");
   await input.press("Enter");
-  await page.waitForTimeout(2_500);
+  await page.waitForTimeout(1_200);
+  const listbox = page.getByRole("listbox", { name: "project files" });
+  await listbox.focus();
+  await page.keyboard.press("End"); // flip to the flutter project preview
+  await page.waitForTimeout(2_000);
+
   await input.fill("goto contact");
   await input.press("Enter");
-  await page.waitForTimeout(2_500);
+  await page.waitForTimeout(2_200);
 });

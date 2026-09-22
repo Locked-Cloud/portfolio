@@ -28,7 +28,9 @@ export const featuredProjects: Project[] = [
     gallery: [
       { src: `${PULPOVR_ASSETS}/hero_banner.jpg`, alt: "PULPOVR cockpit — full interface" },
       { src: `${PULPOVR_ASSETS}/digital_twin_3d.jpg`, alt: "Digital twin — 3D tooth with canal path" },
+      { src: `${PULPOVR_ASSETS}/hardware_wiring.jpg`, alt: "The ~$30 hardware — ESP32 + MPU-6050 IMU wired to the handpiece" },
       { src: `${PULPOVR_ASSETS}/analytics_dashboard.jpg`, alt: "Student analytics dashboard" },
+      { src: `${PULPOVR_ASSETS}/tooth_anatomy.png`, alt: "Tooth anatomy reference — crown, canals, apex" },
     ],
     tagline: "Live endodontic guidance — real-time dental digital twin",
     description:
