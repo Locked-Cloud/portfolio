@@ -75,6 +75,23 @@ test("statusbar carries the session window tab", async ({ page }) => {
   await expect(bar.getByRole("link", { name: "1:session" })).toBeVisible();
 });
 
+test("phosphor color modes swap at runtime", async ({ page }) => {
+  await page.goto("/");
+  const input = page.getByLabel("terminal input");
+  await input.fill("theme amber");
+  await input.press("Enter");
+  await expect(page.getByText("phosphor set to amber", { exact: false })).toBeVisible();
+  const phos = await page.evaluate(() =>
+    document.documentElement.style.getPropertyValue("--color-phos")
+  );
+  expect(phos).toBe("#ffb000");
+  await input.fill("theme green");
+  await input.press("Enter");
+  await expect(
+    page.evaluate(() => document.documentElement.style.getPropertyValue("--color-phos"))
+  ).resolves.toBe("#3dff88");
+});
+
 test("CV toggles to Arabic", async ({ page }) => {
   await page.goto("/cv.html");
   await page.getByRole("button", { name: "عربي" }).click();

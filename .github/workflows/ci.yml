@@ -25,3 +25,25 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+
+  # every green push to main ships: build (footer stamp bakes this commit's
+  # hash) and publish dist/ to the gh-pages branch — no manual deploys.
+  deploy:
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          commit_message: "deploy: ${{ github.sha }}"

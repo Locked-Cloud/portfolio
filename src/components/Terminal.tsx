@@ -56,7 +56,7 @@ const HELP: string[] = [
   "  trace       — find the visitor",
   "  banner      — the flag",
   "  goto <x>    — scroll to: session · work · skills · log · github · blog · contact",
-  "  theme       — toggle the matrix rain",
+  "  theme       — the matrix rain · or theme amber · blue · green",
   "  github      — open github profile",
   "  social      — direct channels",
   "  contact     — how to reach me",
@@ -71,6 +71,18 @@ const COMMAND_NAMES = [
   "uuid", "nmap", "ps", "df", "file", "hack", "trace", "banner", "matrix", "goto",
   "theme", "github", "social", "contact", "uptime", "date", "echo", "sudo", "clear",
 ];
+
+/* ── phosphor tubes for `theme <color>` — runtime CSS-var swap ─────────── */
+const PHOSPHORS: Record<string, [string, string]> = {
+  green: ["#3dff88", "#b0ffcf"],
+  amber: ["#ffb000", "#ffd699"],
+  blue: ["#6ecbff", "#c9e9ff"],
+};
+const TUBE_LORE: Record<string, string> = {
+  green: "P1 — the classic",
+  amber: "P3 — the collector's tube",
+  blue: "P11 — the night-vision tube",
+};
 
 /* ── working codecs — real transforms, not decoration ──────────────────── */
 const toB64 = (s: string) =>
@@ -363,17 +375,28 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
       return;
     }
     if (key === "theme") {
-      const quiet = document.body.classList.toggle("quiet");
-      setLines((l) => [
-        ...l,
-        prompt,
-        {
-          kind: "out",
-          text: quiet
-            ? "quiet mode — matrix rain off. run `theme` to bring the weather back."
-            : "full weather restored.",
-        },
-      ]);
+      const tone = PHOSPHORS[arg];
+      if (tone) {
+        document.documentElement.style.setProperty("--color-phos", tone[0]);
+        document.documentElement.style.setProperty("--color-phos-bright", tone[1]);
+        setLines((l) => [
+          ...l,
+          prompt,
+          { kind: "out", text: `phosphor set to ${arg} — ${TUBE_LORE[arg]}.` },
+        ]);
+      } else {
+        const quiet = document.body.classList.toggle("quiet");
+        setLines((l) => [
+          ...l,
+          prompt,
+          {
+            kind: "out",
+            text: quiet
+              ? "quiet mode — matrix rain off. run `theme` to bring the weather back."
+              : "full weather restored.",
+          },
+        ]);
+      }
       return;
     }
     if (key === "encode" || key === "decode" || key === "hex" || key === "rot13") {
