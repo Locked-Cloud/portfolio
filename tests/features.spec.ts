@@ -102,6 +102,9 @@ test("CV toggles to Arabic", async ({ page }) => {
 
 test("work section is a TUI browser: select, preview, keyboard nav", async ({ page }) => {
   await page.goto("/");
+  // wait for webfont swap — truncated list rows reflow with the real font,
+  // and clicking mid-swap is a CI-only flake
+  await page.evaluate(() => document.fonts.ready);
   await page.locator("#work").scrollIntoViewIfNeeded();
   const listbox = page.getByRole("listbox", { name: "project files" });
   await expect(listbox).toBeVisible();
@@ -202,11 +205,13 @@ test("skills section carries SECURITY and MOBILE groups", async ({ page }) => {
 
 test("flutter project previews with its visual", async ({ page }) => {
   await page.goto("/");
+  await page.evaluate(() => document.fonts.ready);
   await page.locator("#work").scrollIntoViewIfNeeded();
   await page
     .getByRole("listbox", { name: "project files" })
     .getByRole("option", { name: /05-plant-diseases/ })
     .click();
+  await expect(page.getByRole("heading", { name: /PLANT-DISEASES/ })).toBeVisible();
   await expect(page.getByAltText(/Wireframe phone scanning a leaf/)).toBeVisible();
   await expect(page.getByText("1.7K", { exact: true })).toBeVisible();
 });
