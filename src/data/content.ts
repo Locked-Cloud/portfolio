@@ -20,8 +20,29 @@ const PULPOVR_ASSETS = "https://raw.githubusercontent.com/Locked-Cloud/dental-pr
 
 export const featuredProjects: Project[] = [
   {
-    id: "pulpoVr",
+    id: "wokood",
     index: "01",
+    title: "WOKOOD وقود",
+    image: "./projects/wokood.svg",
+    imageAlt: "WOKOOD — dark storefront card with a lime loaded barbell and Arabic wordmark",
+    // TODO: gallery screenshots at go-live
+    tagline: "full-stack ecommerce · React × Supabase × security-hardened",
+    description:
+      "An Egypt-first gym-supplements store built end to end: Arabic-first RTL storefront with wallet credit, gift cards, loyalty and Ramadan mode; a Supabase backend as code (19 migrations, default-deny RLS on every table, SECURITY DEFINER RPCs for every money move); an admin console that controls the entire site. Survived a four-pass security audit that found and fixed three real money-path vulnerabilities — free-money gift-card minting, gift-code enumeration, cancel-without-refund — each with a regression test.",
+    tech: ["React 18", "TypeScript", "Supabase", "Postgres/RLS", "TanStack Query", "Playwright", "PGlite", "PWA"],
+    link: "https://github.com/Locked-Cloud", // TODO: swap to real repo
+    status: "WIP",
+    year: "2026",
+    metrics: [
+      { label: "loc", value: "52K" }, // 45.9K src + 7.0K SQL
+      { label: "sql migrations", value: "19" },
+      { label: "tests", value: "64+194+46" }, // backend+unit+e2e
+      { label: "audit passes", value: "4" },
+    ],
+  },
+  {
+    id: "pulpoVr",
+    index: "02",
     title: "PULPOVR",
     image: `${PULPOVR_ASSETS}/hero_banner.jpg`,
     imageAlt: "PULPOVR cockpit — 3D tooth digital twin with telemetry gauges",
@@ -47,7 +68,7 @@ export const featuredProjects: Project[] = [
   },
   {
     id: "smart-parking",
-    index: "02",
+    index: "03",
     title: "SMART-PARKING",
     image: "./projects/smart-parking.jpg",
     imageAlt: "Miniature parking lot with teal detection boxes — generated in-style visual",
@@ -67,7 +88,7 @@ export const featuredProjects: Project[] = [
   },
   {
     id: "bazarna",
-    index: "03",
+    index: "04",
     title: "BAZARNA",
     image: "./projects/bazarna.jpg",
     imageAlt: "Wireframe bazaar alley with gold lanterns — generated in-style visual",
@@ -85,7 +106,7 @@ export const featuredProjects: Project[] = [
   },
   {
     id: "lms",
-    index: "04",
+    index: "05",
     title: "LMS-PLATFORM",
     image: "./projects/lms.jpg",
     imageAlt: "Dark terminal dashboard with progress bars and certificate seal — generated visual (code is private)",
@@ -104,7 +125,7 @@ export const featuredProjects: Project[] = [
   },
   {
     id: "plant-diseases",
-    index: "05",
+    index: "06",
     title: "PLANT-DISEASES",
     image: "./projects/flutter.svg",
     imageAlt: "Wireframe phone scanning a leaf with a detection box — in-style visual (the app is real)",
@@ -126,7 +147,7 @@ export const featuredProjects: Project[] = [
 export const moreProjects: Project[] = [
   {
     id: "free-state",
-    index: "06",
+    index: "07",
     title: "free-state",
     tagline: "production PWA",
     description: "Installable PWA: offline pages, service-worker caching, OTP auth, ~1,000 files.",
@@ -136,7 +157,7 @@ export const moreProjects: Project[] = [
   },
   {
     id: "raiv",
-    index: "07",
+    index: "08",
     title: "RAIV-GPGPU",
     tagline: "GPU fetch-stage simulator",
     description: "C simulation of a GPGPU instruction-fetch stage — cache, scheduler, decoder, RAM traces.",
@@ -146,7 +167,7 @@ export const moreProjects: Project[] = [
   },
   {
     id: "webscraper",
-    index: "08",
+    index: "09",
     title: "WebScraper_PlayWright",
     tagline: "data pipelines at scale",
     description: "Adaptive batching, retry backoff, checkpointing, proxy validation, GUI.",
@@ -156,7 +177,7 @@ export const moreProjects: Project[] = [
   },
   {
     id: "canny",
-    index: "09",
+    index: "10",
     title: "Canny-Edge-Live",
     tagline: "real-time computer vision",
     description: "Live-camera edge detection with OpenCV — where the CV journey started.",
