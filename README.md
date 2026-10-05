@@ -1,7 +1,7 @@
 # IBRAHIM.SYS — a portfolio that is a terminal
 
 [![CI](https://github.com/Locked-Cloud/portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/Locked-Cloud/portfolio/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/playwright-40%20green-3dff88?style=flat-square)](https://github.com/Locked-Cloud/portfolio/actions/workflows/ci.yml)
+[![tests](https://img.shields.io/badge/playwright-60%20green%20%2B%20105%20unit-3dff88?style=flat-square)](https://github.com/Locked-Cloud/portfolio/actions/workflows/ci.yml)
 [![budget](https://img.shields.io/badge/entry%20js-%E2%89%8870KB%20gz%20%2F%20120KB-3dff88?style=flat-square)](scripts/check-size.js)
 [![license](https://img.shields.io/badge/license-MIT-3dff88?style=flat-square)](LICENSE)
 
@@ -13,7 +13,8 @@ The site boots a BIOS, answers as a shell, browses work as a file manager, and s
 
 ## What's in the machine
 
-- **The shell is the hero** — a scripted terminal that hands you the prompt: ~35 commands including *working* tools (`sha256` via WebCrypto, `encode`/`decode`, `rot13`, `uuid`), fun (`hack`, `nmap`, `trace`), and discipline (`verify` — the source behind every stat on the page). Tab-complete, `↑↓` history, `Ctrl+L`/`Ctrl+C`, shareable `?run=<cmd>` deep-links, konami code.
+- **The shell is the hero** — a scripted terminal that hands you the prompt: ~40 commands including *working* tools (`sha256` via WebCrypto, `encode`/`decode`, `rot13`, `uuid`), fun (`hack`, `nmap`, `trace`), and discipline (`verify` — the source behind every stat on the page). Tab-complete, `↑↓` history, `Ctrl+L`/`Ctrl+C`, shareable `?run=<cmd>` deep-links, konami code.
+- **The security toolkit** — four real tools in the shell, all client-side, nothing leaves the tab: `jwt` (decode + human exp/iat/nbf, flags `alg=none`, no signature verification), `hash` (SHA-256/384/512 digests + `-b [n]` ops/sec bench), `headers` (paste a response block — paste-mode included — and get a security grade per header), `replay` (timed fetch to **public targets only**; loopback/private/link-local/`.local` are rejected before any request, SSRF by design).
 - **`00 — SESSION`** — live telemetry about the visitor (pointer travel, clicks, keys, fps) + the page's own load receipts measured in your browser via the Performance API, with a tcpdump-styled packet log. The "no trackers" claim, demonstrated.
 - **`01 — WORK`** — a ranger-style TUI file manager: select a project directory (`↑↓` or click), the pane `cat`s its README. The flagship carries a counted LOC allocation bar (from `wc -l` over the real repo) and a merit-vs-stars verdict.
 - **CRT kit** — BIOS boot overlay (once per session, skippable), tmux status bar with live clock/uptime/section tabs, scanlines + phosphor flicker, `theme amber|blue|green` phosphor modes.
@@ -25,7 +26,8 @@ The site boots a BIOS, answers as a shell, browses work as a file manager, and s
 ```bash
 npm install
 npm run dev        # vite dev server
-npm test           # npx playwright test (40 specs, needs: npx playwright install chromium)
+npm run test:unit  # vitest — pure tool logic (105 tests)
+npm test           # npx playwright test (needs: npx playwright install chromium)
 SHOTS=1 npm run record:demo   # regenerate screenshots + demo video
 ```
 
@@ -36,6 +38,9 @@ src/
 ├── App.tsx                  # composition + GitHub live fetch (6h-cached)
 ├── styles/tokens.css        # ⭐ theme tokens + CRT kit (color-mix phosphor)
 ├── data/content.ts          # ⭐ ALL copy lives here — edit this to update the site
+├── lib/
+│   ├── gh.ts · reveal.ts    # cached GitHub fetch · scroll reveals
+│   └── security/            # jwt · hash · headers · replay — pure logic + vitest suites
 └── components/
     ├── Terminal.tsx         # the hero shell (commands, codecs, autocomplete)
     ├── Session.tsx          # visitor telemetry + page receipts (Performance API)

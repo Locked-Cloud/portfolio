@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type KeyboardEvent, type RefObject } from "react";
+import { useEffect, useRef, useState, type ClipboardEvent, type KeyboardEvent, type RefObject } from "react";
 import SnakeGame from "./SnakeGame";
 import {
   featuredProjects,
@@ -15,6 +15,10 @@ import {
   pulpoLoc,
   GITHUB_URL,
 } from "../data/content";
+import { formatJwtLines } from "../lib/security/jwt";
+import { digestHex, formatBenchLines, formatDigestLines, parseHashArgs } from "../lib/security/hash";
+import { formatHeaderReport } from "../lib/security/headers";
+import { checkTarget, executeReplay, formatReplayLines, parseReplayArgs } from "../lib/security/replay";
 
 type BlockId = "whoami" | "projects" | "stack";
 type Line = { kind: "in" | "out" | "err"; text: string } | { kind: "block"; block: BlockId };
@@ -49,6 +53,11 @@ const HELP: string[] = [
   "  sha256 <s>  — real hash, via webcrypto",
   "  rot13 <s>   — rotate it",
   "  uuid        — mint one",
+  "  security toolkit — client-side, nothing leaves this tab:",
+  "  jwt <tok>   — decode a token, exp as human time (no sig verify)",
+  "  hash <s>    — sha-256/384/512 · `hash -b [n] <s>` = ops/sec",
+  "  headers     — grade security headers (paste a block or JSON)",
+  "  replay <m> <url> — time a request to a public target",
   "  nmap        — scan ibrahim.sys",
   "  ps          — projects as processes",
   "  df          — where the lines live",
@@ -74,9 +83,9 @@ const HELP: string[] = [
 const COMMAND_NAMES = [
   "help", "whoami", "projects", "stack", "skills", "log", "verify", "scorecard",
   "coverage", "neofetch", "arsenal", "encode", "decode", "hex", "sha256", "rot13",
-  "uuid", "nmap", "ps", "df", "file", "hack", "trace", "banner", "matrix", "goto",
-  "theme", "github", "social", "contact", "uptime", "date", "echo", "sudo", "clear",
-  "man", "history", "snake",
+  "uuid", "jwt", "hash", "headers", "replay", "nmap", "ps", "df", "file", "hack",
+  "trace", "banner", "matrix", "goto", "theme", "github", "social", "contact",
+  "uptime", "date", "echo", "sudo", "clear", "man", "history", "snake",
 ];
 
 /* ── man pages — the shell documents itself ────────────────────────────── */
@@ -124,6 +133,31 @@ const MAN: Record<string, string[]> = {
     "ENCODE(1)",
     "  text → base64, for real. decode reverses it, hex dumps it.",
     "  sha256 uses the browser's own webcrypto.",
+  ],
+  jwt: [
+    "JWT(1)",
+    "  base64url-decode header+payload, pretty-print, exp/iat/nbf as human time.",
+    "  flags alg=none and alg oddities. does NOT verify signatures — decode-only,",
+    "  client-side. the token never leaves this tab.",
+  ],
+  hash: [
+    "HASH(1)",
+    "  sha-256/384/512 digests via webcrypto — all client-side.",
+    "  `hash -b [n] <s>` runs n iterations per algorithm and reports ops/sec.",
+    "  needs a secure context: plain http gets no crypto.subtle.",
+  ],
+  headers: [
+    "HEADERS(1)",
+    "  paste a response-header block (devtools → network → headers, or `curl -I`)",
+    "  or pass a JSON object — graded: csp · hsts · xfo · xcto · referrer ·",
+    "  permissions · coop · corp. pure parsing, no request is sent.",
+  ],
+  replay: [
+    "REPLAY(1)",
+    "  replay [METHOD] URL [-H \"name: value\"]… [-d \"body\"] — a timed fetch with",
+    "  status, response headers, and a truncated body.",
+    "  public targets only: loopback, private, link-local and .local are blocked",
+    "  before any request is sent — the tab is the client, not a proxy.",
   ],
   share: [
     "SHARE(1)",
@@ -359,6 +393,8 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
   const [history, setHistory] = useState<string[]>([]);
   const [histIdx, setHistIdx] = useState(-1);
   const [snakeOpen, setSnakeOpen] = useState(false);
+  /* multi-line paste buffer for `headers` — null = normal command mode */
+  const [pasteBuf, setPasteBuf] = useState<string[] | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const localInput = useRef<HTMLInputElement>(null);
 
@@ -392,6 +428,12 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
     if (el) el.scrollTop = el.scrollHeight;
   }, [lines]);
 
+  /** end `headers` paste-mode and grade whatever was collected */
+  const finishHeaders = (buf: string[]) => {
+    setPasteBuf(null);
+    setLines((l) => [...l, ...formatHeaderReport(buf.join("\n"))]);
+  };
+
   const run = (raw: string) => {
     const cmd = raw.trim();
     const prompt: Line = { kind: "in", text: `ibrahim@sys:~$ ${cmd}` };
@@ -400,6 +442,16 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
       window.clearInterval(scriptTimerRef.current);
       scriptTimerRef.current = null;
       scriptDoneRef.current = true;
+    }
+    /* paste-mode owns the input until the block ends — lines buffer up */
+    if (pasteBuf !== null) {
+      if (cmd === "." || cmd === "") {
+        finishHeaders(pasteBuf);
+      } else {
+        setPasteBuf([...pasteBuf, cmd]);
+        setLines((l) => [...l, { kind: "out", text: `> ${cmd}` }]);
+      }
+      return;
     }
     if (!cmd) {
       setLines((l) => [...l, prompt]);
@@ -480,6 +532,71 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
     }
     if (key === "uuid") {
       setLines((l) => [...l, prompt, { kind: "out", text: `uuid: ${crypto.randomUUID()}` }]);
+      return;
+    }
+    /* ── the security toolkit — client-side, nothing leaves this tab ─────── */
+    if (key === "jwt") {
+      if (!rawArg) {
+        setLines((l) => [
+          ...l,
+          prompt,
+          { kind: "err", text: "jwt: paste a token — `jwt <header>.<payload>.<signature>`" },
+        ]);
+        return;
+      }
+      setLines((l) => [...l, prompt, ...formatJwtLines(rawArg)]);
+      return;
+    }
+    if (key === "hash") {
+      const parsed = parseHashArgs(rawArg);
+      if ("error" in parsed) {
+        setLines((l) => [...l, prompt, { kind: "err", text: parsed.error }]);
+        return;
+      }
+      setLines((l) => [...l, prompt]);
+      // webcrypto is async — the lines land when the digests do
+      (parsed.bench
+        ? formatBenchLines(parsed.text, parsed.iterations, digestHex)
+        : formatDigestLines(parsed.text, digestHex)
+      ).then((lines) => setLines((l) => [...l, ...lines]));
+      return;
+    }
+    if (key === "headers") {
+      if (!rawArg) {
+        // raw blocks are multi-line — open a paste-mode for them
+        setLines((l) => [
+          ...l,
+          prompt,
+          { kind: "out", text: "paste-mode: drop a raw header block (devtools → network, or `curl -I`)" },
+          { kind: "out", text: "or type it line by line — finish with a lone '.' or an empty line · ctrl+c aborts." },
+        ]);
+        setPasteBuf([]);
+        return;
+      }
+      setLines((l) => [...l, prompt, ...formatHeaderReport(rawArg)]);
+      return;
+    }
+    if (key === "replay") {
+      const parsed = parseReplayArgs(rawArg);
+      if (!parsed.ok) {
+        setLines((l) => [...l, prompt, { kind: "err", text: `replay: ${parsed.error}` }]);
+        return;
+      }
+      // the gate: the target is judged before a single byte goes out
+      const check = checkTarget(parsed.req.url);
+      if (!check.ok) {
+        setLines((l) => [...l, prompt, { kind: "err", text: `replay: target rejected — ${check.reason}` }]);
+        return;
+      }
+      setLines((l) => [
+        ...l,
+        prompt,
+        { kind: "out", text: `→ ${parsed.req.method} ${check.url.toString()}` },
+        { kind: "out", text: `  target ok — ${check.host} (${check.scheme}) · loopback/private/.local blocked by design` },
+      ]);
+      executeReplay(parsed.req).then((res) =>
+        setLines((l) => [...l, ...formatReplayLines(res)])
+      );
       return;
     }
     if (key === "man") {
@@ -593,10 +710,31 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
       setValue("");
     } else if (e.ctrlKey && e.key === "c") {
       e.preventDefault();
-      if (value) {
+      if (pasteBuf !== null) {
+        setPasteBuf(null);
+        setLines((l) => [...l, { kind: "out", text: "^C — paste aborted." }]);
+      } else if (value) {
         setLines((l) => [...l, { kind: "in", text: `ibrahim@sys:~$ ${value}^C` }]);
       }
       setValue("");
+    }
+  };
+
+  /* paste-mode eats multi-line clipboard text whole — an <input> would
+     otherwise flatten a copied header block into one line */
+  const onPaste = (e: ClipboardEvent<HTMLInputElement>) => {
+    if (pasteBuf === null) return;
+    e.preventDefault();
+    const text = e.clipboardData.getData("text");
+    if (!text) return;
+    const lines = text.split(/\r?\n/);
+    while (lines.length && lines[lines.length - 1].trim() === "") lines.pop();
+    if (!lines.length) return;
+    setLines((l) => [...l, ...lines.map((t): Line => ({ kind: "out", text: `> ${t}` }))]);
+    if (lines[lines.length - 1].trim() === ".") {
+      finishHeaders([...pasteBuf, ...lines.slice(0, -1)]);
+    } else {
+      setPasteBuf([...pasteBuf, ...lines]);
     }
   };
 
@@ -698,16 +836,19 @@ export default function Terminal({ inputRef }: { inputRef?: RefObject<HTMLInputE
         )}
       </div>
 
-      {/* prompt */}
+      {/* prompt — becomes the paste-mode `>` while a header block collects */}
       <div className="flex items-center gap-2 border-t border-phos/15 px-5 py-3.5 sm:px-6">
-        <span className="shrink-0 text-[13px] text-phos-bright">ibrahim@sys:~$</span>
+        <span className="shrink-0 text-[13px] text-phos-bright">
+          {pasteBuf !== null ? ">" : "ibrahim@sys:~$"}
+        </span>
         <input
           ref={inputRef ?? localInput}
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={onKeyDown}
+          onPaste={onPaste}
           className="w-full bg-transparent text-[13px] text-mint outline-none placeholder:text-fog"
-          placeholder="type help"
+          placeholder={pasteBuf !== null ? "paste headers · '.' to finish" : "type help"}
           autoComplete="off"
           spellCheck={false}
           aria-label="terminal input"

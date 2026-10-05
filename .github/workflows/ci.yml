@@ -16,6 +16,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      - run: npm run test:unit
       - run: node scripts/check-size.js
       - run: npx playwright install chromium --with-deps
       - run: npx playwright test
