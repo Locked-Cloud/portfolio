@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- WOKOOD card — dark storefront, lime loaded barbell, Arabic wordmark -->
+  <rect width="1200" height="630" fill="#0d0d0f"/>
+  <rect x="6" y="6" width="1188" height="618" fill="none" stroke="#c6f227" stroke-opacity="0.18"/>
+
+  <!-- faint grid backdrop -->
+  <g stroke="#c6f227" stroke-opacity="0.05">
+    <path d="M0 157 H1200 M0 315 H1200 M0 472 H1200"/>
+    <path d="M300 0 V630 M600 0 V630 M900 0 V630"/>
+  </g>
+
+  <!-- loaded barbell — 5 plates on a thin bar, symmetric load -->
+  <!-- bar -->
+  <rect x="330" y="197" width="540" height="6" rx="3" fill="#3a3a40"/>
+  <!-- collars -->
+  <rect x="472" y="186" width="9" height="28" rx="3" fill="#55555c"/>
+  <rect x="719" y="186" width="9" height="28" rx="3" fill="#55555c"/>
+  <!-- plates: 100 / 140 / 180 / 140 / 100 -->
+  <rect x="490" y="150" width="36" height="100" rx="10" fill="#c6f227"/>
+  <rect x="536" y="130" width="36" height="140" rx="10" fill="#c6f227"/>
+  <rect x="582" y="110" width="36" height="180" rx="10" fill="#c6f227"/>
+  <rect x="628" y="130" width="36" height="140" rx="10" fill="#c6f227"/>
+  <rect x="674" y="150" width="36" height="100" rx="10" fill="#c6f227"/>
+
+  <!-- Arabic wordmark -->
+  <text x="600" y="420" font-family="Tahoma, 'Segoe UI', sans-serif" font-size="128" font-weight="700"
+        fill="#c6f227" text-anchor="middle">وقود</text>
+
+  <!-- latin wordmark -->
+  <text x="607" y="478" font-family="monospace" font-size="40" letter-spacing="14"
+        fill="#9a9aa2" text-anchor="middle">WOKOOD</text>
+
+  <!-- store promise -->
+  <text x="600" y="530" font-family="Tahoma, 'Segoe UI', sans-serif" font-size="24"
+        fill="#6f6f78" text-anchor="middle">مكملات أصلية · مضمونة بالكود</text>
+
+  <!-- corner ticks -->
+  <g stroke="#c6f227" stroke-opacity="0.5" stroke-width="2" fill="none">
+    <path d="M24 44 V24 H44"/>
+    <path d="M1176 586 V606 H1156"/>
+  </g>
+</svg>
